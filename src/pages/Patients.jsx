@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import { getAllClinics } from "../services/clinicService";
 import {getAllPatients, createPatient, updatePatient, deletePatient} from "../services/patientService";
 
 export default function Patients() {
 
     const [patients, setPatients] = useState([]);
     const [editingId, setEditingId] = useState(null);
+    const [errors, setErrors] = useState({});
+    const [clinics, setClinics] = useState([]);
 
     const [patient, setPatient] = useState({
         firstName: "",
@@ -15,7 +18,8 @@ export default function Patients() {
         phoneNumber: "",
         address: "",
         bloodGroup: "",
-        emergencyContact: "",
+        emergencyContactName: "",
+        emergencyContactPhone: "",
         clinicId: ""
     });
 
@@ -28,6 +32,16 @@ export default function Patients() {
                 console.error(error);
             }
         };
+        const fetchClinics = async () => {
+            try {
+                const data = await getAllClinics();
+                setClinics(data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchClinics();
 
         fetchPatients();
     }, []);
@@ -41,6 +55,7 @@ export default function Patients() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setErrors({});
 
         try {
 
@@ -51,6 +66,7 @@ export default function Patients() {
                 alert("Patient updated successfully!");
 
             } else {
+                console.log(patient);
 
                 await createPatient(patient);
 
@@ -67,7 +83,8 @@ export default function Patients() {
                 phoneNumber: "",
                 address: "",
                 bloodGroup: "",
-                emergencyContact: "",
+                emergencyContactName: "",
+                emergencyContactPhone: "",
                 clinicId: ""
             });
             setEditingId(null);
@@ -81,9 +98,7 @@ export default function Patients() {
 
             if (error.response?.status === 400) {
 
-                const errors = error.response.data;
-
-                alert(Object.values(errors).join("\n"));
+                setErrors(error.response.data);
 
             } else {
 
@@ -121,6 +136,29 @@ export default function Patients() {
         <div>
 
             <h1>Patients</h1>
+            {Object.keys(errors).length > 0 && (
+
+                <div
+                    style={{
+                        background: "#ffe6e6",
+                        color: "#b30000",
+                        padding: "10px",
+                        marginBottom: "20px",
+                        borderRadius: "5px"
+                    }}
+                >
+
+                    {Object.entries(errors).map(([field, message]) => (
+
+                        <p key={field}>
+                            <strong>{field}:</strong> {message}
+                        </p>
+
+                    ))}
+
+                </div>
+
+            )}
 
             <form onSubmit={handleSubmit}>
 
@@ -131,6 +169,12 @@ export default function Patients() {
                     value={patient.firstName}
                     onChange={handleChange}
                     required
+                    onInvalid={(e) =>
+                        e.target.setCustomValidity("Please enter the patient's first name.")
+                    }
+                    onInput={(e) =>
+                        e.target.setCustomValidity("")
+                    }
                 />
 
                 <input
@@ -140,16 +184,29 @@ export default function Patients() {
                     value={patient.lastName}
                     onChange={handleChange}
                     required
+                    onInvalid={(e) =>
+                        e.target.setCustomValidity("Please enter the patient's last name.")
+                    }
+                    onInput={(e) =>
+                        e.target.setCustomValidity("")
+                    }
                 />
 
-                <input
-                    type="text"
+                <select
                     name="gender"
-                    placeholder="Gender"
                     value={patient.gender}
                     onChange={handleChange}
                     required
-                />
+                    onInvalid={(e) =>
+                        e.target.setCustomValidity("Please select a gender.")
+                    }
+                    onInput={(e) => e.target.setCustomValidity("")}
+                >
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
 
                 <input
                     type="date"
@@ -157,6 +214,12 @@ export default function Patients() {
                     value={patient.dateOfBirth}
                     onChange={handleChange}
                     required
+                    onInvalid={(e) =>
+                        e.target.setCustomValidity("Please enter the patient's date of birth.")
+                    }
+                    onInput={(e) =>
+                        e.target.setCustomValidity("")
+                    }
                 />
 
                 <input
@@ -166,6 +229,12 @@ export default function Patients() {
                     value={patient.email}
                     onChange={handleChange}
                     required
+                    onInvalid={(e) =>
+                        e.target.setCustomValidity("Please enter the patient's email.")
+                    }
+                    onInput={(e) =>
+                        e.target.setCustomValidity("")
+                    }
                 />
 
                 <input
@@ -175,6 +244,12 @@ export default function Patients() {
                     value={patient.phoneNumber}
                     onChange={handleChange}
                     required
+                    onInvalid={(e) =>
+                        e.target.setCustomValidity("Please enter the patient's email.")
+                    }
+                    onInput={(e) =>
+                        e.target.setCustomValidity("")
+                    }
                 />
 
                 <input
@@ -184,34 +259,70 @@ export default function Patients() {
                     value={patient.address}
                     onChange={handleChange}
                     required
+                    onInvalid={(e) =>
+                        e.target.setCustomValidity("Please enter the patient's address.")
+                    }
+                    onInput={(e) =>
+                        e.target.setCustomValidity("")
+                    }
                 />
 
-                <input
-                    type="text"
+                <select
                     name="bloodGroup"
-                    placeholder="Blood Group"
                     value={patient.bloodGroup}
                     onChange={handleChange}
                     required
+                    onInvalid={(e) =>
+                        e.target.setCustomValidity("Please select a blood group.")
+                    }
+                    onInput={(e) => e.target.setCustomValidity("")}
+                >
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+
+                <input
+                    type="text"
+                    name="emergencyContactName"
+                    placeholder="Emergency Contact Name"
+                    value={patient.emergencyContactName}
+                    onChange={handleChange}
+                    required
                 />
 
                 <input
                     type="text"
-                    name="emergencyContact"
-                    placeholder="Emergency Contact"
-                    value={patient.emergencyContact}
+                    name="emergencyContactPhone"
+                    placeholder="Emergency Contact Phone"
+                    value={patient.emergencyContactPhone}
                     onChange={handleChange}
                     required
                 />
 
-                <input
-                    type="number"
+                <select
                     name="clinicId"
-                    placeholder="Clinic ID"
                     value={patient.clinicId}
                     onChange={handleChange}
                     required
-                />
+                >
+                    <option value="">Select Clinic</option>
+                    <option value="A+">Pretoria</option>
+                    <option value="A-">Johannesburg</option>
+                    <option value="B+">Soweto</option>
+
+                    {clinics.map((clinic) => (
+                        <option key={clinic.id} value={clinic.id}>
+                            {clinic.clinicName}
+                        </option>
+                    ))}
+                </select>
 
                 <button type="submit">
                     {editingId ? "Update Patient" : "Save Patient"}
