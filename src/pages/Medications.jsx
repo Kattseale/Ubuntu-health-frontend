@@ -49,6 +49,22 @@ export default function Medications() {
             [e.target.name]: e.target.value
         });
     };
+    const handleMedicationSelect = (e) => {
+
+        const selectedMedication = medications.find(
+            med => med.id === Number(e.target.value)
+        );
+
+        if (!selectedMedication) return;
+
+        setMedication({
+            ...medication,
+            medicationName: selectedMedication.medicationName,
+            description: selectedMedication.description,
+            dosage: selectedMedication.dosage
+        });
+
+    };
     const handleSubmit = async (e) => {
 
         e.preventDefault();
@@ -152,14 +168,18 @@ export default function Medications() {
 
             <form onSubmit={handleSubmit}>
 
-                <input
-                    type="text"
-                    name="medicationName"
-                    placeholder="Medication Name"
+                <select
                     value={medication.medicationName}
-                    onChange={handleChange}
-                    required
-                />
+                    onChange={handleMedicationSelect}
+                >
+                    <option value="">Select Medication</option>
+
+                    {medications.map((med) => (
+                        <option key={med.id} value={med.id}>
+                            {med.medicationName}
+                        </option>
+                    ))}
+                </select>
 
                 <input
                     type="text"
