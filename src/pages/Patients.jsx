@@ -62,14 +62,12 @@ export default function Patients() {
             if (editingId) {
 
                 await updatePatient(editingId, patient);
-
                 alert("Patient updated successfully!");
 
             } else {
                 console.log(patient);
 
                 await createPatient(patient);
-
                 alert("Patient added successfully!");
 
             }
@@ -100,9 +98,11 @@ export default function Patients() {
 
                 setErrors(error.response.data);
 
-            } else {
+            } else if (error.response?.status === 409) {
 
-                alert("Something went wrong.");
+                setErrors({
+                    email: error.response.data.message
+                });
 
             }
 
@@ -313,9 +313,6 @@ export default function Patients() {
                     required
                 >
                     <option value="">Select Clinic</option>
-                    <option value="A+">Pretoria</option>
-                    <option value="A-">Johannesburg</option>
-                    <option value="B+">Soweto</option>
 
                     {clinics.map((clinic) => (
                         <option key={clinic.id} value={clinic.id}>
@@ -364,7 +361,20 @@ export default function Patients() {
 
                             <button
                                 onClick={() => {
-                                    setPatient(patient);
+                                    setPatient({
+                                        firstName: patient.firstName,
+                                        lastName: patient.lastName,
+                                        gender: patient.gender,
+                                        dateOfBirth: patient.dateOfBirth,
+                                        email: patient.email,
+                                        phoneNumber: patient.phoneNumber,
+                                        address: patient.address,
+                                        bloodGroup: patient.bloodGroup,
+                                        emergencyContactName: patient.emergencyContactName,
+                                        emergencyContactPhone: patient.emergencyContactPhone,
+                                        clinicId: patient.clinicId
+                                    });
+
                                     setEditingId(patient.id);
                                 }}
                             >

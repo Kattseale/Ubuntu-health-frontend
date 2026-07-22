@@ -13,7 +13,11 @@ export const createPatient = async (patient) => {
 };
 
 export const updatePatient = async (id, patient) => {
+
+    console.log("Updating patient:", patient);
+
     const response = await axios.put(`${API_URL}/${id}`, patient);
+
     return response.data;
 };
 
