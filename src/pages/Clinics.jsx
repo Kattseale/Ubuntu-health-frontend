@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {getAllClinics, createClinic, updateClinic} from "../services/clinicService";
+import {getAllClinics, createClinic, updateClinic, deleteClinic} from "../services/clinicService";
 export default function Clinics() {
     const [clinics, setClinics] = useState([]);
 
@@ -59,6 +59,24 @@ export default function Clinics() {
 
             const data = await getAllClinics();
             setClinics(data);
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    const handleDelete = async (id) => {
+
+        if (!window.confirm("Are you sure you want to delete this clinic?")) {
+            return;
+        }
+
+        try {
+            await deleteClinic(id);
+
+            const data = await getAllClinics();
+            setClinics(data);
+
+            alert("Clinic deleted successfully!");
 
         } catch (error) {
             console.error(error);
@@ -170,6 +188,13 @@ export default function Clinics() {
                                 }}
                             >
                                 Edit
+                            </button>
+
+                            <button
+                                onClick={() => handleDelete(clinic.id)}
+                                style={{ marginLeft: "10px" }}
+                            >
+                                Delete
                             </button>
                         </td>
                     </tr>

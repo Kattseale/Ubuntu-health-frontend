@@ -15,3 +15,7 @@ export const updateClinic = async (id, clinic) => {
     const response = await axios.put(`${API_URL}/${id}`, clinic);
     return response.data;
 };
+export const deleteClinic = async (id) => {
+    const response = await axios.delete(`${API_URL}/${id}`);
+    return response.data;
+};
