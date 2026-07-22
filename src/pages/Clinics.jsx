@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllClinics, createClinic } from "../services/clinicService";
-
+import {getAllClinics, createClinic, updateClinic} from "../services/clinicService";
 export default function Clinics() {
     const [clinics, setClinics] = useState([]);
 
@@ -14,6 +13,8 @@ export default function Clinics() {
         phoneNumber: "",
         email: ""
     });
+
+    const [editingId, setEditingId] = useState(null);
 
     useEffect(() => {
         const fetchClinics = async () => {
@@ -37,10 +38,13 @@ export default function Clinics() {
         e.preventDefault();
 
         try {
-            await createClinic(clinic);
-
-            alert("Clinic added successfully!");
-
+            if (editingId) {
+                await updateClinic(editingId, clinic);
+                alert("Clinic updated successfully!");
+            } else {
+                await createClinic(clinic);
+                alert("Clinic added successfully!");
+            }
             setClinic({
                 clinicName: "",
                 province: "",
@@ -51,6 +55,7 @@ export default function Clinics() {
                 phoneNumber: "",
                 email: ""
             });
+            setEditingId(null);
 
             const data = await getAllClinics();
             setClinics(data);
@@ -130,7 +135,9 @@ export default function Clinics() {
                     onChange={handleChange}
                 />
 
-                <button type="submit">Save Clinic</button>
+                <button type="submit">
+                    {editingId ? "Update Clinic" : "Save Clinic"}
+                </button>
             </form>
 
             <hr />
@@ -143,6 +150,7 @@ export default function Clinics() {
                     <th>City</th>
                     <th>Province</th>
                     <th>Email</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
 
@@ -154,6 +162,16 @@ export default function Clinics() {
                         <td>{clinic.city}</td>
                         <td>{clinic.province}</td>
                         <td>{clinic.email}</td>
+                        <td>
+                            <button
+                                onClick={() => {
+                                    setClinic(clinic);
+                                    setEditingId(clinic.id);
+                                }}
+                            >
+                                Edit
+                            </button>
+                        </td>
                     </tr>
                 ))}
                 </tbody>

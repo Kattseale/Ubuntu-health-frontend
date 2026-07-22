@@ -11,3 +11,7 @@ export const createClinic = async (clinic) => {
     const response = await axios.post(API_URL, clinic);
     return response.data;
 };
+export const updateClinic = async (id, clinic) => {
+    const response = await axios.put(`${API_URL}/${id}`, clinic);
+    return response.data;
+};
