@@ -7,6 +7,7 @@ import Medications from "./pages/Medications";
 import Appointments from "./pages/Appointments";
 import Recommendations from "./pages/Recommendations";
 
+
 function App() {
     return (
         <BrowserRouter>
