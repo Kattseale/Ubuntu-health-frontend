@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import DashboardChart from "../components/DashboardChart";
 import { getAllPatients } from "../services/patientService";
 import { getAllClinics } from "../services/clinicService";
 import { getAllMedications } from "../services/medicationService";
@@ -16,6 +17,8 @@ export default function Dashboard() {
 
     const [recentAppointments, setRecentAppointments] = useState([]);
 
+    const [appointments, setAppointments] = useState([]);
+
     useEffect(() => {
 
         const loadDashboard = async () => {
@@ -26,6 +29,8 @@ export default function Dashboard() {
                 const clinics = await getAllClinics();
                 const medications = await getAllMedications();
                 const appointments = await getAllAppointments();
+                setAppointments(appointments);
+
                 const latestAppointments = [...appointments]
                     .sort((a, b) => {
 
@@ -109,6 +114,12 @@ export default function Dashboard() {
             <h2 style={{ marginTop: "40px" }}>
                 Recent Appointments
             </h2>
+
+            <h2 style={{ marginTop: "40px" }}>
+                Appointment Status
+            </h2>
+
+            <DashboardChart appointments={appointments} />
 
             <table
                 border="1"
