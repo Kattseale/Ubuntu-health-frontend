@@ -168,7 +168,16 @@ export default function Appointments() {
 
         <div>
 
-            <h1>Appointments</h1>
+            <h1>📅 Appointments</h1>
+
+            <p
+                style={{
+                    color: "#666",
+                    marginBottom: "25px"
+                }}
+            >
+                Schedule, update and manage patient appointments.
+            </p>
 
             {Object.keys(errors).length > 0 && (
 
@@ -194,7 +203,9 @@ export default function Appointments() {
 
             )}
 
-            <form onSubmit={handleSubmit}>
+            <div className="card">
+
+                <form onSubmit={handleSubmit}>
 
                 <select
                     name="patientId"
@@ -274,15 +285,21 @@ export default function Appointments() {
                     ))}
                 </select>
 
-                <button type="submit">
+                    <button
+                        className="btn-primary"
+                        type="submit"
+                    >
                     {editingId ? "Update Appointment" : "Save Appointment"}
                 </button>
 
             </form>
+            </div>
 
             <hr />
 
-            <table border="1" cellPadding="10">
+            <div className="card">
+
+                <table>
                 <thead>
                 <tr>
                     <th>Patient</th>
@@ -307,6 +324,7 @@ export default function Appointments() {
 
                         <td>
                             <button
+                                className="btn-primary"
                                 onClick={() => {
                                     setAppointment({
                                         appointmentDate: appointment.appointmentDate,
@@ -324,13 +342,13 @@ export default function Appointments() {
                             </button>
 
                             <button
+                                className="btn-danger"
                                 onClick={async () => {
                                     if (!window.confirm("Delete this appointment?")) return;
 
                                     await deleteAppointment(appointment.id);
                                     await fetchAppointments();
                                 }}
-                                style={{ marginLeft: "10px" }}
                             >
                                 Delete
                             </button>
@@ -339,6 +357,7 @@ export default function Appointments() {
                 ))}
                 </tbody>
             </table>
+            </div>
 
         </div>
 
