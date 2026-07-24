@@ -228,37 +228,69 @@ export default function Home() {
                         Manage Appointments
                     </button>
 
-                    {/* Community */}
+                </div>
 
-                    <div
-                        style={cardStyle}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = "translateY(-8px)";
-                            e.currentTarget.style.boxShadow =
-                                "0 12px 25px rgba(0,0,0,0.25)";
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = "translateY(0)";
-                            e.currentTarget.style.boxShadow =
-                                "0 5px 15px rgba(0,0,0,0.15)";
-                        }}
+                {/* Community */}
+
+                <div
+                    style={cardStyle}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = "translateY(-8px)";
+                        e.currentTarget.style.boxShadow =
+                            "0 12px 25px rgba(0,0,0,0.25)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.boxShadow =
+                            "0 5px 15px rgba(0,0,0,0.15)";
+                    }}
+                >
+
+                    <h2>👥 Community</h2>
+
+                    <p>
+                        Share updates with other patients about clinic queues,
+                        waiting times and healthcare services.
+                    </p>
+
+                    <button
+                        style={buttonStyle}
+                        onClick={() => navigate("/community")}
                     >
+                        Open Community
+                    </button>
 
-                        <h2>👥 Community</h2>
+                </div>
 
-                        <p>
-                            Share updates with other patients about clinic queues,
-                            waiting times and healthcare services.
-                        </p>
+                {/* Announcements */}
 
-                        <button
-                            style={buttonStyle}
-                            onClick={() => navigate("/community")}
-                        >
-                            Open Community
-                        </button>
+                <div
+                    style={cardStyle}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = "translateY(-8px)";
+                        e.currentTarget.style.boxShadow =
+                            "0 12px 25px rgba(0,0,0,0.25)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.boxShadow =
+                            "0 5px 15px rgba(0,0,0,0.15)";
+                    }}
+                >
 
-                    </div>
+                    <h2>📢 Announcements</h2>
+
+                    <p>
+                        Stay informed with official updates, notices, clinic schedules,
+                        and important healthcare announcements.
+                    </p>
+
+                    <button
+                        style={buttonStyle}
+                        onClick={() => navigate("/announcements")}
+                    >
+                        View Announcements
+                    </button>
 
                 </div>
 
