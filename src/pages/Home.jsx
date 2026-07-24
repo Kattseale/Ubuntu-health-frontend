@@ -67,6 +67,126 @@ export default function Home() {
 
             </div>
 
+            <h2 style={{ marginTop: "20px", color: "#198754" }}>
+                👥 Patient Services
+            </h2>
+
+            <p style={{ color: "#666", marginBottom: "20px" }}>
+                Services available to patients using Ubuntu Health.
+            </p>
+
+            <div
+                style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(250px,1fr))",
+                    gap: "25px",
+                    marginBottom: "50px"
+                }}
+            >
+
+                {/* Appointments */}
+
+                <div
+                    style={cardStyle}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = "translateY(-8px)";
+                        e.currentTarget.style.boxShadow =
+                            "0 12px 25px rgba(0,0,0,0.25)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.boxShadow =
+                            "0 5px 15px rgba(0,0,0,0.15)";
+                    }}
+                >
+
+                    <h2>📅 Appointments</h2>
+
+                    <p>
+                        Schedule and manage patient appointments.
+                    </p>
+
+                    <button
+                        style={buttonStyle}
+                        onClick={() => navigate("/appointments")}
+                    >
+                        Manage Appointments
+                    </button>
+
+                </div>
+
+                {/* Community */}
+
+                <div
+                    style={cardStyle}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = "translateY(-8px)";
+                        e.currentTarget.style.boxShadow =
+                            "0 12px 25px rgba(0,0,0,0.25)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.boxShadow =
+                            "0 5px 15px rgba(0,0,0,0.15)";
+                    }}
+                >
+
+                    <h2>👥 Community</h2>
+
+                    <p>
+                        Share updates with other patients about clinic queues,
+                        waiting times and healthcare services.
+                    </p>
+
+                    <button
+                        style={buttonStyle}
+                        onClick={() => navigate("/community")}
+                    >
+                        Open Community
+                    </button>
+
+                </div>
+
+                {/* Announcements */}
+
+                <div
+                    style={cardStyle}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = "translateY(-8px)";
+                        e.currentTarget.style.boxShadow =
+                            "0 12px 25px rgba(0,0,0,0.25)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.boxShadow =
+                            "0 5px 15px rgba(0,0,0,0.15)";
+                    }}
+                >
+
+                    <h2>📢 Announcements</h2>
+
+                    <p>
+                        Stay informed with official updates, notices, clinic schedules,
+                        and important healthcare announcements.
+                    </p>
+
+                    <button
+                        style={buttonStyle}
+                        onClick={() => navigate("/announcements")}
+                    >
+                        View Announcements
+                    </button>
+
+                </div>
+            </div>
+            <h2 style={{ color: "#0d6efd" }}>
+                🛠 Administration
+            </h2>
+
+            <p style={{ color: "#666", marginBottom: "20px" }}>
+                Administrative tools for managing clinics, patients and healthcare data.
+            </p>
+
             <div
                 style={{
                     display: "grid",
@@ -74,7 +194,6 @@ export default function Home() {
                     gap: "25px"
                 }}
             >
-
                 {/* Dashboard */}
 
                 <div
@@ -196,69 +315,6 @@ export default function Home() {
                     >
                         Manage Medications
                     </button>
-
-                </div>
-
-                {/* Appointments */}
-
-                <div
-                    style={cardStyle}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-8px)";
-                        e.currentTarget.style.boxShadow =
-                            "0 12px 25px rgba(0,0,0,0.25)";
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow =
-                            "0 5px 15px rgba(0,0,0,0.15)";
-                    }}
-                >
-
-                    <h2>📅 Appointments</h2>
-
-                    <p>
-                        Schedule and manage patient appointments.
-                    </p>
-
-                    <button
-                        style={buttonStyle}
-                        onClick={() => navigate("/appointments")}
-                    >
-                        Manage Appointments
-                    </button>
-
-                    {/* Community */}
-
-                    <div
-                        style={cardStyle}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = "translateY(-8px)";
-                            e.currentTarget.style.boxShadow =
-                                "0 12px 25px rgba(0,0,0,0.25)";
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = "translateY(0)";
-                            e.currentTarget.style.boxShadow =
-                                "0 5px 15px rgba(0,0,0,0.15)";
-                        }}
-                    >
-
-                        <h2>👥 Community</h2>
-
-                        <p>
-                            Share updates with other patients about clinic queues,
-                            waiting times and healthcare services.
-                        </p>
-
-                        <button
-                            style={buttonStyle}
-                            onClick={() => navigate("/community")}
-                        >
-                            Open Community
-                        </button>
-
-                    </div>
 
                 </div>
 
