@@ -49,22 +49,6 @@ export default function Medications() {
             [e.target.name]: e.target.value
         });
     };
-    const handleMedicationSelect = (e) => {
-
-        const selectedMedication = medications.find(
-            med => med.id === Number(e.target.value)
-        );
-
-        if (!selectedMedication) return;
-
-        setMedication({
-            ...medication,
-            medicationName: selectedMedication.medicationName,
-            description: selectedMedication.description,
-            dosage: selectedMedication.dosage
-        });
-
-    };
     const handleSubmit = async (e) => {
 
         e.preventDefault();
@@ -140,7 +124,16 @@ export default function Medications() {
     return (
         <div>
 
-            <h1>Medications</h1>
+            <h1>💊 Medications</h1>
+
+            <p
+                style={{
+                    color: "#666",
+                    marginBottom: "25px"
+                }}
+            >
+                Maintain medication information and clinic inventory.
+            </p>
 
             {Object.keys(errors).length > 0 && (
 
@@ -166,12 +159,18 @@ export default function Medications() {
 
             )}
 
-            <form onSubmit={handleSubmit}>
+            <div className="card">
 
-                <select
-                    value={medication.medicationName}
-                    onChange={handleMedicationSelect}
-                >
+                <form onSubmit={handleSubmit}>
+
+                    <input
+                        type="text"
+                        name="medicationName"
+                        placeholder="Medication Name"
+                        value={medication.medicationName}
+                        onChange={handleChange}
+                        required
+                    />
                     <option value="">Select Medication</option>
 
                     {medications.map((med) => (
@@ -179,7 +178,6 @@ export default function Medications() {
                             {med.medicationName}
                         </option>
                     ))}
-                </select>
 
                 <input
                     type="text"
@@ -232,15 +230,21 @@ export default function Medications() {
 
                 </select>
 
-                <button type="submit">
+                    <button
+                        className="btn-primary"
+                        type="submit"
+                    >
                     {editingId ? "Update Medication" : "Save Medication"}
                 </button>
 
             </form>
+            </div>
 
             <hr />
 
-            <table border="1" cellPadding="10">
+            <div className="card">
+
+                <table>
 
                 <thead>
 
@@ -270,6 +274,7 @@ export default function Medications() {
                         <td>
 
                             <button
+                                className="btn-primary"
                                 onClick={() => {
                                     setMedication({
                                         medicationName: medication.medicationName,
@@ -287,8 +292,8 @@ export default function Medications() {
                             </button>
 
                             <button
+                                className="btn-danger"
                                 onClick={() => handleDelete(medication.id)}
-                                style={{ marginLeft: "10px" }}
                             >
                                 Delete
                             </button>
@@ -302,6 +307,7 @@ export default function Medications() {
                 </tbody>
 
             </table>
+            </div>
 
         </div>
     );
