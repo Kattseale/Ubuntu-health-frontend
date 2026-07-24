@@ -81,7 +81,7 @@ export default function Dashboard() {
                 gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
                 gap: "20px",
                 marginTop: "30px",
-                padding: "20px"
+                
             }}>
 
                 <div style={{ ...cardStyle, backgroundColor: "#0d6efd" }}>

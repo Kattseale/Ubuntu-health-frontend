@@ -133,9 +133,12 @@ export default function Patients() {
     };
 
     return (
-        <div>
 
-            <h1>Patients</h1>
+        <div className="page">
+
+            <h1 className="page-title">
+                Patients
+            </h1>
             {Object.keys(errors).length > 0 && (
 
                 <div
@@ -160,7 +163,12 @@ export default function Patients() {
 
             )}
 
-            <form onSubmit={handleSubmit}>
+            <div className="card">
+
+                <h2 className="card-title">
+                    Patient Information
+                </h2>
+                <form onSubmit={handleSubmit}>
 
                 <input
                     type="text"
@@ -321,14 +329,25 @@ export default function Patients() {
                     ))}
                 </select>
 
-                <button type="submit">
-                    {editingId ? "Update Patient" : "Save Patient"}
-                </button>
+                    <button
+                        className="btn-primary"
+                        type="submit"
+                    >
+                        {editingId ? "Update Patient" : "Save Patient"}
+                    </button>
 
-            </form>
+                    </form>
+
+            </div>
 
             <hr />
-            <table border="1" cellPadding="10">
+            <div className="card">
+
+                <h2 className="card-title">
+                    Patient Records
+                </h2>
+
+                <table>
 
                 <thead>
                 <tr>
@@ -342,6 +361,7 @@ export default function Patients() {
                     <th>Actions</th>
                 </tr>
                 </thead>
+
 
                 <tbody>
 
@@ -359,34 +379,39 @@ export default function Patients() {
 
                         <td>
 
-                            <button
-                                onClick={() => {
-                                    setPatient({
-                                        firstName: patient.firstName,
-                                        lastName: patient.lastName,
-                                        gender: patient.gender,
-                                        dateOfBirth: patient.dateOfBirth,
-                                        email: patient.email,
-                                        phoneNumber: patient.phoneNumber,
-                                        address: patient.address,
-                                        bloodGroup: patient.bloodGroup,
-                                        emergencyContactName: patient.emergencyContactName,
-                                        emergencyContactPhone: patient.emergencyContactPhone,
-                                        clinicId: patient.clinicId
-                                    });
+                            <div className="action-buttons">
 
-                                    setEditingId(patient.id);
-                                }}
-                            >
-                                Edit
-                            </button>
+                                <button
+                                    className="btn-edit"
+                                    onClick={() => {
+                                        setPatient({
+                                            firstName: patient.firstName,
+                                            lastName: patient.lastName,
+                                            gender: patient.gender,
+                                            dateOfBirth: patient.dateOfBirth,
+                                            email: patient.email,
+                                            phoneNumber: patient.phoneNumber,
+                                            address: patient.address,
+                                            bloodGroup: patient.bloodGroup,
+                                            emergencyContactName: patient.emergencyContactName,
+                                            emergencyContactPhone: patient.emergencyContactPhone,
+                                            clinicId: patient.clinicId
+                                        });
 
-                            <button
-                                onClick={() => handleDelete(patient.id)}
-                                style={{ marginLeft: "10px" }}
-                            >
-                                Delete
-                            </button>
+                                        setEditingId(patient.id);
+                                    }}
+                                >
+                                    ✏️ Edit
+                                </button>
+
+                                <button
+                                    className="btn-danger"
+                                    onClick={() => handleDelete(patient.id)}
+                                >
+                                    🗑 Delete
+                                </button>
+
+                            </div>
 
                         </td>
 
@@ -397,6 +422,8 @@ export default function Patients() {
                 </tbody>
 
             </table>
+
+            </div>
 
         </div>
     );
