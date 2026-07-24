@@ -7,6 +7,7 @@ import Medications from "./pages/Medications";
 import Appointments from "./pages/Appointments";
 import Community from "./pages/Community";
 import Announcements from "./pages/Announcements";
+import Reports from "./pages/Reports";
 
 function App() {
     return (
@@ -17,9 +18,9 @@ function App() {
                 <Route path="/patients" element={<Patients />} />
                 <Route path="/medications" element={<Medications />} />
                 <Route path="/appointments" element={<Appointments />} />
-
                 <Route path="/community" element={<Community />} />
                 <Route path="/announcements" element={<Announcements />} />
+                <Route path="/Reports" element={<Reports />} />
             </Routes>
         </BrowserRouter>
     );
