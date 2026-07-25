@@ -15,14 +15,12 @@ export default function Dashboard() {
         todayAppointments: 0
     });
 
-    const [recentAppointments, setRecentAppointments] = useState([]);
-
     const [appointments, setAppointments] = useState([]);
+    const [recentAppointments, setRecentAppointments] = useState([]);
 
     useEffect(() => {
 
         const loadDashboard = async () => {
-            console.log(appointments);
 
             try {
 
@@ -32,24 +30,16 @@ export default function Dashboard() {
                 const appointments = await getAllAppointments();
                 setAppointments(appointments);
 
-                const latestAppointments = [...appointments]
-                    .sort((a, b) => {
-
-                        const dateA = new Date(`${a.appointmentDate}T${a.appointmentTime}`);
-                        const dateB = new Date(`${b.appointmentDate}T${b.appointmentTime}`);
-
-                        return dateB - dateA;
-
-                    })
-                    .slice(0, 5);
-
-                setRecentAppointments(latestAppointments);
-
                 const today = new Date().toISOString().split("T")[0];
 
-                const todaysAppointments = appointments.filter(
-                    (appointment) => appointment.appointmentDate === today
-                );
+                const todaysAppointments = appointments
+                    .filter(a => a.appointmentDate === today)
+                    .sort((a, b) => {
+                        const dateA = new Date(`${a.appointmentDate}T${a.appointmentTime}`);
+                        const dateB = new Date(`${b.appointmentDate}T${b.appointmentTime}`);
+                        return dateA - dateB;
+                    });
+                setRecentAppointments(todaysAppointments);
 
                 setStats({
                     patients: patients.length,
@@ -75,7 +65,49 @@ export default function Dashboard() {
 
         <div>
 
-            <h1>Dashboard</h1>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "30px"
+                }}
+            >
+
+                <div>
+
+                    <h1 style={{ margin: 0 }}>
+                        👋 Welcome to Ubuntu Health
+                    </h1>
+
+                    <p
+                        style={{
+                            color: "#666",
+                            marginTop: "8px"
+                        }}
+                    >
+                        Manage patients, clinics, appointments and community activity from one place.
+                    </p>
+
+                </div>
+
+                <div
+                    style={{
+                        textAlign: "right"
+                    }}
+                >
+
+                    <h3 style={{ margin: 0 }}>
+                        {new Date().toLocaleDateString()}
+                    </h3>
+
+                    <p style={{ color: "#777" }}>
+                        Dashboard Overview
+                    </p>
+
+                </div>
+
+            </div>
 
             <div style={{
                 display: "grid",
@@ -86,83 +118,150 @@ export default function Dashboard() {
             }}>
 
                 <div style={{ ...cardStyle, backgroundColor: "#0d6efd" }}>
-                    <h2>Patients</h2>
-                    <h1>{stats.patients}</h1>
+                    <h2>👥 Patients</h2>
+                    <h1
+                        style={{
+                            fontSize: "48px",
+                            margin: "15px 0"
+                        }}
+                    >
+                        {stats.patients}
+                    </h1>
                 </div>
 
                 <div style={{ ...cardStyle, backgroundColor: "#198754" }}>
-                    <h2>Clinics</h2>
-                    <h1>{stats.clinics}</h1>
+                    <h2>🏥 Clinics</h2>
+                    <h1
+                        style={{
+                            fontSize: "48px",
+                            margin: "15px 0"
+                        }}
+                    >
+                        {stats.clinics}
+                    </h1>
                 </div>
 
                 <div style={{ ...cardStyle, backgroundColor: "#fd7e14" }}>
-                    <h2>Medications</h2>
-                    <h1>{stats.medications}</h1>
+                    <h2>💊 Medications</h2>
+                    <h1
+                        style={{
+                            fontSize: "48px",
+                            margin: "15px 0"
+                        }}
+                    >
+                        {stats.medications}
+                    </h1>
                 </div>
 
                 <div style={{ ...cardStyle, backgroundColor: "#6f42c1" }}>
-                    <h2>Appointments</h2>
-                    <h1>{stats.appointments}</h1>
+                    <h2>📅 Appointments</h2>
+                    <h1
+                        style={{
+                            fontSize: "48px",
+                            margin: "15px 0"
+                        }}
+                    >
+                        {stats.appointments}
+                    </h1>
                 </div>
 
                 <div style={{ ...cardStyle, backgroundColor: "#dc3545" }}>
-                    <h2>Today's Appointments</h2>
-                    <h1>{stats.todayAppointments}</h1>
+                    <h2>⏰ Today's Appointments</h2>
+                    <h1
+                        style={{
+                            fontSize: "48px",
+                            margin: "15px 0"
+                        }}
+                    >
+                        {stats.todayAppointments}
+                    </h1>
                 </div>
 
             </div>
 
-            <h2 style={{ marginTop: "40px" }}>
-                Recent Appointments
+            <div className="card">
+
+                <h2>📊 Appointment Status</h2>
+
+                <DashboardChart appointments={appointments} />
+
+            </div>
+
+            <h2 style={{ marginTop: "50px" }}>
+                📅 Today's Schedule
             </h2>
 
-            <h2 style={{ marginTop: "40px" }}>
-                Appointment Status
-            </h2>
+            <div className="card">
 
-            <DashboardChart appointments={appointments} />
+                <table
+                    border="1"
+                    cellPadding="10"
+                    style={{
+                        width: "100%",
+                        borderCollapse: "collapse",
+                        marginTop: "15px"
+                    }}
+                >
 
-            <table
-                border="1"
-                cellPadding="10"
-                style={{
-                    width: "100%",
-                    borderCollapse: "collapse",
-                    marginTop: "15px"
-                }}
-            >
-
-                <thead>
-
-                <tr>
-                    <th>Patient</th>
-                    <th>Clinic</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Status</th>
-                </tr>
-
-                </thead>
-
-                <tbody>
-
-                {recentAppointments.map((appointment) => (
-
-                    <tr key={appointment.id}>
-
-                        <td>{appointment.patientName}</td>
-                        <td>{appointment.clinicName}</td>
-                        <td>{appointment.appointmentDate}</td>
-                        <td>{appointment.appointmentTime}</td>
-                        <td>{appointment.status}</td>
-
+                    <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Clinic</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
                     </tr>
+                    </thead>
 
-                ))}
+                    <tbody>
 
-                </tbody>
+                    {recentAppointments.length === 0 ? (
 
-            </table>
+                        <tr>
+                            <td colSpan="5" style={{ textAlign: "center" }}>
+                                No appointments scheduled for today.
+                            </td>
+                        </tr>
+
+                    ) : (
+
+                        recentAppointments.map((appointment) => (
+
+                            <tr key={appointment.id}>
+                                <td>{appointment.patientName}</td>
+                                <td>{appointment.clinicName}</td>
+                                <td>{appointment.appointmentDate}</td>
+                                <td>{appointment.appointmentTime}</td>
+                                <td>{appointment.status}</td>
+                            </tr>
+
+                        ))
+
+                    )}
+
+                    </tbody>
+
+                </table>
+
+                <h2 style={{ marginTop: "40px" }}>
+                    📢 Latest Announcements
+                </h2>
+
+                <div className="card">
+
+                    <ul
+                        style={{
+                            lineHeight: "2",
+                            paddingLeft: "20px"
+                        }}
+                    >
+                        <li>Flu vaccination campaign starts Monday.</li>
+                        <li>Clinic 3 will be closed for maintenance on Friday.</li>
+                        <li>Please verify patient contact details during registration.</li>
+                    </ul>
+
+                </div>
+            </div>
 
         </div>
 
@@ -173,10 +272,19 @@ export default function Dashboard() {
 }
 
 const cardStyle = {
+
     color: "white",
-    borderRadius: "12px",
-    padding: "25px",
+
+    borderRadius: "16px",
+
+    padding: "30px",
+
     textAlign: "center",
-    fontWeight: "bold",
-    boxShadow: "0 4px 8px rgba(0,0,0,0.2)"
+
+    boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
+
+    transition: "0.3s",
+
+    cursor: "pointer"
+
 };
