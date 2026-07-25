@@ -22,6 +22,7 @@ export default function Dashboard() {
     useEffect(() => {
 
         const loadDashboard = async () => {
+            console.log(appointments);
 
             try {
 

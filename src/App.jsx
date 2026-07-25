@@ -9,6 +9,7 @@ import Recommendations from "./pages/Recommendations";
 import Reports from "./pages/Reports";
 import Community from "./pages/Community";
 import Announcements from "./pages/Announcements";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
     return (
@@ -32,6 +33,8 @@ function App() {
                 <Route path="/announcements" element={<Announcements />} />
 
                 <Route path="/reports" element={<Reports />} />
+
+                <Route path="/dashboard" element={<Dashboard />} />
 
             </Routes>
         </BrowserRouter>

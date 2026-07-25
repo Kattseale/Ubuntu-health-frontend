@@ -33,32 +33,24 @@ export default function DashboardChart({ appointments }) {
     ];
 
     return (
-
         <PieChart width={500} height={320}>
-
             <Pie
                 data={data}
                 dataKey="value"
+                nameKey="name"
                 outerRadius={100}
                 label
             >
-
                 {data.map((entry, index) => (
-
                     <Cell
                         key={index}
                         fill={COLORS[index]}
                     />
-
                 ))}
-
             </Pie>
 
             <Tooltip />
             <Legend />
-
         </PieChart>
-
     );
-
 }
