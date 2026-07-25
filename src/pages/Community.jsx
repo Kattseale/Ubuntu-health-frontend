@@ -1,243 +1,120 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+    getAllPosts,
+    createPost,
+    deletePost
+} from "../services/communityService";
 
-export default function Community() {
+import { getAllClinics } from "../services/clinicService";
 
-    const [posts, setPosts] = useState([
-        {
-            id: 1,
-            clinic: "Soweto Clinic",
-            category: "Queue Update",
-            message: "The queue is very short today. Waiting time is around 20 minutes.",
-            postedBy: "Patient",
-            likes: 5,
-            date: "Today 09:30"
-        },
-        {
-            id: 2,
-            clinic: "Hillbrow Clinic",
-            category: "Medicine Update",
-            message: "Flu vaccines are available again.",
-            postedBy: "Patient",
-            likes: 12,
-            date: "Yesterday 15:00"
+import CommunityCard from "./CommunityCard";
+import CreatePostModal from "./CreatePostModal";
+
+import "./community.css";
+
+function Community() {
+
+    const [posts, setPosts] = useState([]);
+    const [clinics, setClinics] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+
+    // Replace later with logged-in user's ID
+    const currentUserId = 1;
+
+    useEffect(() => {
+        loadPosts();
+        loadClinics();
+    }, []);
+
+    const loadPosts = async () => {
+        try {
+            const data = await getAllPosts();
+            setPosts(data);
+        } catch (error) {
+            console.error(error);
         }
-    ]);
-
-
-    const [newPost, setNewPost] = useState({
-        clinic: "",
-        category: "",
-        message: ""
-    });
-
-
-    const handleChange = (e) => {
-
-        setNewPost({
-            ...newPost,
-            [e.target.name]: e.target.value
-        });
-
     };
 
-
-    const addPost = (e) => {
-
-        e.preventDefault();
-
-        const post = {
-
-            id: Date.now(),
-            clinic: newPost.clinic,
-            category: newPost.category,
-            message: newPost.message,
-            postedBy: "Patient",
-            likes: 0,
-            date: new Date().toLocaleString()
-
-        };
-
-
-        setPosts([
-            post,
-            ...posts
-        ]);
-
-
-        setNewPost({
-            clinic: "",
-            category: "",
-            message: ""
-        });
-
+    const loadClinics = async () => {
+        try {
+            const response = await getAllClinics();
+            setClinics(response);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
+    const handleCreate = async (post) => {
+        try {
+            await createPost({
+                ...post,
+                patientId: currentUserId
+            });
 
-    const likePost = (id) => {
-
-        setPosts(
-            posts.map(post =>
-                post.id === id
-                    ? {...post, likes: post.likes + 1}
-                    : post
-            )
-        );
-
+            setShowModal(false);
+            loadPosts();
+        } catch (error) {
+            console.error(error);
+            alert("Unable to create post.");
+        }
     };
 
+    const handleDelete = async (id) => {
 
-    const deletePost = (id) => {
+        if (!window.confirm("Delete this post?")) {
+            return;
+        }
 
-        setPosts(
-            posts.filter(post => post.id !== id)
-        );
-
+        try {
+            await deletePost(id);
+            loadPosts();
+        } catch (error) {
+            console.error(error);
+        }
     };
 
+    const handleEdit = (post) => {
+        console.log("Edit post:", post);
+        // Edit functionality will be added later
+    };
 
     return (
+        <div className="community-page">
 
-        <div className="page">
+            <div className="community-top">
+                <h2>Community</h2>
 
-
-            <h1 className="page-title">
-                👥 Community Updates
-            </h1>
-
-
-            <p style={{color:"#666"}}>
-                Share clinic updates, waiting times and healthcare information with other patients.
-            </p>
-
-
-            <div className="card">
-
-
-                <h2>Create Update</h2>
-
-
-                <form onSubmit={addPost}>
-
-
-                    <input
-                        type="text"
-                        name="clinic"
-                        placeholder="Clinic Name"
-                        value={newPost.clinic}
-                        onChange={handleChange}
-                        required
-                    />
-
-
-                    <select
-                        name="category"
-                        value={newPost.category}
-                        onChange={handleChange}
-                        required
-                    >
-
-                        <option value="">
-                            Select Category
-                        </option>
-
-                        <option value="Queue Update">
-                            Queue Update
-                        </option>
-
-                        <option value="Medicine Update">
-                            Medicine Update
-                        </option>
-
-                        <option value="General Information">
-                            General Information
-                        </option>
-
-                    </select>
-
-
-                    <textarea
-                        name="message"
-                        placeholder="Write your update..."
-                        value={newPost.message}
-                        onChange={handleChange}
-                        required
-                    />
-
-
-                    <button
-                        className="btn-primary"
-                        type="submit"
-                    >
-                        Post Update
-                    </button>
-
-
-                </form>
-
-
+                <button
+                    className="create-post-btn"
+                    onClick={() => setShowModal(true)}
+                >
+                    Create Post
+                </button>
             </div>
 
+            <CreatePostModal
+                show={showModal}
+                clinics={clinics}
+                onClose={() => setShowModal(false)}
+                onCreate={handleCreate}
+            />
 
-            <hr />
-
-
-            {posts.map(post => (
-
-                <div
-                    className="card"
-                    key={post.id}
-                    style={{marginBottom:"20px"}}
-                >
-
-                    <h2>
-                        🏥 {post.clinic}
-                    </h2>
-
-
-                    <strong>
-                        {post.category}
-                    </strong>
-
-
-                    <p>
-                        {post.message}
-                    </p>
-
-
-                    <small>
-                        Posted by {post.postedBy}
-                        <br/>
-                        {post.date}
-                    </small>
-
-
-                    <br/><br/>
-
-
-                    <button
-                        className="btn-primary"
-                        onClick={() => likePost(post.id)}
-                    >
-                        ❤️ {post.likes} Likes
-                    </button>
-
-
-                    <button
-                        className="btn-danger"
-                        onClick={() => deletePost(post.id)}
-                        style={{marginLeft:"10px"}}
-                    >
-                        🗑 Delete
-                    </button>
-
-
-                </div>
-
-            ))}
-
+            {posts.length === 0 ? (
+                <p>No posts available.</p>
+            ) : (
+                posts.map((post) => (
+                    <CommunityCard
+                        key={post.id}
+                        post={post}
+                        currentUserId={currentUserId}
+                        onDelete={handleDelete}
+                        onEdit={handleEdit}
+                    />
+                ))
+            )}
 
         </div>
-
     );
-
 }
+
+export default Community;
