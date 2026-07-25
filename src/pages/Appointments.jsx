@@ -340,7 +340,7 @@ export default function Appointments() {
                             >
                                 Edit
                             </button>
-
+                            
                             <button
                                 className="btn-danger"
                                 onClick={async () => {

@@ -16,6 +16,7 @@ import Community from "./pages/Community";
 import Announcements from "./pages/Announcements";
 
 import Sidebar from "./components/Sidebar";
+
 import ProtectedRoute from "./routes/ProtectedRoute";
 import RoleRoute from "./routes/RoleRoute";
 
@@ -29,7 +30,7 @@ function Layout({ children }) {
                     marginLeft: "250px",
                     padding: "20px",
                     minHeight: "100vh",
-                    background: "#f5f7fa"
+                    background: "#f5f7fa",
                 }}
             >
                 {children}
@@ -47,20 +48,9 @@ function App() {
                     PUBLIC ROUTES
                 ========================== */}
 
-                <Route
-                    path="/"
-                    element={<HomeM />}
-                />
-
-                <Route
-                    path="/login"
-                    element={<Login />}
-                />
-
-                <Route
-                    path="/register"
-                    element={<Register />}
-                />
+                <Route path="/" element={<HomeM />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
 
                 {/* ==========================
                     PROTECTED ROUTES
@@ -103,7 +93,7 @@ function App() {
                                     "ADMIN",
                                     "DOCTOR",
                                     "NURSE",
-                                    "RECEPTIONIST"
+                                    "RECEPTIONIST",
                                 ]}
                             >
                                 <Layout>
@@ -123,7 +113,7 @@ function App() {
                             <RoleRoute
                                 allowedRoles={[
                                     "ADMIN",
-                                    "RECEPTIONIST"
+                                    "RECEPTIONIST",
                                 ]}
                             >
                                 <Layout>
@@ -144,7 +134,7 @@ function App() {
                                 allowedRoles={[
                                     "ADMIN",
                                     "DOCTOR",
-                                    "NURSE"
+                                    "NURSE",
                                 ]}
                             >
                                 <Layout>
@@ -167,7 +157,7 @@ function App() {
                                     "DOCTOR",
                                     "NURSE",
                                     "RECEPTIONIST",
-                                    "PATIENT"
+                                    "PATIENT",
                                 ]}
                             >
                                 <Layout>
@@ -184,9 +174,7 @@ function App() {
                     path="/recommendations"
                     element={
                         <ProtectedRoute>
-                            <RoleRoute
-                                allowedRoles={["PATIENT"]}
-                            >
+                            <RoleRoute allowedRoles={["PATIENT"]}>
                                 <Layout>
                                     <Recommendations />
                                 </Layout>
@@ -207,7 +195,7 @@ function App() {
                                     "DOCTOR",
                                     "NURSE",
                                     "RECEPTIONIST",
-                                    "PATIENT"
+                                    "PATIENT",
                                 ]}
                             >
                                 <Layout>
@@ -230,7 +218,7 @@ function App() {
                                     "DOCTOR",
                                     "NURSE",
                                     "RECEPTIONIST",
-                                    "PATIENT"
+                                    "PATIENT",
                                 ]}
                             >
                                 <Layout>
@@ -247,9 +235,7 @@ function App() {
                     path="/reports"
                     element={
                         <ProtectedRoute>
-                            <RoleRoute
-                                allowedRoles={["ADMIN"]}
-                            >
+                            <RoleRoute allowedRoles={["ADMIN"]}>
                                 <Layout>
                                     <Reports />
                                 </Layout>
@@ -258,9 +244,7 @@ function App() {
                     }
                 />
 
-                {/* ==========================
-                    404 PAGE
-                ========================== */}
+                {/* 404 */}
 
                 <Route
                     path="*"
