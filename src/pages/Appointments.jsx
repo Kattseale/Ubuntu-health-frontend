@@ -24,6 +24,30 @@ export default function Appointments() {
         clinicId: ""
 
     });
+    
+    const appointmentReasons = [
+        "General Consultation",
+        "Dentist",
+        "Check-up Routine",
+        "Vaccination",
+        "Blood Test",
+        "Optometrist",
+        "Chronic Disease Management",
+        "Minor Injury",
+        "Family Planning",
+        "Mental Health",
+        "Women's Health",
+        "Men's Health",
+        "Children's Health",
+        "Emergency Consultation",
+        "Other"
+    ];
+
+    const appointmentStatuses = [
+        "Scheduled",
+        "Completed",
+        "Cancelled"
+    ];
 
 
     const fetchAppointments = async () => {
@@ -144,7 +168,16 @@ export default function Appointments() {
 
         <div>
 
-            <h1>Appointments</h1>
+            <h1>📅 Appointments</h1>
+
+            <p
+                style={{
+                    color: "#666",
+                    marginBottom: "25px"
+                }}
+            >
+                Schedule, update and manage patient appointments.
+            </p>
 
             {Object.keys(errors).length > 0 && (
 
@@ -170,7 +203,9 @@ export default function Appointments() {
 
             )}
 
-            <form onSubmit={handleSubmit}>
+            <div className="card">
+
+                <form onSubmit={handleSubmit}>
 
                 <select
                     name="patientId"
@@ -220,14 +255,20 @@ export default function Appointments() {
                     required
                 />
 
-                <input
-                    type="text"
+                <select
                     name="reason"
-                    placeholder="Reason for Appointment"
                     value={appointment.reason}
                     onChange={handleChange}
                     required
-                />
+                >
+                    <option value="">Select Reason for Visit</option>
+
+                    {appointmentReasons.map((reason) => (
+                        <option key={reason} value={reason}>
+                            {reason}
+                        </option>
+                    ))}
+                </select>
 
                 <select
                     name="status"
@@ -236,20 +277,29 @@ export default function Appointments() {
                     required
                 >
                     <option value="">Select Status</option>
-                    <option value="Scheduled">Scheduled</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Cancelled">Cancelled</option>
+
+                    {appointmentStatuses.map((status) => (
+                        <option key={status} value={status}>
+                            {status}
+                        </option>
+                    ))}
                 </select>
 
-                <button type="submit">
+                    <button
+                        className="btn-primary"
+                        type="submit"
+                    >
                     {editingId ? "Update Appointment" : "Save Appointment"}
                 </button>
 
             </form>
+            </div>
 
             <hr />
 
-            <table border="1" cellPadding="10">
+            <div className="card">
+
+                <table>
                 <thead>
                 <tr>
                     <th>Patient</th>
@@ -274,6 +324,7 @@ export default function Appointments() {
 
                         <td>
                             <button
+                                className="btn-primary"
                                 onClick={() => {
                                     setAppointment({
                                         appointmentDate: appointment.appointmentDate,
@@ -291,13 +342,13 @@ export default function Appointments() {
                             </button>
 
                             <button
+                                className="btn-danger"
                                 onClick={async () => {
                                     if (!window.confirm("Delete this appointment?")) return;
 
                                     await deleteAppointment(appointment.id);
                                     await fetchAppointments();
                                 }}
-                                style={{ marginLeft: "10px" }}
                             >
                                 Delete
                             </button>
@@ -306,6 +357,7 @@ export default function Appointments() {
                 ))}
                 </tbody>
             </table>
+            </div>
 
         </div>
 

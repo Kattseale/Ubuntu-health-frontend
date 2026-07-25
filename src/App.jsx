@@ -8,6 +8,7 @@ import Appointments from "./pages/Appointments";
 import Recommendations from "./pages/Recommendations";
 import Reports from "./pages/Reports";
 import Community from "./pages/Community";
+import Announcements from "./pages/Announcements";
 
 function App() {
     return (
@@ -26,13 +27,11 @@ function App() {
 
                 <Route path="/recommendations" element={<Recommendations />} />
 
-                <Route path="/reports" element={<Reports />} />
+                <Route path="/community" element={<Community />} />
 
-                {/* Community */}
-                <Route
-                    path="/community"
-                    element={<Community />}
-                />
+                <Route path="/announcements" element={<Announcements />} />
+
+                <Route path="/reports" element={<Reports />} />
 
             </Routes>
         </BrowserRouter>

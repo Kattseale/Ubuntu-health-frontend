@@ -16,7 +16,6 @@ function Community() {
 
     const [posts, setPosts] = useState([]);
     const [clinics, setClinics] = useState([]);
-
     const [showModal, setShowModal] = useState(false);
 
     // Replace later with logged-in user's ID
@@ -29,11 +28,8 @@ function Community() {
 
     const loadPosts = async () => {
         try {
-
             const data = await getAllPosts();
-
             setPosts(data);
-
         } catch (error) {
             console.error(error);
         }
@@ -41,72 +37,51 @@ function Community() {
 
     const loadClinics = async () => {
         try {
-
             const response = await getAllClinics();
-
             setClinics(response);
-
         } catch (error) {
             console.error(error);
         }
     };
 
     const handleCreate = async (post) => {
-
         try {
-
             await createPost({
                 ...post,
                 patientId: currentUserId
             });
 
             setShowModal(false);
-
             loadPosts();
-
         } catch (error) {
-
             console.error(error);
-
             alert("Unable to create post.");
-
         }
-
     };
 
     const handleDelete = async (id) => {
 
-        if (!window.confirm("Delete this post?"))
+        if (!window.confirm("Delete this post?")) {
             return;
-
-        try {
-
-            await deletePost(id);
-
-            loadPosts();
-
-        } catch (error) {
-
-            console.error(error);
-
         }
 
+        try {
+            await deletePost(id);
+            loadPosts();
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const handleEdit = (post) => {
-
-        console.log(post);
-
-        // Next step
-
+        console.log("Edit post:", post);
+        // Edit functionality will be added later
     };
 
     return (
-
         <div className="community-page">
 
             <div className="community-top">
-
                 <h2>Community</h2>
 
                 <button
@@ -115,7 +90,6 @@ function Community() {
                 >
                     Create Post
                 </button>
-
             </div>
 
             <CreatePostModal
@@ -125,31 +99,22 @@ function Community() {
                 onCreate={handleCreate}
             />
 
-            {
-                posts.length === 0 ?
-
-                    <p>No posts available.</p>
-
-                    :
-
-                    posts.map(post => (
-
-                        <CommunityCard
-                            key={post.id}
-                            post={post}
-                            currentUserId={currentUserId}
-                            onDelete={handleDelete}
-                            onEdit={handleEdit}
-                        />
-
-                    ))
-
-            }
+            {posts.length === 0 ? (
+                <p>No posts available.</p>
+            ) : (
+                posts.map((post) => (
+                    <CommunityCard
+                        key={post.id}
+                        post={post}
+                        currentUserId={currentUserId}
+                        onDelete={handleDelete}
+                        onEdit={handleEdit}
+                    />
+                ))
+            )}
 
         </div>
-
     );
-
 }
 
 export default Community;
