@@ -1,16 +1,18 @@
 import { useNavigate } from "react-router-dom";
+import { getRole } from "../services/authService";
 
 export default function Home() {
 
     const navigate = useNavigate();
+    const role = getRole();
 
     const cardStyle = {
-        backgroundColor: "white",
+        backgroundColor: "#fff",
         borderRadius: "15px",
         padding: "30px",
         textAlign: "center",
-        boxShadow: "0 5px 15px rgba(0,0,0,0.15)",
-        transition: "0.25s",
+        boxShadow: "0 5px 15px rgba(0,0,0,.15)",
+        transition: ".25s",
         cursor: "pointer"
     };
 
@@ -18,317 +20,301 @@ export default function Home() {
         marginTop: "20px",
         padding: "12px 22px",
         backgroundColor: "#0d6efd",
-        color: "white",
+        color: "#fff",
         border: "none",
         borderRadius: "8px",
         cursor: "pointer",
-        fontWeight: "bold",
-        fontSize: "15px"
+        fontWeight: "bold"
     };
+
+    const hover = {
+        onMouseEnter: (e) => {
+            e.currentTarget.style.transform = "translateY(-8px)";
+            e.currentTarget.style.boxShadow =
+                "0 12px 25px rgba(0,0,0,.25)";
+        },
+        onMouseLeave: (e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow =
+                "0 5px 15px rgba(0,0,0,.15)";
+        }
+    };
+
+    const Card = ({ title, description, button, link }) => (
+        <div style={cardStyle} {...hover}>
+            <h2>{title}</h2>
+
+            <p>{description}</p>
+
+            <button
+                style={buttonStyle}
+                onClick={() => navigate(link)}
+            >
+                {button}
+            </button>
+        </div>
+    );
 
     return (
 
         <div
             style={{
                 minHeight: "100vh",
-                backgroundColor: "#f4f8fb",
+                background: "#f4f8fb",
                 padding: "40px"
             }}
         >
 
+            {/* HERO */}
+
             <div
                 style={{
                     background: "linear-gradient(90deg,#0d6efd,#198754)",
-                    color: "white",
+                    color: "#fff",
                     padding: "40px",
                     borderRadius: "15px",
                     textAlign: "center",
                     marginBottom: "40px",
-                    boxShadow: "0 6px 18px rgba(0,0,0,0.2)"
+                    boxShadow: "0 6px 18px rgba(0,0,0,.2)"
                 }}
             >
 
-                <h1 style={{ margin: 0 }}>
-                    Ubuntu Health Management System
-                </h1>
+                <h1>Welcome {role}</h1>
 
-                <h3
-                    style={{
-                        marginTop: "10px",
-                        fontWeight: "normal"
-                    }}
-                >
-                    Clinic Management Portal
-                </h3>
+                <h3>Ubuntu Health Management System</h3>
 
-                <p style={{ marginTop: "15px" }}>
-                    Welcome! Manage clinics, patients, medications and appointments from one place.
-                </p>
+                
 
             </div>
 
-            <h2 style={{ marginTop: "20px", color: "#198754" }}>
-                👥 Patient Services
-            </h2>
+            {/* AVAILABLE SERVICES */}
 
-            <p style={{ color: "#666", marginBottom: "20px" }}>
-                Services available to patients using Ubuntu Health.
-            </p>
-
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(250px,1fr))",
-                    gap: "25px",
-                    marginBottom: "50px"
-                }}
-            >
-
-                {/* Appointments */}
-
-                <div
-                    style={cardStyle}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-8px)";
-                        e.currentTarget.style.boxShadow =
-                            "0 12px 25px rgba(0,0,0,0.25)";
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow =
-                            "0 5px 15px rgba(0,0,0,0.15)";
-                    }}
-                >
-
-                    <h2>📅 Appointments</h2>
-
-                    <p>
-                        Schedule and manage patient appointments.
-                    </p>
-
-                    <button
-                        style={buttonStyle}
-                        onClick={() => navigate("/appointments")}
-                    >
-                        Manage Appointments
-                    </button>
-
-                </div>
-
-                {/* Community */}
-
-                <div
-                    style={cardStyle}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-8px)";
-                        e.currentTarget.style.boxShadow =
-                            "0 12px 25px rgba(0,0,0,0.25)";
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow =
-                            "0 5px 15px rgba(0,0,0,0.15)";
-                    }}
-                >
-
-                    <h2>👥 Community</h2>
-
-                    <p>
-                        Share updates with other patients about clinic queues,
-                        waiting times and healthcare services.
-                    </p>
-
-                    <button
-                        style={buttonStyle}
-                        onClick={() => navigate("/community")}
-                    >
-                        Open Community
-                    </button>
-
-                </div>
-
-                {/* Announcements */}
-
-                <div
-                    style={cardStyle}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-8px)";
-                        e.currentTarget.style.boxShadow =
-                            "0 12px 25px rgba(0,0,0,0.25)";
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow =
-                            "0 5px 15px rgba(0,0,0,0.15)";
-                    }}
-                >
-
-                    <h2>📢 Announcements</h2>
-
-                    <p>
-                        Stay informed with official updates, notices, clinic schedules,
-                        and important healthcare announcements.
-                    </p>
-
-                    <button
-                        style={buttonStyle}
-                        onClick={() => navigate("/announcements")}
-                    >
-                        View Announcements
-                    </button>
-
-                </div>
-            </div>
             <h2 style={{ color: "#0d6efd" }}>
-                🛠 Administration
+                Available Services
             </h2>
-
-            <p style={{ color: "#666", marginBottom: "20px" }}>
-                Administrative tools for managing clinics, patients and healthcare data.
-            </p>
 
             <div
                 style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(250px,1fr))",
-                    gap: "25px"
+                    gridTemplateColumns:
+                        "repeat(auto-fit,minmax(260px,1fr))",
+                    gap: "25px",
+                    marginTop: "20px"
                 }}
             >
-                {/* Dashboard */}
 
-                <div
-                    style={cardStyle}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-8px)";
-                        e.currentTarget.style.boxShadow =
-                            "0 12px 25px rgba(0,0,0,0.25)";
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow =
-                            "0 5px 15px rgba(0,0,0,0.15)";
-                    }}
-                >
+                {/* Everyone */}
 
-                    <h2>📊 Dashboard</h2>
+                <Card
+                    title="📅 Appointments"
+                    description="Manage appointments and schedules."
+                    button="Open Appointments"
+                    link="/appointments"
+                />
 
-                    <p>
-                        View system statistics and recent activity.
-                    </p>
+                <Card
+                    title="📢 Announcements"
+                    description="Read clinic announcements and notices."
+                    button="Open Announcements"
+                    link="/announcements"
+                />
 
-                    <button
-                        style={buttonStyle}
-                        onClick={() => navigate("/dashboard")}
-                    >
-                        Open Dashboard
-                    </button>
+                {/* Patient */}
 
-                </div>
+                {role === "PATIENT" && (
+                    <>
+                        <Card
+                            title="❤️ Recommendations"
+                            description="View personalized healthcare recommendations."
+                            button="View Recommendations"
+                            link="/recommendations"
+                        />
 
-                {/* Clinics */}
+                        <Card
+                            title="👥 Community"
+                            description="Join discussions with other patients."
+                            button="Open Community"
+                            link="/community"
+                        />
+                    </>
+                )}
 
-                <div
-                    style={cardStyle}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-8px)";
-                        e.currentTarget.style.boxShadow =
-                            "0 12px 25px rgba(0,0,0,0.25)";
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow =
-                            "0 5px 15px rgba(0,0,0,0.15)";
-                    }}
-                >
+                {/* Doctor */}
 
-                    <h2>🏥 Clinics</h2>
+                {role === "DOCTOR" && (
+                    <>
+                        <Card
+                            title="👤 Patients"
+                            description="View and manage your patients."
+                            button="Manage Patients"
+                            link="/patients"
+                        />
 
-                    <p>
-                        Add, edit and manage clinic information.
-                    </p>
+                        <Card
+                            title="💊 Medications"
+                            description="Manage medications and prescriptions."
+                            button="Manage Medications"
+                            link="/medications"
+                        />
 
-                    <button
-                        style={buttonStyle}
-                        onClick={() => navigate("/clinics")}
-                    >
-                        Manage Clinics
-                    </button>
+                        <Card
+                            title="👥 Community"
+                            description="Collaborate with healthcare professionals."
+                            button="Open Community"
+                            link="/community"
+                        />
+                    </>
+                )}
 
-                </div>
+                {/* Nurse */}
 
-                {/* Patients */}
+                {role === "NURSE" && (
+                    <>
+                        <Card
+                            title="👤 Patients"
+                            description="Assist in managing patient records."
+                            button="Manage Patients"
+                            link="/patients"
+                        />
 
-                <div
-                    style={cardStyle}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-8px)";
-                        e.currentTarget.style.boxShadow =
-                            "0 12px 25px rgba(0,0,0,0.25)";
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow =
-                            "0 5px 15px rgba(0,0,0,0.15)";
-                    }}
-                >
+                        <Card
+                            title="💊 Medications"
+                            description="Manage medication administration."
+                            button="Manage Medications"
+                            link="/medications"
+                        />
 
-                    <h2>👤 Patients</h2>
+                        <Card
+                            title="👥 Community"
+                            description="Collaborate with healthcare professionals."
+                            button="Open Community"
+                            link="/community"
+                        />
+                    </>
+                )}
 
-                    <p>
-                        Register and manage patient records.
-                    </p>
+                {/* Receptionist */}
 
-                    <button
-                        style={buttonStyle}
-                        onClick={() => navigate("/patients")}
-                    >
-                        Manage Patients
-                    </button>
+                {role === "RECEPTIONIST" && (
+                    <>
+                        <Card
+                            title="👤 Patients"
+                            description="Register and manage patients."
+                            button="Manage Patients"
+                            link="/patients"
+                        />
 
-                </div>
+                        <Card
+                            title="🏥 Clinics"
+                            description="Manage clinic information."
+                            button="Manage Clinics"
+                            link="/clinics"
+                        />
 
-                {/* Medications */}
+                        <Card
+                            title="👥 Community"
+                            description="Collaborate with staff."
+                            button="Open Community"
+                            link="/community"
+                        />
+                    </>
+                )}
 
-                <div
-                    style={cardStyle}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-8px)";
-                        e.currentTarget.style.boxShadow =
-                            "0 12px 25px rgba(0,0,0,0.25)";
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow =
-                            "0 5px 15px rgba(0,0,0,0.15)";
-                    }}
-                >
+                {/* Admin */}
 
-                    <h2>💊 Medications</h2>
+                {role === "ADMIN" && (
+                    <>
+                        <Card
+                            title="👤 Patients"
+                            description="Manage all patient records."
+                            button="Manage Patients"
+                            link="/patients"
+                        />
 
-                    <p>
-                        Maintain medication inventory and stock.
-                    </p>
+                        <Card
+                            title="🏥 Clinics"
+                            description="Manage clinics."
+                            button="Manage Clinics"
+                            link="/clinics"
+                        />
 
-                    <button
-                        style={buttonStyle}
-                        onClick={() => navigate("/medications")}
-                    >
-                        Manage Medications
-                    </button>
+                        <Card
+                            title="💊 Medications"
+                            description="Manage medication inventory."
+                            button="Manage Medications"
+                            link="/medications"
+                        />
 
-                </div>
+                        <Card
+                            title="📈 Reports"
+                            description="View reports and analytics."
+                            button="Open Reports"
+                            link="/reports"
+                        />
+                    </>
+                )}
 
             </div>
 
+            {/* ROLE DESCRIPTION */}
 
-            <hr style={{ marginTop: "60px" }} />
+            <div
+                style={{
+                    marginTop: "50px",
+                    background: "#fff",
+                    padding: "30px",
+                    borderRadius: "15px",
+                    boxShadow: "0 5px 15px rgba(0,0,0,.15)"
+                }}
+            >
+
+                <h2>{role}</h2>
+
+                {role === "ADMIN" && (
+                    <p>
+                        You have full system access including clinics,
+                        patients, medications, appointments and reports.
+                    </p>
+                )}
+
+                {role === "DOCTOR" && (
+                    <p>
+                        You can manage patients, medications,
+                        appointments and collaborate with staff.
+                    </p>
+                )}
+
+                {role === "NURSE" && (
+                    <p>
+                        You can assist doctors by managing patients,
+                        medications and appointments.
+                    </p>
+                )}
+
+                {role === "RECEPTIONIST" && (
+                    <p>
+                        You can register patients, manage clinics
+                        and schedule appointments.
+                    </p>
+                )}
+
+                {role === "PATIENT" && (
+                    <p>
+                        You can book appointments, receive health
+                        recommendations, join the community and stay
+                        informed through announcements.
+                    </p>
+                )}
+
+            </div>
+
+            <hr style={{ marginTop: "50px" }} />
 
             <div
                 style={{
                     textAlign: "center",
-                    color: "gray",
-                    marginTop: "20px",
-                    fontSize: "14px"
+                    color: "#777",
+                    marginTop: "20px"
                 }}
             >
 
