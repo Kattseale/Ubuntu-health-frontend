@@ -7,18 +7,33 @@ import Medications from "./pages/Medications";
 import Appointments from "./pages/Appointments";
 import Recommendations from "./pages/Recommendations";
 import Reports from "./pages/Reports";
+import Community from "./pages/Community";
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
+
                 <Route path="/" element={<Home />} />
+
                 <Route path="/clinics" element={<Clinics />} />
+
                 <Route path="/patients" element={<Patients />} />
+
                 <Route path="/medications" element={<Medications />} />
+
                 <Route path="/appointments" element={<Appointments />} />
+
                 <Route path="/recommendations" element={<Recommendations />} />
+
                 <Route path="/reports" element={<Reports />} />
+
+                {/* Community */}
+                <Route
+                    path="/community"
+                    element={<Community />}
+                />
+
             </Routes>
         </BrowserRouter>
     );
