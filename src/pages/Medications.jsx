@@ -150,6 +150,7 @@ export default function Medications() {
     return (
 
         <div
+            className="page"
             style={{
                 minHeight: "100vh",
                 backgroundColor: darkMode ? "#121212" : "#f4f8fb",
@@ -161,6 +162,7 @@ export default function Medications() {
             <h1>💊 Medications</h1>
             {successMessage && (
                 <div
+                    className="page"
                     style={{
                         background: darkMode ? "#1e4620" : "#d1e7dd",
                         color: darkMode ? "#8ff0a4" : "#0f5132",
@@ -176,6 +178,7 @@ export default function Medications() {
 
             {errorMessage && (
                 <div
+                    className="page"
                     style={{
                         background: darkMode ? "#4a1f1f" : "#f8d7da",
                         color: darkMode ? "#ff9999" : "#842029",
@@ -201,6 +204,7 @@ export default function Medications() {
             {Object.keys(errors).length > 0 && (
 
                 <div
+                    className="page"
                     style={{
                         background: darkMode ? "#3a1f1f" : "#ffe6e6",
                         color: darkMode ? "#ff9999" : "#b30000",
@@ -317,7 +321,7 @@ export default function Medications() {
                     color: darkMode ? "white" : "black"
                 }}
             >
-
+                <div className="table-container">
                 <table
                     style={{
                         width: "100%",
@@ -406,6 +410,7 @@ export default function Medications() {
                 </tbody>
 
             </table>
+                </div>
             </div>
 
         </div>

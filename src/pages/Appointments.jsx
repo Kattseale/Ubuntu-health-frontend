@@ -194,7 +194,7 @@ export default function Appointments() {
             <h1>📅 Appointments</h1>
 
             {successMessage && (
-                <div
+                <div className="page"
                     style={{
                         background: darkMode ? "#1e4620" : "#d1e7dd",
                         color: darkMode ? "#8ff0a4" : "#0f5132",
@@ -209,7 +209,7 @@ export default function Appointments() {
             )}
 
             {errorMessage && (
-                <div
+                <div className="page"
                     style={{
                         background: darkMode ? "#4a1f1f" : "#f8d7da",
                         color: darkMode ? "#ff9999" : "#842029",
@@ -234,7 +234,7 @@ export default function Appointments() {
 
             {Object.keys(errors).length > 0 && (
 
-                <div
+                <div className="page"
                     style={{
                         background: "#ffe6e6",
                         color: "#b30000",
@@ -372,7 +372,7 @@ export default function Appointments() {
                     color: darkMode ? "white" : "black"
                 }}
             >
-
+                <div className="table-container">
                 <table
                     style={{
                         width: "100%",
@@ -448,6 +448,7 @@ export default function Appointments() {
                 ))}
                 </tbody>
             </table>
+                </div>
             </div>
 
         </div>

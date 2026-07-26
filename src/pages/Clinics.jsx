@@ -152,7 +152,7 @@ export default function Clinics() {
 
     return (
 
-        <div
+        <div className="page"
             style={{
                 backgroundColor: darkMode ? "#121212" : "#f4f8fb",
                 color: darkMode ? "white" : "black",
@@ -164,7 +164,7 @@ export default function Clinics() {
             <h1>Clinics</h1>
 
             {successMessage && (
-                <div
+                <div className="page"
                     style={{
                         background: darkMode ? "#1e4620" : "#d1e7dd",
                         color: darkMode ? "#8ff0a4" : "#0f5132",
@@ -178,7 +178,7 @@ export default function Clinics() {
                 </div>
             )}
             {errorMessage && (
-                <div
+                <div className="page"
                     style={{
                         background: darkMode ? "#4a1f1f" : "#f8d7da",
                         color: darkMode ? "#ff9999" : "#842029",
@@ -194,7 +194,7 @@ export default function Clinics() {
 
             {Object.keys(errors).length > 0 && (
 
-                <div
+                <div className="page"
                     style={{
                         background: "#ffe6e6",
                         color: "#b30000",
@@ -330,7 +330,7 @@ export default function Clinics() {
                     color: darkMode ? "white" : "black"
                 }}
             >
-
+                <div className="table-container">
                 <table
                     style={{
                         width: "100%",
@@ -428,6 +428,7 @@ export default function Clinics() {
                     </tbody>
 
                 </table>
+                </div>
 
             </div>
 

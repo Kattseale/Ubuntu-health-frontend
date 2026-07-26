@@ -406,7 +406,7 @@ export default function Reports() {
                 />
 
             </div>
-
+            <div className="table-container">
             <table
                 style={{
                     width: "100%",
@@ -450,11 +450,12 @@ export default function Reports() {
                 </tbody>
 
             </table>
+            </div>
 
             <br />
 
             <h2>Patients per Clinic</h2>
-
+            <div className="table-container">
             <table
                 style={{
                     width: "100%",
@@ -498,11 +499,12 @@ export default function Reports() {
                 </tbody>
 
             </table>
+            </div>
 
             <br />
 
             <h2>Daily Appointments</h2>
-
+            <div className="table-container">
             <table
                 style={{
                     width: "100%",
@@ -546,6 +548,7 @@ export default function Reports() {
                 </tbody>
 
             </table>
+            </div>
 
         </div>
 

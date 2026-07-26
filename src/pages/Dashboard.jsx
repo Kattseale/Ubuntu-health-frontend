@@ -67,6 +67,7 @@ export default function Dashboard() {
     return (
 
         <div
+            className="page"
             style={{
                 minHeight: "100vh",
                 backgroundColor: darkMode ? "#121212" : "#f4f8fb",
@@ -76,6 +77,7 @@ export default function Dashboard() {
         >
 
             <div
+                className="page"
                 style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -102,6 +104,7 @@ export default function Dashboard() {
                 </div>
 
                 <div
+                    className="page"
                     style={{
                         textAlign: "right"
                     }}
@@ -119,15 +122,16 @@ export default function Dashboard() {
 
             </div>
 
-            <div style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                gap: "20px",
-                marginTop: "30px",
-                
+            <div
+                className="dashboard-grid"
+                style={{
+                    marginTop:"30px"
+
             }}>
 
-                <div style={{ ...cardStyle, backgroundColor: "#0d6efd" }}>
+                <div
+                    className="page"
+                    style={{ ...cardStyle, backgroundColor: "#0d6efd" }}>
                     <h2>👥 Patients</h2>
                     <h1
                         style={{
@@ -139,7 +143,9 @@ export default function Dashboard() {
                     </h1>
                 </div>
 
-                <div style={{ ...cardStyle, backgroundColor: "#198754" }}>
+                <div
+                    className="page"
+                    style={{ ...cardStyle, backgroundColor: "#198754" }}>
                     <h2>🏥 Clinics</h2>
                     <h1
                         style={{
@@ -151,7 +157,9 @@ export default function Dashboard() {
                     </h1>
                 </div>
 
-                <div style={{ ...cardStyle, backgroundColor: "#fd7e14" }}>
+                <div
+                    className="page"
+                    style={{ ...cardStyle, backgroundColor: "#fd7e14" }}>
                     <h2>💊 Medications</h2>
                     <h1
                         style={{
@@ -163,7 +171,8 @@ export default function Dashboard() {
                     </h1>
                 </div>
 
-                <div style={{ ...cardStyle, backgroundColor: "#6f42c1" }}>
+                <div className="page"
+                     style={{ ...cardStyle, backgroundColor: "#6f42c1" }}>
                     <h2>📅 Appointments</h2>
                     <h1
                         style={{
@@ -175,7 +184,8 @@ export default function Dashboard() {
                     </h1>
                 </div>
 
-                <div style={{ ...cardStyle, backgroundColor: "#dc3545" }}>
+                <div className="page"
+                     style={{ ...cardStyle, backgroundColor: "#dc3545" }}>
                     <h2>⏰ Today's Appointments</h2>
                     <h1
                         style={{
@@ -214,7 +224,7 @@ export default function Dashboard() {
                     color: darkMode ? "white" : "black"
                 }}
             >
-
+                <div className="table-container">
                 <table
                     style={{
                         width: "100%",
@@ -353,6 +363,7 @@ export default function Dashboard() {
                     </tbody>
 
                 </table>
+                </div>
 
                 <h2 style={{ marginTop: "40px" }}>
                     📢 Latest Announcements

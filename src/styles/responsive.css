@@ -1,0 +1,95 @@
+/* Mobile Responsive Layout */
+
+* {
+    box-sizing: border-box;
+}
+
+img {
+    max-width: 100%;
+}
+
+.page {
+    padding: 20px;
+}
+
+/* Forms */
+
+form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 15px;
+}
+
+form button {
+    grid-column: 1 / -1;
+    width: fit-content;
+}
+
+/* Tables */
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    min-width: 700px;
+}
+
+/* Dashboard cards */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* Action buttons */
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+    .page {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    table {
+        min-width: 650px;
+    }
+
+    form {
+        grid-template-columns: 1fr;
+    }
+
+    form button {
+        width: 100%;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .action-buttons button {
+        width: 100%;
+    }
+
+}

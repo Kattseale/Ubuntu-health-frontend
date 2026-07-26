@@ -14,6 +14,7 @@ export default function HomeM() {
             {/* TOP BAR */}
 
             <div
+                className="page"
                 style={{
                     background: "#084298",
                     color: "#fff",
@@ -25,6 +26,7 @@ export default function HomeM() {
                 }}
             >
                 <div
+                    className="page"
                     style={{
                         display: "flex",
                         gap: "25px",
@@ -42,6 +44,7 @@ export default function HomeM() {
                 </div>
 
                 <div
+                    className="page"
                     style={{
                         display: "flex",
                         gap: "18px"
@@ -98,6 +101,7 @@ export default function HomeM() {
                 </h2>
 
                 <div
+                    className="page"
                     style={{
                         display: "flex",
                         gap: "30px",
@@ -162,6 +166,7 @@ export default function HomeM() {
                 </p>
 
                 <div
+                    className="page"
                     style={{
                         marginTop: "40px",
                         display: "flex",
@@ -203,6 +208,7 @@ export default function HomeM() {
                 </h2>
 
                 <div
+                    className="page"
                     style={{
                         display: "grid",
                         gridTemplateColumns:
@@ -293,6 +299,7 @@ export default function HomeM() {
 function FeatureCard({ icon, title, description }) {
     return (
         <div
+            className="page"
             style={{
                 background: "#fff",
                 borderRadius: "12px",

@@ -153,6 +153,7 @@ export default function Community() {
     return (
 
         <div
+            className="page"
             style={{
                 backgroundColor: darkMode ? "#121212" : "#f4f8fb",
                 color: darkMode ? "white" : "black",
@@ -160,11 +161,12 @@ export default function Community() {
                 padding: "20px"
             }}
         >
-            <div style={{ marginBottom: "30px" }}>
+            <div className="page"
+                 style={{ marginBottom: "30px" }}>
 
                 <h1>👥 Community</h1>
                 {successMessage && (
-                    <div
+                    <div className="page"
                         style={{
                             background: darkMode ? "#1e4620" : "#d1e7dd",
                             color: darkMode ? "#8ff0a4" : "#0f5132",
@@ -178,7 +180,7 @@ export default function Community() {
                     </div>
                 )}
                 {errorMessage && (
-                    <div
+                    <div className="page"
                         style={{
                             background: darkMode ? "#4a1f1f" : "#f8d7da",
                             color: darkMode ? "#ff9999" : "#842029",
@@ -203,7 +205,7 @@ export default function Community() {
 
             </div>
             {successMessage && (
-                <div
+                <div className="page"
                     style={{
                         background: "#d1e7dd",
                         color: "#0f5132",
@@ -346,7 +348,7 @@ export default function Community() {
                     }}
                 >
 
-                    <div
+                    <div className="page"
                         style={{
                             textAlign: "center",
                             padding: "40px"
@@ -377,7 +379,7 @@ export default function Community() {
                         }}
                     >
 
-                        <div
+                        <div className="page"
                             style={{
                                 display: "flex",
                                 justifyContent: "space-between"

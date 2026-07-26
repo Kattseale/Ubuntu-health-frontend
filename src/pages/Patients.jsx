@@ -175,6 +175,7 @@ export default function Patients() {
             {Object.keys(errors).length > 0 && (
 
                 <div
+                    className="page"
                     style={{
                         background: darkMode ? "#3a1f1f" : "#ffe6e6",
                         color: darkMode ? "#ff9999" : "#b30000",
@@ -209,6 +210,7 @@ export default function Patients() {
                 </h2>
                 {successMessage && (
                     <div
+                        className="page"
                         style={{
                             background: darkMode ? "#1e4620" : "#d1e7dd",
                             color: darkMode ? "#8ff0a4" : "#0f5132",
@@ -223,6 +225,7 @@ export default function Patients() {
                 )}
                 {errorMessage && (
                     <div
+                        className="page"
                         style={{
                             background: darkMode ? "#4a1f1f" : "#f8d7da",
                             color: darkMode ? "#ff9999" : "#842029",
@@ -429,7 +432,7 @@ export default function Patients() {
                 <h2 className="card-title">
                     Patient Records
                 </h2>
-
+                <div className="table-container">
                 <table
                     style={{
                         width: "100%",
@@ -520,6 +523,7 @@ export default function Patients() {
                 </tbody>
 
             </table>
+                </div>
 
             </div>
 

@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
+import "./styles/responsive.css";
 
 import ThemeContext from "./context/ThemeContext";
 
