@@ -13,6 +13,9 @@ export default function Patients() {
     const { darkMode } = useContext(ThemeContext);
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const recordsPerPage = 5;
 
     const [patient, setPatient] = useState({
         firstName: "",
@@ -100,6 +103,7 @@ export default function Patients() {
 
             const data = await getAllPatients();
             setPatients(data);
+            setCurrentPage(1);
 
         } catch (error) {
 
@@ -132,6 +136,7 @@ export default function Patients() {
 
             const data = await getAllPatients();
             setPatients(data);
+            setCurrentPage(1);
 
             setSuccessMessage("🗑️ Patient deleted successfully!");
             setTimeout(() => {
@@ -156,6 +161,15 @@ export default function Patients() {
         color: darkMode ? "white" : "black",
         border: darkMode ? "1px solid #555" : "1px solid #ccc"
     };
+    const indexOfLastRecord = currentPage * recordsPerPage;
+    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+
+    const currentRecords = patients.slice(
+        indexOfFirstRecord,
+        indexOfLastRecord
+    );
+
+    const totalPages = Math.ceil(patients.length / recordsPerPage);
 
     return (
 
@@ -460,7 +474,7 @@ export default function Patients() {
 
 
                     <tbody>
-                    {patients.map((patient) => (
+                    {currentRecords.map((patient) => (
                         <tr
                             key={patient.id}
                             style={{
@@ -520,9 +534,38 @@ export default function Patients() {
 
                 ))}
 
-                </tbody>
+                    </tbody>
+                </table>
 
-            </table>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            gap: "10px",
+                            marginTop: "20px"
+                        }}
+                    >
+                        <button
+                            className="btn-primary"
+                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage(currentPage - 1)}
+                        >
+                            Previous
+                        </button>
+
+                        <span>
+        Page {currentPage} of {totalPages}
+    </span>
+
+                        <button
+                            className="btn-primary"
+                            disabled={currentPage === totalPages}
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                        >
+                            Next
+                        </button>
+                    </div>
+
                 </div>
 
             </div>

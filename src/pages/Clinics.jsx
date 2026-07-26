@@ -26,6 +26,9 @@ export default function Clinics() {
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [search, setSearch] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const recordsPerPage = 5;
     const filteredClinics = clinics.filter(c =>
         c.clinicName.toLowerCase().includes(search.toLowerCase())
     );
@@ -109,6 +112,7 @@ export default function Clinics() {
             setEditingId(null);
 
             await fetchClinics();
+            setCurrentPage(1);
 
         } catch (error) {
 
@@ -141,6 +145,7 @@ export default function Clinics() {
             await deleteClinic(id);
 
             await fetchClinics();
+            setCurrentPage(1);
 
             setSuccessMessage("🗑️ Clinic deleted successfully!");
             setTimeout(() => {
@@ -155,6 +160,17 @@ export default function Clinics() {
 
     };
 
+    const indexOfLastRecord = currentPage * recordsPerPage;
+    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+
+    const currentRecords = clinics.slice(
+        indexOfFirstRecord,
+        indexOfLastRecord
+    );
+
+    const totalPages = Math.ceil(
+        clinics.length / recordsPerPage
+    );
     return (
 
         <div className="page"
@@ -364,7 +380,7 @@ export default function Clinics() {
 
                     <tbody>
 
-                    {filteredClinics.map((clinic) => (
+                    {currentRecords.map((clinic) => (
 
                         <tr
                             key={clinic.id}
@@ -433,6 +449,37 @@ export default function Clinics() {
                     </tbody>
 
                 </table>
+
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            gap: "10px",
+                            marginTop: "20px",
+                            flexWrap: "wrap"
+                        }}
+                    >
+                        <button
+                            className="btn-primary"
+                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage(currentPage - 1)}
+                        >
+                            Previous
+                        </button>
+
+                        <span>
+        Page {currentPage} of {totalPages}
+    </span>
+
+                        <button
+                            className="btn-primary"
+                            disabled={currentPage === totalPages}
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                        >
+                            Next
+                        </button>
+                    </div>
                     <hr />
 
                     <div
