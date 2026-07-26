@@ -216,22 +216,61 @@ export default function Dashboard() {
             >
 
                 <table
-                    border="1"
-                    cellPadding="10"
                     style={{
                         width: "100%",
                         borderCollapse: "collapse",
-                        marginTop: "15px"
+                        marginTop: "15px",
+                        backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
+                        color: darkMode ? "#ffffff" : "#000000"
                     }}
                 >
 
                     <thead>
-                    <tr>
-                        <th>Patient</th>
-                        <th>Clinic</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Status</th>
+                    <tr
+                        style={{
+                            backgroundColor: darkMode ? "#333" : "#e9ecef"
+                        }}
+                    >
+                        <th
+                            style={{
+                                padding: "12px",
+                                border: "1px solid #555"
+                            }}
+                        >
+                            Patient
+                        </th>
+                        <th
+                            style={{
+                                padding: "12px",
+                                border: "1px solid #555"
+                            }}
+                        >
+                            Clinic
+                        </th>
+                        <th
+                            style={{
+                                padding: "12px",
+                                border: "1px solid #555"
+                            }}
+                        >
+                            Date
+                        </th>
+                        <th
+                            style={{
+                                padding: "12px",
+                                border: "1px solid #555"
+                            }}
+                        >
+                            Time
+                        </th>
+                        <th
+                            style={{
+                                padding: "12px",
+                                border: "1px solid #555"
+                            }}
+                        >
+                            Status
+                        </th>
                     </tr>
                     </thead>
 
@@ -240,7 +279,16 @@ export default function Dashboard() {
                     {recentAppointments.length === 0 ? (
 
                         <tr>
-                            <td colSpan="5" style={{ textAlign: "center" }}>
+                            <td
+                                colSpan="5"
+                                style={{
+                                    textAlign: "center",
+                                    padding: "15px",
+                                    border: "1px solid #555",
+                                    backgroundColor: darkMode ? "#2b2b2b" : "#ffffff",
+                                    color: darkMode ? "#ffffff" : "#000000"
+                                }}
+                            >
                                 No appointments scheduled for today.
                             </td>
                         </tr>
@@ -249,12 +297,53 @@ export default function Dashboard() {
 
                         recentAppointments.map((appointment) => (
 
-                            <tr key={appointment.id}>
-                                <td>{appointment.patientName}</td>
-                                <td>{appointment.clinicName}</td>
-                                <td>{appointment.appointmentDate}</td>
-                                <td>{appointment.appointmentTime}</td>
-                                <td>{appointment.status}</td>
+                            <tr
+                                key={appointment.id}
+                                style={{
+                                    backgroundColor: darkMode ? "#2b2b2b" : "#ffffff",
+                                    color: darkMode ? "#ffffff" : "#000000"
+                                }}
+                            >
+                                <td
+                                    style={{
+                                        padding: "10px",
+                                        border: "1px solid #555"
+                                    }}
+                                >
+                                    {appointment.patientName}
+                                </td>
+                                <td
+                                    style={{
+                                        padding: "10px",
+                                        border: "1px solid #555"
+                                    }}
+                                >
+                                    {appointment.clinicName}
+                                </td>
+                                <td
+                                    style={{
+                                        padding: "10px",
+                                        border: "1px solid #555"
+                                    }}
+                                >
+                                    {appointment.appointmentDate}
+                                </td>
+                                <td
+                                    style={{
+                                        padding: "10px",
+                                        border: "1px solid #555"
+                                    }}
+                                >
+                                    {appointment.appointmentTime}
+                                </td>
+                                <td
+                                    style={{
+                                        padding: "10px",
+                                        border: "1px solid #555"
+                                    }}
+                                >
+                                    {appointment.status}
+                                </td>
                             </tr>
 
                         ))

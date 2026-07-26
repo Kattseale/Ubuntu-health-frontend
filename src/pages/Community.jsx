@@ -6,7 +6,6 @@ import {
     getAllPosts,
     createPost,
     updatePost,
-    deletePost
 } from "../services/communityService";
 
 import { getAllPatients } from "../services/patientService";
@@ -14,11 +13,20 @@ import { getAllClinics } from "../services/clinicService";
 
 export default function Community() {
     const { darkMode } = useContext(ThemeContext);
+    const inputStyle = {
+        backgroundColor: darkMode ? "#2b2b2b" : "white",
+        color: darkMode ? "white" : "black",
+        border: darkMode ? "1px solid #555" : "1px solid #ccc",
+        padding: "10px",
+        width: "100%",
+        boxSizing: "border-box"
+    };
 
     const [posts, setPosts] = useState([]);
     const [patients, setPatients] = useState([]);
     const [clinics, setClinics] = useState([]);
     const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const [editingId, setEditingId] = useState(null);
     const [search, setSearch] = useState("");
@@ -74,16 +82,21 @@ export default function Community() {
         try {
 
             if (editingId) {
-
                 await updatePost(editingId, post);
-                setSuccessMessage("✅ Post created successfully!");
-
-            } else {
-
-                await createPost(post);
                 setSuccessMessage("✅ Post updated successfully!");
-
+                setTimeout(() => {
+                    setSuccessMessage("");
+                }, 3000);
+            } else {
+                await createPost(post);
+                setSuccessMessage("✅ Post created successfully!");
+                setTimeout(() => {
+                    setSuccessMessage("");
+                }, 3000);
             }
+            setTimeout(() => {
+                setSuccessMessage("");
+            }, 3000);
 
             setPost({
                 message: "",
@@ -98,7 +111,11 @@ export default function Community() {
         } catch (error) {
 
             console.error(error);
-            alert("Unable to save post.");
+            setErrorMessage("Unable to save post!");
+
+            setTimeout(() => {
+                setErrorMessage("");
+            }, 3000);
 
         }
 
@@ -121,24 +138,7 @@ export default function Community() {
 
     };
 
-    const handleDelete = async (id) => {
 
-        if (!window.confirm("Delete this post?")) return;
-
-        try {
-
-            await deletePost(id);
-
-            await loadData();
-
-        } catch (error) {
-
-            console.error(error);
-            alert("Unable to delete post.");
-
-        }
-
-    };
 
     const filteredPosts = [...posts]
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -163,6 +163,34 @@ export default function Community() {
             <div style={{ marginBottom: "30px" }}>
 
                 <h1>👥 Community</h1>
+                {successMessage && (
+                    <div
+                        style={{
+                            background: darkMode ? "#1e4620" : "#d1e7dd",
+                            color: darkMode ? "#8ff0a4" : "#0f5132",
+                            padding: "12px",
+                            marginBottom: "20px",
+                            borderRadius: "8px",
+                            border: darkMode ? "1px solid #2f7d32" : "1px solid #badbcc"
+                        }}
+                    >
+                        {successMessage}
+                    </div>
+                )}
+                {errorMessage && (
+                    <div
+                        style={{
+                            background: darkMode ? "#4a1f1f" : "#f8d7da",
+                            color: darkMode ? "#ff9999" : "#842029",
+                            padding: "12px",
+                            marginBottom: "20px",
+                            borderRadius: "8px",
+                            border: darkMode ? "1px solid #842029" : "1px solid #f5c2c7"
+                        }}
+                    >
+                        {errorMessage}
+                    </div>
+                )}
 
                 <p
                     style={{
@@ -201,11 +229,7 @@ export default function Community() {
                         name="patientId"
                         value={post.patientId}
                         onChange={handleChange}
-                        style={{
-                            backgroundColor: darkMode ? "#2c2c2c" : "white",
-                            color: darkMode ? "white" : "black",
-                            border: "1px solid #666"
-                        }}
+                        style={inputStyle}
                         required
                     >
                         <option value="">Select Patient</option>
@@ -229,11 +253,7 @@ export default function Community() {
                         name="clinicId"
                         value={post.clinicId}
                         onChange={handleChange}
-                        style={{
-                            backgroundColor: darkMode ? "#2c2c2c" : "white",
-                            color: darkMode ? "white" : "black",
-                            border: "1px solid #666"
-                        }}
+                        style={inputStyle}
                         required
                     >
                         <option value="">Select Clinic</option>
@@ -264,7 +284,9 @@ export default function Community() {
                             padding: "10px",
                             backgroundColor: darkMode ? "#2c2c2c" : "white",
                             color: darkMode ? "white" : "black",
-                            border: "1px solid #666"
+                            border: "1px solid #666",
+                            minHeight: "120px",
+                            resize: "vertical"
                         }}
                         required
                     />
@@ -301,13 +323,9 @@ export default function Community() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 style={{
-                    width: "100%",
-                    padding: "12px",
-                    borderRadius: "8px",
-                    border: "1px solid #666",
-                    marginBottom: "20px",
-                    backgroundColor: darkMode ? "#2c2c2c" : "white",
-                    color: darkMode ? "white" : "black"
+                    ...inputStyle,
+                    minHeight: "120px",
+                    resize: "vertical"
                 }}
             />
             <button
@@ -393,14 +411,6 @@ export default function Community() {
                             onClick={() => handleEdit(communityPost)}
                         >
                             Edit
-                        </button>
-
-                        <button
-                            className="btn-danger"
-                            style={{ marginLeft: "10px" }}
-                            onClick={() => handleDelete(communityPost.id)}
-                        >
-                            Delete
                         </button>
 
                     </div>

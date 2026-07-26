@@ -11,6 +11,8 @@ export default function Patients() {
     const [errors, setErrors] = useState({});
     const [clinics, setClinics] = useState([]);
     const { darkMode } = useContext(ThemeContext);
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const [patient, setPatient] = useState({
         firstName: "",
@@ -65,13 +67,19 @@ export default function Patients() {
             if (editingId) {
 
                 await updatePatient(editingId, patient);
-                alert("Patient updated successfully!");
+                setSuccessMessage("✅ Patient updated successfully!");
+                setTimeout(() => {
+                    setSuccessMessage("");
+                }, 3000);
 
             } else {
                 console.log(patient);
 
                 await createPatient(patient);
-                alert("Patient added successfully!");
+                setSuccessMessage("✅ Patient added successfully!");
+                setTimeout(() => {
+                    setSuccessMessage("");
+                }, 3000);
 
             }
 
@@ -125,11 +133,20 @@ export default function Patients() {
             const data = await getAllPatients();
             setPatients(data);
 
-            alert("Patient deleted successfully!");
+            setSuccessMessage("🗑️ Patient deleted successfully!");
+            setTimeout(() => {
+                setSuccessMessage("");
+            }, 3000);
 
         } catch (error) {
 
             console.error(error);
+            setErrorMessage("❌ Something went wrong.");
+
+            setTimeout(() => {
+                setErrorMessage("");
+            }, 3000);
+
 
         }
 
@@ -190,6 +207,34 @@ export default function Patients() {
                 <h2 className="card-title">
                     Patient Information
                 </h2>
+                {successMessage && (
+                    <div
+                        style={{
+                            background: darkMode ? "#1e4620" : "#d1e7dd",
+                            color: darkMode ? "#8ff0a4" : "#0f5132",
+                            padding: "12px",
+                            marginBottom: "20px",
+                            borderRadius: "8px",
+                            border: darkMode ? "1px solid #2f7d32" : "1px solid #badbcc"
+                        }}
+                    >
+                        {successMessage}
+                    </div>
+                )}
+                {errorMessage && (
+                    <div
+                        style={{
+                            background: darkMode ? "#4a1f1f" : "#f8d7da",
+                            color: darkMode ? "#ff9999" : "#842029",
+                            padding: "12px",
+                            marginBottom: "20px",
+                            borderRadius: "8px",
+                            border: darkMode ? "1px solid #842029" : "1px solid #f5c2c7"
+                        }}
+                    >
+                        {errorMessage}
+                    </div>
+                )}
                 <form onSubmit={handleSubmit}>
 
                 <input

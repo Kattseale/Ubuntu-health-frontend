@@ -10,9 +10,11 @@ import ThemeContext from "../context/ThemeContext";
 export default function Appointments() {
 
     const { darkMode } = useContext(ThemeContext);
+    const [successMessage, setSuccessMessage] = useState("");
     const [appointments, setAppointments] = useState([]);
     const [patients, setPatients] = useState([]);
     const [clinics, setClinics] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const [editingId, setEditingId] = useState(null);
     const [errors, setErrors] = useState({});
@@ -127,10 +129,16 @@ export default function Appointments() {
 
             if (editingId) {
                 await updateAppointment(editingId, appointment);
-                alert("Appointment updated successfully!");
+                setSuccessMessage("✅ Appointment updated successfully!");
+                setTimeout(() => {
+                    setSuccessMessage("");
+                }, 3000);
             } else {
                 await createAppointment(appointment);
-                alert("Appointment created successfully!");
+                setSuccessMessage("✅ Appointment created successfully!");
+                setTimeout(() => {
+                    setSuccessMessage("");
+                }, 3000);
             }
 
             setAppointment({
@@ -156,7 +164,11 @@ export default function Appointments() {
 
             } else {
 
-                alert("Something went wrong.");
+                setErrorMessage("❌ Something went wrong.");
+
+                setTimeout(() => {
+                    setErrorMessage("");
+                }, 3000);
 
             }
 
@@ -180,6 +192,36 @@ export default function Appointments() {
         >
 
             <h1>📅 Appointments</h1>
+
+            {successMessage && (
+                <div
+                    style={{
+                        background: darkMode ? "#1e4620" : "#d1e7dd",
+                        color: darkMode ? "#8ff0a4" : "#0f5132",
+                        padding: "12px",
+                        marginBottom: "20px",
+                        borderRadius: "8px",
+                        border: darkMode ? "1px solid #2f7d32" : "1px solid #badbcc"
+                    }}
+                >
+                    {successMessage}
+                </div>
+            )}
+
+            {errorMessage && (
+                <div
+                    style={{
+                        background: darkMode ? "#4a1f1f" : "#f8d7da",
+                        color: darkMode ? "#ff9999" : "#842029",
+                        padding: "12px",
+                        marginBottom: "20px",
+                        borderRadius: "8px",
+                        border: darkMode ? "1px solid #842029" : "1px solid #f5c2c7"
+                    }}
+                >
+                    {errorMessage}
+                </div>
+            )}
 
             <p
                 style={{

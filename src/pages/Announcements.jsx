@@ -6,6 +6,7 @@ import ThemeContext from "../context/ThemeContext";
 export default function Announcements() {
     const { darkMode } = useContext(ThemeContext);
 
+
     const [announcements] = useState([
         {
             id: 1,
@@ -44,6 +45,7 @@ export default function Announcements() {
             <h1 className="page-title">
                 📢 Official Announcements
             </h1>
+
 
             <p style={{ marginBottom: "30px", color: darkMode ? "#ccc" : "gray" }}>
                 Stay informed with official updates from Ubuntu Health.

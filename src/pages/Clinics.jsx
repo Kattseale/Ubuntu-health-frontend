@@ -17,6 +17,13 @@ export default function Clinics() {
     const [errors, setErrors] = useState({});
 
     const { darkMode } = useContext(ThemeContext);
+    const inputStyle = {
+        backgroundColor: darkMode ? "#2b2b2b" : "white",
+        color: darkMode ? "white" : "black",
+        border: darkMode ? "1px solid #555" : "1px solid #ccc"
+    };
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const [clinic, setClinic] = useState({
         clinicName: "",
@@ -68,12 +75,18 @@ export default function Clinics() {
             if (editingId) {
 
                 await updateClinic(editingId, clinic);
-                alert("Clinic updated successfully!");
+                setSuccessMessage("✅ Clinic updated successfully!");
+                setTimeout(() => {
+                    setSuccessMessage("");
+                }, 3000);
 
             } else {
 
                 await createClinic(clinic);
-                alert("Clinic added successfully!");
+                setSuccessMessage("✅ Clinic added successfully!");
+                setTimeout(() => {
+                    setSuccessMessage("");
+                }, 3000);
 
             }
 
@@ -102,7 +115,11 @@ export default function Clinics() {
 
             } else {
 
-                alert("Something went wrong.");
+                setErrorMessage("❌ Something went wrong.");
+
+                setTimeout(() => {
+                    setErrorMessage("");
+                }, 3000);
 
             }
 
@@ -120,7 +137,10 @@ export default function Clinics() {
 
             await fetchClinics();
 
-            alert("Clinic deleted successfully!");
+            setSuccessMessage("🗑️ Clinic deleted successfully!");
+            setTimeout(() => {
+                setSuccessMessage("");
+            }, 3000);
 
         } catch (error) {
 
@@ -142,6 +162,35 @@ export default function Clinics() {
         >
 
             <h1>Clinics</h1>
+
+            {successMessage && (
+                <div
+                    style={{
+                        background: darkMode ? "#1e4620" : "#d1e7dd",
+                        color: darkMode ? "#8ff0a4" : "#0f5132",
+                        padding: "12px",
+                        marginBottom: "20px",
+                        borderRadius: "8px",
+                        border: darkMode ? "1px solid #2f7d32" : "1px solid #badbcc"
+                    }}
+                >
+                    {successMessage}
+                </div>
+            )}
+            {errorMessage && (
+                <div
+                    style={{
+                        background: darkMode ? "#4a1f1f" : "#f8d7da",
+                        color: darkMode ? "#ff9999" : "#842029",
+                        padding: "12px",
+                        marginBottom: "20px",
+                        borderRadius: "8px",
+                        border: darkMode ? "1px solid #842029" : "1px solid #f5c2c7"
+                    }}
+                >
+                    {errorMessage}
+                </div>
+            )}
 
             {Object.keys(errors).length > 0 && (
 
@@ -174,16 +223,10 @@ export default function Clinics() {
                     color: darkMode ? "white" : "black"
                 }}
             >
-                <div
-                    className="card"
-                    style={{
-                        backgroundColor: darkMode ? "#1e1e1e" : "white",
-                        color: darkMode ? "white" : "black"
-                    }}
-                >
                 <form onSubmit={handleSubmit}>
 
                     <input
+                        style={inputStyle}
                         type="text"
                         name="clinicName"
                         placeholder="Clinic Name"
@@ -193,6 +236,7 @@ export default function Clinics() {
                     />
 
                     <input
+                        style={inputStyle}
                         type="text"
                         name="province"
                         placeholder="Province"
@@ -202,6 +246,7 @@ export default function Clinics() {
                     />
 
                     <input
+                        style={inputStyle}
                         type="text"
                         name="city"
                         placeholder="City"
@@ -211,6 +256,7 @@ export default function Clinics() {
                     />
 
                     <input
+                        style={inputStyle}
                         type="text"
                         name="address"
                         placeholder="Address"
@@ -220,6 +266,7 @@ export default function Clinics() {
                     />
 
                     <input
+                        style={inputStyle}
                         type="number"
                         step="any"
                         name="latitude"
@@ -230,6 +277,7 @@ export default function Clinics() {
                     />
 
                     <input
+                        style={inputStyle}
                         type="number"
                         step="any"
                         name="longitude"
@@ -240,6 +288,7 @@ export default function Clinics() {
                     />
 
                     <input
+                        style={inputStyle}
                         type="text"
                         name="phoneNumber"
                         placeholder="Phone Number"
@@ -249,6 +298,7 @@ export default function Clinics() {
                     />
 
                     <input
+                        style={inputStyle}
                         type="email"
                         name="email"
                         placeholder="Email"
@@ -260,12 +310,14 @@ export default function Clinics() {
                     <button
                         className="btn-primary"
                         type="submit"
+                        style={{
+                            marginTop: "15px"
+                        }}
                     >
                         {editingId ? "Update Clinic" : "Save Clinic"}
                     </button>
 
                 </form>
-                </div>
 
             </div>
 
@@ -282,19 +334,25 @@ export default function Clinics() {
                 <table
                     style={{
                         width: "100%",
-                        color: darkMode ? "white" : "black"
+                        borderCollapse: "collapse",
+                        backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
+                        color: darkMode ? "#ffffff" : "#000000"
                     }}
                 >
 
                     <thead>
 
-                    <tr>
-                        <th>ID</th>
-                        <th>Clinic Name</th>
-                        <th>City</th>
-                        <th>Province</th>
-                        <th>Email</th>
-                        <th>Actions</th>
+                    <tr
+                        style={{
+                            backgroundColor: darkMode ? "#333" : "#e9ecef"
+                        }}
+                    >
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>ID</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Clinic Name</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>City</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Province</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Email</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Actions</th>
                     </tr>
 
                     </thead>
@@ -303,16 +361,33 @@ export default function Clinics() {
 
                     {clinics.map((clinic) => (
 
-                        <tr key={clinic.id}>
+                        <tr
+                            key={clinic.id}
+                            style={{
+                                backgroundColor: darkMode ? "#2b2b2b" : "#ffffff",
+                                color: darkMode ? "#ffffff" : "#000000"
+                            }}
+                        >
 
-                            <td>{clinic.id}</td>
-                            <td>{clinic.clinicName}</td>
-                            <td>{clinic.city}</td>
-                            <td>{clinic.province}</td>
-                            <td>{clinic.email}</td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>
+                                {clinic.id}
+                            </td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>
+                                {clinic.clinicName}
+                            </td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>
+                                {clinic.city}
+                            </td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>
+                                {clinic.province}
+                            </td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>
+                                {clinic.email}
+                            </td>
 
                             <td>
 
+                                <td style={{ padding: "10px", border: "1px solid #555" }}>
                                 <button
                                     className="btn-primary"
                                     onClick={() => {
@@ -341,6 +416,8 @@ export default function Clinics() {
                                 >
                                     Delete
                                 </button>
+
+                                </td>
 
                             </td>
 

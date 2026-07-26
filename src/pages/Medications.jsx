@@ -12,6 +12,8 @@ export default function Medications() {
     const [editingId, setEditingId] = useState(null);
     const [errors, setErrors] = useState({});
     const { darkMode } = useContext(ThemeContext);
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const [medication, setMedication] = useState({
         medicationName: "",
@@ -63,13 +65,19 @@ export default function Medications() {
 
                 await updateMedication(editingId, medication);
 
-                alert("Medication updated successfully!");
+                setSuccessMessage("✅ Medication updated successfully!");
+                setTimeout(() => {
+                    setSuccessMessage("");
+                }, 3000);
 
             } else {
 
                 await createMedication(medication);
 
-                alert("Medication added successfully!");
+                setSuccessMessage("✅ Medication added successfully!");
+                setTimeout(() => {
+                    setSuccessMessage("");
+                }, 3000);
 
             }
 
@@ -94,7 +102,11 @@ export default function Medications() {
             if (error.response?.status === 400) {
                 setErrors(error.response.data);
             } else {
-                alert("Something went wrong.");
+                setErrorMessage("❌ Something went wrong.");
+
+                setTimeout(() => {
+                    setErrorMessage("");
+                }, 3000);
             }
 
         }
@@ -114,7 +126,10 @@ export default function Medications() {
             const data = await getAllMedications();
             setMedications(data);
 
-            alert("Medication deleted successfully!");
+            setSuccessMessage("🗑️ Medication deleted successfully!");
+            setTimeout(() => {
+                setSuccessMessage("");
+            }, 3000);
 
         } catch (error) {
 
@@ -127,7 +142,9 @@ export default function Medications() {
         backgroundColor: darkMode ? "#2b2b2b" : "white",
         color: darkMode ? "white" : "black",
         border: darkMode ? "1px solid #555" : "1px solid #ccc",
-        padding: "10px"
+        padding: "10px",
+        width: "100%",
+        boxSizing: "border-box",
     };
 
     return (
@@ -142,6 +159,35 @@ export default function Medications() {
         >
 
             <h1>💊 Medications</h1>
+            {successMessage && (
+                <div
+                    style={{
+                        background: darkMode ? "#1e4620" : "#d1e7dd",
+                        color: darkMode ? "#8ff0a4" : "#0f5132",
+                        padding: "12px",
+                        marginBottom: "20px",
+                        borderRadius: "8px",
+                        border: darkMode ? "1px solid #2f7d32" : "1px solid #badbcc"
+                    }}
+                >
+                    {successMessage}
+                </div>
+            )}
+
+            {errorMessage && (
+                <div
+                    style={{
+                        background: darkMode ? "#4a1f1f" : "#f8d7da",
+                        color: darkMode ? "#ff9999" : "#842029",
+                        padding: "12px",
+                        marginBottom: "20px",
+                        borderRadius: "8px",
+                        border: darkMode ? "1px solid #842029" : "1px solid #f5c2c7"
+                    }}
+                >
+                    {errorMessage}
+                </div>
+            )}
 
             <p
                 style={{
@@ -274,39 +320,55 @@ export default function Medications() {
 
                 <table
                     style={{
-                        width:"100%",
-                        color: darkMode ? "white" : "black"
+                        width: "100%",
+                        borderCollapse: "collapse",
+                        backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
+                        color: darkMode ? "#ffffff" : "#000000"
                     }}
                 >
 
-                    <thead
+                    <thead>
+                    <tr
                         style={{
-                            backgroundColor: darkMode ? "#333" : "#f5f5f5"
+                            backgroundColor: darkMode ? "#333" : "#e9ecef"
                         }}
                     >
-
-                <tr>
-                    <th>Medication</th>
-                    <th>Dosage</th>
-                    <th>Quantity</th>
-                    <th>Expiry Date</th>
-                    <th>Clinic</th>
-                    <th>Actions</th>
-                </tr>
-
-                </thead>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Medication</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Dosage</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Quantity</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Expiry Date</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Clinic</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Actions</th>
+                    </tr>
+                    </thead>
 
                 <tbody>
 
                 {medications.map((medication) => (
 
-                    <tr key={medication.id}>
+                    <tr
+                        key={medication.id}
+                        style={{
+                            backgroundColor: darkMode ? "#2b2b2b" : "#ffffff",
+                            color: darkMode ? "#ffffff" : "#000000"
+                        }}
+                    >
 
-                        <td>{medication.medicationName}</td>
-                        <td>{medication.dosage}</td>
-                        <td>{medication.quantityAvailable}</td>
-                        <td>{medication.expiryDate}</td>
-                        <td>{medication.clinicName}</td>
+                        <td style={{ padding: "10px", border: "1px solid #555" }}>
+                            {medication.medicationName}
+                        </td>
+                        <td style={{ padding: "10px", border: "1px solid #555" }}>
+                            {medication.dosage}
+                        </td>
+                        <td style={{ padding: "10px", border: "1px solid #555" }}>
+                            {medication.quantityAvailable}
+                        </td>
+                        <td style={{ padding: "10px", border: "1px solid #555" }}>
+                            {medication.expiryDate}
+                        </td>
+                        <td style={{ padding: "10px", border: "1px solid #555" }}>
+                            {medication.clinicName}
+                        </td>
 
                         <td>
 
@@ -325,16 +387,16 @@ export default function Medications() {
                                     setEditingId(medication.id);
                                 }}
                             >
-                                Edit
+                                ✏️ Edit
                             </button>
 
                             <button
                                 className="btn-danger"
+                                style={{ marginLeft: "8px" }}
                                 onClick={() => handleDelete(medication.id)}
                             >
-                                Delete
+                                🗑 Delete
                             </button>
-
                         </td>
 
                     </tr>
