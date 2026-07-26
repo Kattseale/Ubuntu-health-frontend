@@ -91,5 +91,24 @@ table {
     .action-buttons button {
         width: 100%;
     }
+    .clinic-map {
+        height: 500px;
+        width: 100%;
+        border-radius: 12px;
+    }
+
+    @media (max-width:768px){
+
+        .clinic-map{
+            height:350px;
+        }
+
+    }
+
+    form {
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+        gap:15px;
+    }
 
 }

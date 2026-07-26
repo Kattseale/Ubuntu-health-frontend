@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ClinicMap from "../components/ClinicMap";
 import {
     getAllClinics,
     createClinic,
@@ -24,6 +25,10 @@ export default function Clinics() {
     };
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [search, setSearch] = useState("");
+    const filteredClinics = clinics.filter(c =>
+        c.clinicName.toLowerCase().includes(search.toLowerCase())
+    );
 
     const [clinic, setClinic] = useState({
         clinicName: "",
@@ -359,7 +364,7 @@ export default function Clinics() {
 
                     <tbody>
 
-                    {clinics.map((clinic) => (
+                    {filteredClinics.map((clinic) => (
 
                         <tr
                             key={clinic.id}
@@ -428,6 +433,45 @@ export default function Clinics() {
                     </tbody>
 
                 </table>
+                    <hr />
+
+                    <div
+                        className="card"
+                        style={{
+                            backgroundColor: darkMode ? "#1e1e1e" : "white",
+                            color: darkMode ? "white" : "black"
+                        }}
+                    >
+
+                        <h2>Clinic Locations</h2>
+                        <input
+                            type="text"
+                            placeholder="Search clinic..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            style={{
+                                width: "100%",
+                                maxWidth: "500px",
+                                padding: "12px",
+                                marginBottom: "20px",
+                                borderRadius: "8px",
+                                border: darkMode ? "1px solid #555" : "1px solid #ccc",
+                                backgroundColor: darkMode ? "#2b2b2b" : "white",
+                                color: darkMode ? "white" : "black",
+                                boxSizing: "border-box"
+                            }}
+                        />
+                        <div
+                            style={{
+                                width: "100%",
+                                overflow: "hidden",
+                                borderRadius: "12px"
+                            }}
+                        >
+                            <ClinicMap clinics={filteredClinics} />
+                        </div>
+
+                    </div>
                 </div>
 
             </div>
