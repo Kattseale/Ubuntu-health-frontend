@@ -37,7 +37,7 @@ export default function Login() {
 
             alert(response.message);
 
-            navigate("/dashboard");
+            navigate("/home");
 
         } catch (error) {
 

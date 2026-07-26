@@ -13,6 +13,9 @@ import Reports from "./pages/Reports";
 import Community from "./pages/Community";
 import Announcements from "./pages/Announcements";
 import Dashboard from "./pages/Dashboard";
+import HomeM from "./pages/HomeM";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
 
@@ -41,7 +44,7 @@ function App() {
 
                         <Route
                             path="/"
-                            element={<Home />}
+                            element={<HomeM />}
                         />
 
                         <Route
@@ -78,10 +81,22 @@ function App() {
                             path="/reports"
                             element={<Reports />}
                         />
-
                         <Route
                             path="/dashboard"
                             element={<Dashboard />}
+                        />
+
+                        <Route
+                            path="/home"
+                            element={<Home />}
+                        />
+                        <Route
+                            path="/login"
+                            element={<Login />}
+                        />
+                        <Route
+                            path="/register"
+                            element={<Register />}
                         />
 
                     </Routes>
