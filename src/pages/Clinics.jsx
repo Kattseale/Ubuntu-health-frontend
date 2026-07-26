@@ -5,6 +5,8 @@ import {
     updateClinic,
     deleteClinic
 } from "../services/clinicService";
+import { useContext } from "react";
+import ThemeContext from "../context/ThemeContext";
 
 export default function Clinics() {
 
@@ -13,6 +15,8 @@ export default function Clinics() {
     const [editingId, setEditingId] = useState(null);
 
     const [errors, setErrors] = useState({});
+
+    const { darkMode } = useContext(ThemeContext);
 
     const [clinic, setClinic] = useState({
         clinicName: "",
@@ -127,7 +131,15 @@ export default function Clinics() {
     };
 
     return (
-        <div>
+
+        <div
+            style={{
+                backgroundColor: darkMode ? "#121212" : "#f4f8fb",
+                color: darkMode ? "white" : "black",
+                minHeight: "100vh",
+                padding: "20px"
+            }}
+        >
 
             <h1>Clinics</h1>
 
@@ -155,8 +167,20 @@ export default function Clinics() {
 
             )}
 
-            <div className="card">
-
+            <div
+                className="card"
+                style={{
+                    backgroundColor: darkMode ? "#1e1e1e" : "white",
+                    color: darkMode ? "white" : "black"
+                }}
+            >
+                <div
+                    className="card"
+                    style={{
+                        backgroundColor: darkMode ? "#1e1e1e" : "white",
+                        color: darkMode ? "white" : "black"
+                    }}
+                >
                 <form onSubmit={handleSubmit}>
 
                     <input
@@ -241,14 +265,26 @@ export default function Clinics() {
                     </button>
 
                 </form>
+                </div>
 
             </div>
 
             <hr />
 
-            <div className="card">
+            <div
+                className="card"
+                style={{
+                    backgroundColor: darkMode ? "#1e1e1e" : "white",
+                    color: darkMode ? "white" : "black"
+                }}
+            >
 
-                <table>
+                <table
+                    style={{
+                        width: "100%",
+                        color: darkMode ? "white" : "black"
+                    }}
+                >
 
                     <thead>
 

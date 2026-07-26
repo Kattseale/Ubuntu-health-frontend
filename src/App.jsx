@@ -1,44 +1,98 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+
+import ThemeContext from "./context/ThemeContext";
 
 import Home from "./pages/Home";
 import Clinics from "./pages/Clinics";
 import Patients from "./pages/Patients";
 import Medications from "./pages/Medications";
 import Appointments from "./pages/Appointments";
-import Recommendations from "./pages/Recommendations";
 import Reports from "./pages/Reports";
 import Community from "./pages/Community";
 import Announcements from "./pages/Announcements";
 import Dashboard from "./pages/Dashboard";
 
 function App() {
+
+    const [darkMode, setDarkMode] = useState(false);
+
     return (
-        <BrowserRouter>
-            <Routes>
 
-                <Route path="/" element={<Home />} />
+        <ThemeContext.Provider
+            value={{
+                darkMode,
+                setDarkMode
+            }}
+        >
 
-                <Route path="/clinics" element={<Clinics />} />
+            <div
+                style={{
+                    backgroundColor: darkMode ? "#121212" : "#f4f8fb",
+                    color: darkMode ? "white" : "black",
+                    minHeight: "100vh"
+                }}
+            >
 
-                <Route path="/patients" element={<Patients />} />
+                <BrowserRouter>
 
-                <Route path="/medications" element={<Medications />} />
+                    <Routes>
 
-                <Route path="/appointments" element={<Appointments />} />
+                        <Route
+                            path="/"
+                            element={<Home />}
+                        />
 
-                <Route path="/recommendations" element={<Recommendations />} />
+                        <Route
+                            path="/clinics"
+                            element={<Clinics />}
+                        />
 
-                <Route path="/community" element={<Community />} />
+                        <Route
+                            path="/patients"
+                            element={<Patients />}
+                        />
 
-                <Route path="/announcements" element={<Announcements />} />
+                        <Route
+                            path="/medications"
+                            element={<Medications />}
+                        />
 
-                <Route path="/reports" element={<Reports />} />
+                        <Route
+                            path="/appointments"
+                            element={<Appointments />}
+                        />
 
-                <Route path="/dashboard" element={<Dashboard />} />
+                        <Route
+                            path="/community"
+                            element={<Community />}
+                        />
 
-            </Routes>
-        </BrowserRouter>
+                        <Route
+                            path="/announcements"
+                            element={<Announcements />}
+                        />
+
+                        <Route
+                            path="/reports"
+                            element={<Reports />}
+                        />
+
+                        <Route
+                            path="/dashboard"
+                            element={<Dashboard />}
+                        />
+
+                    </Routes>
+
+                </BrowserRouter>
+
+            </div>
+
+        </ThemeContext.Provider>
+
     );
+
 }
 
 export default App;

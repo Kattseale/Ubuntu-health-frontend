@@ -1,6 +1,10 @@
 import { useState } from "react";
+import { useContext } from "react";
+import ThemeContext from "../context/ThemeContext";
+
 
 export default function Announcements() {
+    const { darkMode } = useContext(ThemeContext);
 
     const [announcements] = useState([
         {
@@ -27,14 +31,21 @@ export default function Announcements() {
     ]);
 
     return (
-
-        <div className="page">
+        <div
+            className="page"
+            style={{
+                backgroundColor: darkMode ? "#121212" : "#f4f8fb",
+                color: darkMode ? "white" : "black",
+                minHeight: "100vh",
+                padding: "20px"
+            }}
+        >
 
             <h1 className="page-title">
                 📢 Official Announcements
             </h1>
 
-            <p style={{ marginBottom: "30px", color: "gray" }}>
+            <p style={{ marginBottom: "30px", color: darkMode ? "#ccc" : "gray" }}>
                 Stay informed with official updates from Ubuntu Health.
             </p>
 
@@ -65,7 +76,6 @@ export default function Announcements() {
                 </div>
 
             ))}
-
         </div>
 
     );

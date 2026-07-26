@@ -4,9 +4,12 @@ import {getAllAppointments, createAppointment, updateAppointment, deleteAppointm
 
 import { getAllPatients } from "../services/patientService";
 import { getAllClinics } from "../services/clinicService";
+import { useContext } from "react";
+import ThemeContext from "../context/ThemeContext";
 
 export default function Appointments() {
 
+    const { darkMode } = useContext(ThemeContext);
     const [appointments, setAppointments] = useState([]);
     const [patients, setPatients] = useState([]);
     const [clinics, setClinics] = useState([]);
@@ -120,18 +123,14 @@ export default function Appointments() {
 
         try {
 
-            if (editingId) {
+            console.log("Appointment being sent:", appointment);
 
+            if (editingId) {
                 await updateAppointment(editingId, appointment);
                 alert("Appointment updated successfully!");
-
-                console.log("Appointment being sent:", appointment);
-
             } else {
-
                 await createAppointment(appointment);
                 alert("Appointment created successfully!");
-
             }
 
             setAppointment({
@@ -164,15 +163,27 @@ export default function Appointments() {
         }
 
     };
+    const inputStyle = {
+        backgroundColor: darkMode ? "#2c2c2c" : "white",
+        color: darkMode ? "white" : "black",
+        border: "1px solid #888"
+    };
     return (
-
-        <div>
+        <div
+            className="page"
+            style={{
+                backgroundColor: darkMode ? "#121212" : "#f4f8fb",
+                color: darkMode ? "white" : "black",
+                minHeight: "100vh",
+                padding: "20px"
+            }}
+        >
 
             <h1>📅 Appointments</h1>
 
             <p
                 style={{
-                    color: "#666",
+                    color: darkMode ? "#cccccc" : "#666",
                     marginBottom: "25px"
                 }}
             >
@@ -203,11 +214,19 @@ export default function Appointments() {
 
             )}
 
-            <div className="card">
+            <div
+                className="card"
+                style={{
+                    backgroundColor: darkMode ? "#1e1e1e" : "white",
+                    color: darkMode ? "white" : "black"
+                }}
+            >
 
                 <form onSubmit={handleSubmit}>
 
-                <select
+                    <select
+                        type="date"
+                        style={inputStyle}
                     name="patientId"
                     value={appointment.patientId}
                     onChange={handleChange}
@@ -223,7 +242,9 @@ export default function Appointments() {
 
                 </select>
 
-                <select
+                    <select
+                        type="date"
+                        style={inputStyle}
                     name="clinicId"
                     value={appointment.clinicId}
                     onChange={handleChange}
@@ -239,28 +260,31 @@ export default function Appointments() {
 
                 </select>
 
-                <input
-                    type="date"
-                    name="appointmentDate"
-                    value={appointment.appointmentDate}
-                    onChange={handleChange}
-                    required
-                />
+                    <input
+                        style={inputStyle}
+                        type="date"
+                        name="appointmentDate"
+                        value={appointment.appointmentDate}
+                        onChange={handleChange}
+                        required
+                    />
 
-                <input
-                    type="time"
-                    name="appointmentTime"
-                    value={appointment.appointmentTime}
-                    onChange={handleChange}
-                    required
-                />
+                    <input
+                        style={inputStyle}
+                        type="time"
+                        name="appointmentTime"
+                        value={appointment.appointmentTime}
+                        onChange={handleChange}
+                        required
+                    />
 
-                <select
-                    name="reason"
-                    value={appointment.reason}
-                    onChange={handleChange}
-                    required
-                >
+                    <select
+                        style={inputStyle}
+                        name="reason"
+                        value={appointment.reason}
+                        onChange={handleChange}
+                        required
+                    >
                     <option value="">Select Reason for Visit</option>
 
                     {appointmentReasons.map((reason) => (
@@ -270,7 +294,9 @@ export default function Appointments() {
                     ))}
                 </select>
 
-                <select
+                    <select
+                        type="date"
+                        style={inputStyle}
                     name="status"
                     value={appointment.status}
                     onChange={handleChange}
@@ -297,61 +323,84 @@ export default function Appointments() {
 
             <hr />
 
-            <div className="card">
+            <div
+                className="card"
+                style={{
+                    backgroundColor: darkMode ? "#1e1e1e" : "white",
+                    color: darkMode ? "white" : "black"
+                }}
+            >
 
-                <table>
-                <thead>
-                <tr>
-                    <th>Patient</th>
-                    <th>Clinic</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Reason</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
+                <table
+                    style={{
+                        width: "100%",
+                        borderCollapse: "collapse",
+                        backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
+                        color: darkMode ? "#ffffff" : "#000000"
+                    }}
+                >
+                    <thead>
+                    <tr
+                        style={{
+                            backgroundColor: darkMode ? "#333" : "#e9ecef"
+                        }}
+                    >
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Patient</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Clinic</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Date</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Time</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Reason</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Status</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Actions</th>
+                    </tr>
+                    </thead>
 
-                <tbody>
-                {appointments.map((appointment) => (
-                    <tr key={appointment.id}>
-                        <td>{appointment.patientName}</td>
-                        <td>{appointment.clinicName}</td>
-                        <td>{appointment.appointmentDate}</td>
-                        <td>{appointment.appointmentTime}</td>
-                        <td>{appointment.reason}</td>
-                        <td>{appointment.status}</td>
+                    <tbody>
+                    {appointments.map((appointment) => (
+                        <tr
+                            key={appointment.id}
+                            style={{
+                                backgroundColor: darkMode ? "#2b2b2b" : "#ffffff",
+                                color: darkMode ? "#ffffff" : "#000000"
+                            }}
+                        >
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>{appointment.patientName}</td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>{appointment.clinicName}</td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>{appointment.appointmentDate}</td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>{appointment.appointmentTime}</td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>{appointment.reason}</td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>{appointment.status}</td>
 
-                        <td>
-                            <button
-                                className="btn-primary"
-                                onClick={() => {
-                                    setAppointment({
-                                        appointmentDate: appointment.appointmentDate,
-                                        appointmentTime: appointment.appointmentTime,
-                                        reason: appointment.reason,
-                                        status: appointment.status,
-                                        patientId: appointment.patientId,
-                                        clinicId: appointment.clinicId
-                                    });
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>
+                                <button
+                                    className="btn-primary"
+                                    onClick={() => {
+                                        setAppointment({
+                                            appointmentDate: appointment.appointmentDate,
+                                            appointmentTime: appointment.appointmentTime,
+                                            reason: appointment.reason,
+                                            status: appointment.status,
+                                            patientId: appointment.patientId,
+                                            clinicId: appointment.clinicId
+                                        });
 
-                                    setEditingId(appointment.id);
-                                }}
-                            >
-                                Edit
-                            </button>
-                            
-                            <button
-                                className="btn-danger"
-                                onClick={async () => {
-                                    if (!window.confirm("Delete this appointment?")) return;
+                                        setEditingId(appointment.id);
+                                    }}
+                                >
+                                    ✏️ Edit
+                                </button>
+                                <button
+                                    className="btn-danger"
+                                    style={{ marginLeft: "8px" }}
+                                    onClick={async () => {
+                                        if (!window.confirm("Delete this appointment?")) return;
 
-                                    await deleteAppointment(appointment.id);
-                                    await fetchAppointments();
-                                }}
-                            >
-                                Delete
-                            </button>
+                                        await deleteAppointment(appointment.id);
+                                        await fetchAppointments();
+                                    }}
+                                >
+                                    🗑 Delete
+                                </button>
                         </td>
                     </tr>
                 ))}

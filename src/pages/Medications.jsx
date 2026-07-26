@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useContext } from "react";
+import ThemeContext from "../context/ThemeContext";
 import {getAllMedications, createMedication, updateMedication, deleteMedication} from "../services/medicationService";
 
 import { getAllClinics } from "../services/clinicService";
@@ -9,6 +11,7 @@ export default function Medications() {
     const [clinics, setClinics] = useState([]);
     const [editingId, setEditingId] = useState(null);
     const [errors, setErrors] = useState({});
+    const { darkMode } = useContext(ThemeContext);
 
     const [medication, setMedication] = useState({
         medicationName: "",
@@ -120,15 +123,29 @@ export default function Medications() {
         }
 
     };
+    const inputStyle = {
+        backgroundColor: darkMode ? "#2b2b2b" : "white",
+        color: darkMode ? "white" : "black",
+        border: darkMode ? "1px solid #555" : "1px solid #ccc",
+        padding: "10px"
+    };
 
     return (
-        <div>
+
+        <div
+            style={{
+                minHeight: "100vh",
+                backgroundColor: darkMode ? "#121212" : "#f4f8fb",
+                color: darkMode ? "white" : "black",
+                padding: "20px"
+            }}
+        >
 
             <h1>💊 Medications</h1>
 
             <p
                 style={{
-                    color: "#666",
+                    color: darkMode ? "#ccc" : "#666",
                     marginBottom: "25px"
                 }}
             >
@@ -139,8 +156,8 @@ export default function Medications() {
 
                 <div
                     style={{
-                        background: "#ffe6e6",
-                        color: "#b30000",
+                        background: darkMode ? "#3a1f1f" : "#ffe6e6",
+                        color: darkMode ? "#ff9999" : "#b30000",
                         padding: "10px",
                         marginBottom: "20px",
                         borderRadius: "5px"
@@ -159,7 +176,13 @@ export default function Medications() {
 
             )}
 
-            <div className="card">
+            <div
+                className="card"
+                style={{
+                    backgroundColor: darkMode ? "#1e1e1e" : "white",
+                    color: darkMode ? "white" : "black"
+                }}
+            >
 
                 <form onSubmit={handleSubmit}>
 
@@ -169,15 +192,9 @@ export default function Medications() {
                         placeholder="Medication Name"
                         value={medication.medicationName}
                         onChange={handleChange}
+                        style={inputStyle}
                         required
                     />
-                    <option value="">Select Medication</option>
-
-                    {medications.map((med) => (
-                        <option key={med.id} value={med.id}>
-                            {med.medicationName}
-                        </option>
-                    ))}
 
                 <input
                     type="text"
@@ -185,6 +202,7 @@ export default function Medications() {
                     placeholder="Description"
                     value={medication.description}
                     onChange={handleChange}
+                    style={inputStyle}
                     required
                 />
 
@@ -194,6 +212,7 @@ export default function Medications() {
                     placeholder="Dosage"
                     value={medication.dosage}
                     onChange={handleChange}
+                    style={inputStyle}
                     required
                 />
 
@@ -203,6 +222,7 @@ export default function Medications() {
                     placeholder="Quantity Available"
                     value={medication.quantityAvailable}
                     onChange={handleChange}
+                    style={inputStyle}
                     required
                 />
 
@@ -211,6 +231,7 @@ export default function Medications() {
                     name="expiryDate"
                     value={medication.expiryDate}
                     onChange={handleChange}
+                    style={inputStyle}
                     required
                 />
 
@@ -218,6 +239,7 @@ export default function Medications() {
                     name="clinicId"
                     value={medication.clinicId}
                     onChange={handleChange}
+                    style={inputStyle}
                     required
                 >
                     <option value="">Select Clinic</option>
@@ -242,11 +264,26 @@ export default function Medications() {
 
             <hr />
 
-            <div className="card">
+            <div
+                className="card"
+                style={{
+                    backgroundColor: darkMode ? "#1e1e1e" : "white",
+                    color: darkMode ? "white" : "black"
+                }}
+            >
 
-                <table>
+                <table
+                    style={{
+                        width:"100%",
+                        color: darkMode ? "white" : "black"
+                    }}
+                >
 
-                <thead>
+                    <thead
+                        style={{
+                            backgroundColor: darkMode ? "#333" : "#f5f5f5"
+                        }}
+                    >
 
                 <tr>
                     <th>Medication</th>

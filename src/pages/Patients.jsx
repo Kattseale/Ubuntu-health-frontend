@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllClinics } from "../services/clinicService";
+import { useContext } from "react";
+import ThemeContext from "../context/ThemeContext";
 import {getAllPatients, createPatient, updatePatient, deletePatient} from "../services/patientService";
 
 export default function Patients() {
@@ -8,6 +10,7 @@ export default function Patients() {
     const [editingId, setEditingId] = useState(null);
     const [errors, setErrors] = useState({});
     const [clinics, setClinics] = useState([]);
+    const { darkMode } = useContext(ThemeContext);
 
     const [patient, setPatient] = useState({
         firstName: "",
@@ -131,10 +134,23 @@ export default function Patients() {
         }
 
     };
+    const inputStyle = {
+        backgroundColor: darkMode ? "#2b2b2b" : "white",
+        color: darkMode ? "white" : "black",
+        border: darkMode ? "1px solid #555" : "1px solid #ccc"
+    };
 
     return (
 
-        <div className="page">
+        <div
+            className="page"
+            style={{
+                minHeight: "100vh",
+                backgroundColor: darkMode ? "#121212" : "#f4f8fb",
+                color: darkMode ? "white" : "black",
+                padding: "20px"
+            }}
+        >
 
             <h1 className="page-title">
                 Patients
@@ -143,8 +159,8 @@ export default function Patients() {
 
                 <div
                     style={{
-                        background: "#ffe6e6",
-                        color: "#b30000",
+                        background: darkMode ? "#3a1f1f" : "#ffe6e6",
+                        color: darkMode ? "#ff9999" : "#b30000",
                         padding: "10px",
                         marginBottom: "20px",
                         borderRadius: "5px"
@@ -163,7 +179,13 @@ export default function Patients() {
 
             )}
 
-            <div className="card">
+            <div
+                className="card"
+                style={{
+                    backgroundColor: darkMode ? "#1e1e1e" : "white",
+                    color: darkMode ? "white" : "black"
+                }}
+            >
 
                 <h2 className="card-title">
                     Patient Information
@@ -171,6 +193,7 @@ export default function Patients() {
                 <form onSubmit={handleSubmit}>
 
                 <input
+                    style={inputStyle}
                     type="text"
                     name="firstName"
                     placeholder="First Name"
@@ -186,6 +209,7 @@ export default function Patients() {
                 />
 
                 <input
+                    style={inputStyle}
                     type="text"
                     name="lastName"
                     placeholder="Last Name"
@@ -201,6 +225,7 @@ export default function Patients() {
                 />
 
                 <select
+                    style={inputStyle}
                     name="gender"
                     value={patient.gender}
                     onChange={handleChange}
@@ -217,6 +242,7 @@ export default function Patients() {
                 </select>
 
                 <input
+                    style={inputStyle}
                     type="date"
                     name="dateOfBirth"
                     value={patient.dateOfBirth}
@@ -231,6 +257,7 @@ export default function Patients() {
                 />
 
                 <input
+                    style={inputStyle}
                     type="email"
                     name="email"
                     placeholder="Email"
@@ -246,6 +273,7 @@ export default function Patients() {
                 />
 
                 <input
+                    style={inputStyle}
                     type="text"
                     name="phoneNumber"
                     placeholder="Phone Number"
@@ -261,6 +289,7 @@ export default function Patients() {
                 />
 
                 <input
+                    style={inputStyle}
                     type="text"
                     name="address"
                     placeholder="Address"
@@ -276,6 +305,7 @@ export default function Patients() {
                 />
 
                 <select
+                    style={inputStyle}
                     name="bloodGroup"
                     value={patient.bloodGroup}
                     onChange={handleChange}
@@ -297,6 +327,7 @@ export default function Patients() {
                 </select>
 
                 <input
+                    style={inputStyle}
                     type="text"
                     name="emergencyContactName"
                     placeholder="Emergency Contact Name"
@@ -306,6 +337,7 @@ export default function Patients() {
                 />
 
                 <input
+                    style={inputStyle}
                     type="text"
                     name="emergencyContactPhone"
                     placeholder="Emergency Contact Phone"
@@ -315,6 +347,7 @@ export default function Patients() {
                 />
 
                 <select
+                    style={inputStyle}
                     name="clinicId"
                     value={patient.clinicId}
                     onChange={handleChange}
@@ -337,45 +370,64 @@ export default function Patients() {
                     </button>
 
                     </form>
-
             </div>
 
             <hr />
-            <div className="card">
+            <div
+                className="card"
+                style={{
+                    backgroundColor: darkMode ? "#1e1e1e" : "white",
+                    color: darkMode ? "white" : "black"
+                }}
+            >
 
                 <h2 className="card-title">
                     Patient Records
                 </h2>
 
-                <table>
-
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Gender</th>
-                    <th>DOB</th>
-                    <th>Email</th>
-                    <th>Clinic</th>
-                    <th>Actions</th>
-                </tr>
+                <table
+                    style={{
+                        width: "100%",
+                        borderCollapse: "collapse",
+                        backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
+                        color: darkMode ? "#ffffff" : "#000000"
+                    }}
+                >
+                    <thead>
+                    <tr
+                        style={{
+                            backgroundColor: darkMode ? "#333" : "#e9ecef"
+                        }}
+                    >
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>ID</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>First Name</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Last Name</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Gender</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>DOB</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Email</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Clinic</th>
+                        <th style={{ padding: "12px", border: "1px solid #555" }}>Actions</th>
+                    </tr>
                 </thead>
 
 
-                <tbody>
-
-                {patients.map((patient) => (
-
-                    <tr key={patient.id}>
-
-                        <td>{patient.id}</td>
-                        <td>{patient.firstName}</td>
-                        <td>{patient.lastName}</td>
-                        <td>{patient.gender}</td>
-                        <td>{patient.dateOfBirth}</td>
-                        <td>{patient.email}</td>
-                        <td>{patient.clinicName}</td>
+                    <tbody>
+                    {patients.map((patient) => (
+                        <tr
+                            key={patient.id}
+                            style={{
+                                backgroundColor: darkMode ? "#2b2b2b" : "#ffffff",
+                                color: darkMode ? "#ffffff" : "#000000"
+                            }}
+                        >
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>{patient.id}</td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>{patient.firstName}</td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>{patient.lastName}</td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>{patient.gender}</td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>{patient.dateOfBirth}</td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>{patient.email}</td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>{patient.clinicName}</td>
+                            <td style={{ padding: "10px", border: "1px solid #555" }}>
 
                         <td>
 
@@ -412,6 +464,7 @@ export default function Patients() {
                                 </button>
 
                             </div>
+                        </td>
 
                         </td>
 

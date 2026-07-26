@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useContext } from "react";
+import ThemeContext from "../context/ThemeContext";
 import DashboardChart from "../components/DashboardChart";
 import { getAllPatients } from "../services/patientService";
 import { getAllClinics } from "../services/clinicService";
@@ -14,6 +16,7 @@ export default function Dashboard() {
         appointments: 0,
         todayAppointments: 0
     });
+    const { darkMode } = useContext(ThemeContext);
 
     const [appointments, setAppointments] = useState([]);
     const [recentAppointments, setRecentAppointments] = useState([]);
@@ -63,7 +66,14 @@ export default function Dashboard() {
 
     return (
 
-        <div>
+        <div
+            style={{
+                minHeight: "100vh",
+                backgroundColor: darkMode ? "#121212" : "#f4f8fb",
+                color: darkMode ? "white" : "black",
+                padding: "20px"
+            }}
+        >
 
             <div
                 style={{
@@ -82,7 +92,7 @@ export default function Dashboard() {
 
                     <p
                         style={{
-                            color: "#666",
+                            color: darkMode ? "#ccc" : "#666",
                             marginTop: "8px"
                         }}
                     >
@@ -101,7 +111,7 @@ export default function Dashboard() {
                         {new Date().toLocaleDateString()}
                     </h3>
 
-                    <p style={{ color: "#777" }}>
+                    <p style={{color: darkMode ? "#aaa" : "#777" }}>
                         Dashboard Overview
                     </p>
 
@@ -179,7 +189,13 @@ export default function Dashboard() {
 
             </div>
 
-            <div className="card">
+            <div
+                className="card"
+                style={{
+                    backgroundColor: darkMode ? "#1e1e1e" : "white",
+                    color: darkMode ? "white" : "black"
+                }}
+            >
 
                 <h2>📊 Appointment Status</h2>
 
@@ -191,7 +207,13 @@ export default function Dashboard() {
                 📅 Today's Schedule
             </h2>
 
-            <div className="card">
+            <div
+                className="card"
+                style={{
+                    backgroundColor: darkMode ? "#1e1e1e" : "white",
+                    color: darkMode ? "white" : "black"
+                }}
+            >
 
                 <table
                     border="1"
@@ -247,7 +269,13 @@ export default function Dashboard() {
                     📢 Latest Announcements
                 </h2>
 
-                <div className="card">
+                <div
+                    className="card"
+                    style={{
+                        backgroundColor: darkMode ? "#1e1e1e" : "white",
+                        color: darkMode ? "white" : "black"
+                    }}
+                >
 
                     <ul
                         style={{

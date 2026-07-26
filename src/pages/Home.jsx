@@ -1,11 +1,15 @@
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import ThemeContext from "../context/ThemeContext";
 
 export default function Home() {
 
+    const { darkMode, setDarkMode } = useContext(ThemeContext);
     const navigate = useNavigate();
 
     const cardStyle = {
-        backgroundColor: "white",
+            backgroundColor: darkMode ? "#1f1f1f" : "white",
+            color: darkMode ? "white" : "black",
         borderRadius: "15px",
         padding: "30px",
         textAlign: "center",
@@ -31,10 +35,36 @@ export default function Home() {
         <div
             style={{
                 minHeight: "100vh",
-                backgroundColor: "#f4f8fb",
+                backgroundColor: darkMode ? "#121212" : "#f4f8fb",
+                color: darkMode ? "white" : "black",
                 padding: "40px"
             }}
         >
+
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginBottom: "20px"
+                }}
+            >
+
+                <button
+                    onClick={() => setDarkMode(!darkMode)}
+                    style={{
+                        padding: "10px 20px",
+                        borderRadius: "8px",
+                        border: "none",
+                        cursor: "pointer",
+                        backgroundColor: darkMode ? "#f8f9fa" : "#212529",
+                        color: darkMode ? "#212529" : "white",
+                        fontWeight: "bold"
+                    }}
+                >
+                    {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+                </button>
+
+            </div>
 
             <div
                 style={{
@@ -65,13 +95,14 @@ export default function Home() {
                     Welcome! Manage clinics, patients, medications and appointments from one place.
                 </p>
 
+
             </div>
 
             <h2 style={{ marginTop: "20px", color: "#198754" }}>
                 👥 Patient Services
             </h2>
 
-            <p style={{ color: "#666", marginBottom: "20px" }}>
+            <p style={{ color: darkMode ? "#ccc" : "#666", marginBottom: "20px" }}>
                 Services available to patients using Ubuntu Health.
             </p>
 
@@ -183,7 +214,7 @@ export default function Home() {
                 🛠 Administration
             </h2>
 
-            <p style={{ color: "#666", marginBottom: "20px" }}>
+            <p style={{ color: darkMode ? "#ccc" : "#666", marginBottom: "20px" }}>
                 Administrative tools for managing clinics, patients and healthcare data.
             </p>
 
@@ -318,15 +349,43 @@ export default function Home() {
 
                 </div>
 
+                {/* Reports */}
+
+                <div
+                    style={cardStyle}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = "translateY(-8px)";
+                        e.currentTarget.style.boxShadow =
+                            "0 12px 25px rgba(0,0,0,0.25)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.boxShadow =
+                            "0 5px 15px rgba(0,0,0,0.15)";
+                    }}
+                >
+
+                    <h2>📊 Reports</h2>
+
+                    <p>
+                        View reports and analytics for patients, clinics, appointments and medications.
+                    </p>
+
+                    <button
+                        style={buttonStyle}
+                        onClick={() => navigate("/reports")}
+                    >
+                        View Reports
+                    </button>
+
+                </div>
             </div>
 
-
-            <hr style={{ marginTop: "60px" }} />
 
             <div
                 style={{
                     textAlign: "center",
-                    color: "gray",
+                    color: darkMode ? "#bbb" : "gray",
                     marginTop: "20px",
                     fontSize: "14px"
                 }}

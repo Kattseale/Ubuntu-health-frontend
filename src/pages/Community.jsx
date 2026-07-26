@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useContext } from "react";
+import ThemeContext from "../context/ThemeContext";
 
 import {
     getAllPosts,
@@ -11,6 +13,7 @@ import { getAllPatients } from "../services/patientService";
 import { getAllClinics } from "../services/clinicService";
 
 export default function Community() {
+    const { darkMode } = useContext(ThemeContext);
 
     const [posts, setPosts] = useState([]);
     const [patients, setPatients] = useState([]);
@@ -149,14 +152,21 @@ export default function Community() {
 
     return (
 
-        <div>
+        <div
+            style={{
+                backgroundColor: darkMode ? "#121212" : "#f4f8fb",
+                color: darkMode ? "white" : "black",
+                minHeight: "100vh",
+                padding: "20px"
+            }}
+        >
             <div style={{ marginBottom: "30px" }}>
 
                 <h1>👥 Community</h1>
 
                 <p
                     style={{
-                        color: "#666",
+                        color: darkMode ? "#cccccc" : "#666",
                         fontSize: "16px"
                     }}
                 >
@@ -177,7 +187,13 @@ export default function Community() {
                     {successMessage}
                 </div>
             )}
-            <div className="card">
+            <div
+                className="card"
+                style={{
+                    backgroundColor: darkMode ? "#1e1e1e" : "white",
+                    color: darkMode ? "white" : "black"
+                }}
+            >
 
                 <form onSubmit={handleSubmit}>
 
@@ -185,6 +201,11 @@ export default function Community() {
                         name="patientId"
                         value={post.patientId}
                         onChange={handleChange}
+                        style={{
+                            backgroundColor: darkMode ? "#2c2c2c" : "white",
+                            color: darkMode ? "white" : "black",
+                            border: "1px solid #666"
+                        }}
                         required
                     >
                         <option value="">Select Patient</option>
@@ -208,6 +229,11 @@ export default function Community() {
                         name="clinicId"
                         value={post.clinicId}
                         onChange={handleChange}
+                        style={{
+                            backgroundColor: darkMode ? "#2c2c2c" : "white",
+                            color: darkMode ? "white" : "black",
+                            border: "1px solid #666"
+                        }}
                         required
                     >
                         <option value="">Select Clinic</option>
@@ -235,14 +261,17 @@ export default function Community() {
                         rows={4}
                         style={{
                             width: "100%",
-                            padding: "10px"
+                            padding: "10px",
+                            backgroundColor: darkMode ? "#2c2c2c" : "white",
+                            color: darkMode ? "white" : "black",
+                            border: "1px solid #666"
                         }}
                         required
                     />
                     <p
                         style={{
                             textAlign: "right",
-                            color: "#666",
+                            color: darkMode ? "#ccc" : "#666",
                             marginTop: "5px",
                             marginBottom: "15px"
                         }}
@@ -275,8 +304,10 @@ export default function Community() {
                     width: "100%",
                     padding: "12px",
                     borderRadius: "8px",
-                    border: "1px solid #ccc",
-                    marginBottom: "20px"
+                    border: "1px solid #666",
+                    marginBottom: "20px",
+                    backgroundColor: darkMode ? "#2c2c2c" : "white",
+                    color: darkMode ? "white" : "black"
                 }}
             />
             <button
@@ -289,7 +320,13 @@ export default function Community() {
 
             {filteredPosts.length === 0 ? (
 
-                <div className="card">
+                <div
+                    className="card"
+                    style={{
+                        backgroundColor: darkMode ? "#1e1e1e" : "white",
+                        color: darkMode ? "white" : "black"
+                    }}
+                >
 
                     <div
                         style={{
@@ -301,7 +338,7 @@ export default function Community() {
 
                         <h3>No community posts yet</h3>
 
-                        <p style={{ color: "#777" }}>
+                        <p style={{ color: darkMode ? "#ccc" : "#777" }}>
                             Be the first to share an update with your healthcare community.
                         </p>
                     </div>
@@ -316,7 +353,9 @@ export default function Community() {
                         key={communityPost.id}
                         className="card"
                         style={{
-                            marginBottom: "20px"
+                            marginBottom: "20px",
+                            backgroundColor: darkMode ? "#1e1e1e" : "white",
+                            color: darkMode ? "white" : "black"
                         }}
                     >
 
