@@ -110,6 +110,9 @@ tr:hover {
 .btn-edit:hover {
     background: #146c43;
 }
+html {
+    scroll-behavior: smooth;
+}
 
 .btn-danger {
     background: #dc3545;

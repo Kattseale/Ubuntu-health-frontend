@@ -96,6 +96,9 @@ table {
         width: 100%;
         border-radius: 12px;
     }
+    html {
+        scroll-behavior: smooth;
+    }
 
     @media (max-width:768px){
 
