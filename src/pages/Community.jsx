@@ -30,6 +30,7 @@ export default function Community() {
 
     const [editingId, setEditingId] = useState(null);
     const [search, setSearch] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const [post, setPost] = useState({
         message: "",
@@ -45,6 +46,8 @@ export default function Community() {
 
         try {
 
+            setLoading(true);
+
             const [
                 postsData,
                 patientsData,
@@ -54,6 +57,7 @@ export default function Community() {
                 getAllPatients(),
                 getAllClinics()
             ]);
+            console.log(postsData);
 
             setPosts(postsData);
             setPatients(patientsData);
@@ -62,6 +66,12 @@ export default function Community() {
         } catch (error) {
 
             console.error(error);
+
+
+        } finally {
+
+            setLoading(false);
+
 
         }
 
@@ -98,11 +108,12 @@ export default function Community() {
                 setSuccessMessage("");
             }, 3000);
 
-            setPost({
-                message: "",
-                patientId: "",
-                clinicId: ""
-            });
+            const emptyPost = {
+                message:"",
+                patientId:"",
+                clinicId:""
+            };
+            setPost(emptyPost);
 
             setEditingId(null);
 
@@ -149,6 +160,13 @@ export default function Community() {
 
             post.clinicName?.toLowerCase().includes(search.toLowerCase())
         );
+    if (loading) {
+        return (
+            <div className="page">
+                <h2>Loading Community...</h2>
+            </div>
+        );
+    }
 
     return (
 
@@ -204,19 +222,7 @@ export default function Community() {
                 </p>
 
             </div>
-            {successMessage && (
-                <div className="page"
-                    style={{
-                        background: "#d1e7dd",
-                        color: "#0f5132",
-                        padding: "12px",
-                        borderRadius: "8px",
-                        marginBottom: "20px"
-                    }}
-                >
-                    {successMessage}
-                </div>
-            )}
+
             <div
                 className="card"
                 style={{
@@ -279,7 +285,7 @@ export default function Community() {
                         name="message"
                         value={post.message}
                         onChange={handleChange}
-                        placeholder="Share something with the community..."
+                        maxLength={300}
                         rows={4}
                         style={{
                             width: "100%",
@@ -300,7 +306,7 @@ export default function Community() {
                             marginBottom: "15px"
                         }}
                     >
-                        {post.message.length}/1000 characters
+                        {post.message.length}/300 characters
                     </p>
 
                     <br /><br />
@@ -326,8 +332,7 @@ export default function Community() {
                 onChange={(e) => setSearch(e.target.value)}
                 style={{
                     ...inputStyle,
-                    minHeight: "120px",
-                    resize: "vertical"
+                    marginBottom: "15px"
                 }}
             />
             <button
@@ -373,47 +378,75 @@ export default function Community() {
                         key={communityPost.id}
                         className="card"
                         style={{
-                            marginBottom: "20px",
                             backgroundColor: darkMode ? "#1e1e1e" : "white",
-                            color: darkMode ? "white" : "black"
+                            color: darkMode ? "white" : "black",
+                            marginBottom: "20px",
+                            padding: "20px",
+                            borderRadius: "10px",
+                            boxShadow: "0 2px 10px rgba(0,0,0,0.1)"
                         }}
                     >
 
-                        <div className="page"
+                        <div
                             style={{
                                 display: "flex",
-                                justifyContent: "space-between"
+                                justifyContent: "space-between",
+                                alignItems: "center"
                             }}
                         >
 
                             <div>
 
-                                <h3>
+                                <h3 style={{ marginBottom: "5px" }}>
                                     👤 {communityPost.patientName}
                                 </h3>
 
-                                <p>
+                                <p
+                                    style={{
+                                        margin: 0,
+                                        color: darkMode ? "#bbb" : "#666"
+                                    }}
+                                >
                                     🏥 {communityPost.clinicName}
                                 </p>
 
                             </div>
 
-                            <small>
-                                {communityPost.createdAt}
+                            <small
+                                style={{
+                                    color: darkMode ? "#999" : "#777"
+                                }}
+                            >
+                                🕒 {new Date(communityPost.createdAt).toLocaleString()}
                             </small>
 
                         </div>
 
                         <hr />
 
-                        <p>{communityPost.message}</p>
-
-                        <button
-                            className="btn-primary"
-                            onClick={() => handleEdit(communityPost)}
+                        <p
+                            style={{
+                                fontSize: "16px",
+                                lineHeight: "1.7"
+                            }}
                         >
-                            Edit
-                        </button>
+                            {communityPost.message}
+                        </p>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "flex-end",
+                                marginTop: "20px"
+                            }}
+                        >
+                            <button
+                                className="btn-primary"
+                                onClick={() => handleEdit(communityPost)}
+                            >
+                                ✏️ Edit Post
+                            </button>
+                        </div>
 
                     </div>
 

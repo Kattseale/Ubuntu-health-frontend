@@ -1,13 +1,14 @@
 import { Navigate } from "react-router-dom";
-import { getToken } from "../services/authService";
+import { useAuth } from "../context/AuthContext";
 
 export default function ProtectedRoute({ children }) {
 
-    const token = getToken();
+    const { authenticated } = useAuth();
 
-    if (!token) {
+    if (!authenticated) {
         return <Navigate to="/login" replace />;
     }
 
     return children;
+
 }

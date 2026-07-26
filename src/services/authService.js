@@ -1,4 +1,5 @@
 import axios from "axios";
+import api from "./api";
 
 const API_URL = "http://localhost:8080/api/auth";
 
@@ -84,7 +85,11 @@ export const getUser = () => {
 // =========================
 
 export const isAuthenticated = () => {
-    return getToken() !== null;
+    const token = getToken();
+
+    console.log("Token from localStorage:", token);
+
+    return token !== null;
 };
 
 // =========================
@@ -98,20 +103,11 @@ export const logout = () => {
     localStorage.removeItem("role");
     localStorage.removeItem("user");
 
-    window.location.href = "/login";
+    return;
 };
 
 // =========================
 // AUTH HEADER
 // =========================
 
-export const authHeader = () => {
-
-    const token = getToken();
-
-    return {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    };
-};
+export { api };

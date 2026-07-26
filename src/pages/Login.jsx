@@ -32,12 +32,17 @@ export default function Login() {
             setLoading(true);
 
             const response = await login(formData);
+            console.log(response);
 
             saveUser(response);
 
             alert(response.message);
 
+            console.log("Before navigate");
+
             navigate("/home");
+
+            console.log("After navigate");
 
         } catch (error) {
 
