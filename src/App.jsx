@@ -13,7 +13,6 @@ import Appointments from "./pages/Appointments";
 import Reports from "./pages/Reports";
 import Community from "./pages/Community";
 import Announcements from "./pages/Announcements";
-import Recommendations from "./pages/Recommendations";
 
 import Sidebar from "./components/Sidebar";
 
@@ -40,11 +39,8 @@ function Layout({ children }) {
 }
 
 function App() {
-
     return (
-
         <BrowserRouter>
-
             <Routes>
 
                 {/* ================= PUBLIC ================= */}
@@ -194,21 +190,6 @@ function App() {
                     }
                 />
 
-                {/* ================= RECOMMENDATIONS ================= */}
-
-                <Route
-                    path="/recommendations"
-                    element={
-                        <ProtectedRoute>
-                            <RoleRoute allowedRoles={["PATIENT"]}>
-                                <Layout>
-                                    <Recommendations />
-                                </Layout>
-                            </RoleRoute>
-                        </ProtectedRoute>
-                    }
-                />
-
                 {/* ================= 404 ================= */}
 
                 <Route
@@ -217,9 +198,7 @@ function App() {
                 />
 
             </Routes>
-
         </BrowserRouter>
-
     );
 }
 
