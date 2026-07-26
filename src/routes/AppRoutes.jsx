@@ -2,11 +2,13 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import Dashboard from "../pages/Dashboard";
 import Home from "../pages/Home";
+import HomeM from "../pages/HomeM";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 import Patients from "../pages/Patients";
 import Clinics from "../pages/Clinics";
 import Medications from "../pages/Medications";
 import Appointments from "../pages/Appointments";
-import Recommendations from "../pages/Recommendations";
 import Community from "../pages/Community";
 import Announcements from "../pages/Announcements";
 import Reports from "../pages/Reports";
@@ -18,10 +20,13 @@ const AppRoutes = () => {
     return (
         <Routes>
 
-            <Route
-                path="/"
-                element={<Navigate to="/dashboard" replace />}
-            />
+            {/* Public Routes */}
+
+            <Route path="/" element={<HomeM />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+
+            {/* Dashboard */}
 
             <Route
                 path="/dashboard"
@@ -41,6 +46,8 @@ const AppRoutes = () => {
                 }
             />
 
+            {/* Patients */}
+
             <Route
                 path="/patients"
                 element={
@@ -59,6 +66,8 @@ const AppRoutes = () => {
                 }
             />
 
+            {/* Clinics */}
+
             <Route
                 path="/clinics"
                 element={
@@ -74,6 +83,8 @@ const AppRoutes = () => {
                     </ProtectedRoute>
                 }
             />
+
+            {/* Medications */}
 
             <Route
                 path="/medications"
@@ -91,6 +102,8 @@ const AppRoutes = () => {
                     </ProtectedRoute>
                 }
             />
+
+            {/* Appointments */}
 
             <Route
                 path="/appointments"
@@ -111,18 +124,7 @@ const AppRoutes = () => {
                 }
             />
 
-            <Route
-                path="/recommendations"
-                element={
-                    <ProtectedRoute>
-                        <RoleRoute
-                            allowedRoles={["PATIENT"]}
-                        >
-                            <Recommendations />
-                        </RoleRoute>
-                    </ProtectedRoute>
-                }
-            />
+            {/* Community */}
 
             <Route
                 path="/community"
@@ -133,6 +135,8 @@ const AppRoutes = () => {
                 }
             />
 
+            {/* Announcements */}
+
             <Route
                 path="/announcements"
                 element={
@@ -142,18 +146,20 @@ const AppRoutes = () => {
                 }
             />
 
+            {/* Reports */}
+
             <Route
                 path="/reports"
                 element={
                     <ProtectedRoute>
-                        <RoleRoute
-                            allowedRoles={["ADMIN"]}
-                        >
+                        <RoleRoute allowedRoles={["ADMIN"]}>
                             <Reports />
                         </RoleRoute>
                     </ProtectedRoute>
                 }
             />
+
+            {/* 404 */}
 
             <Route
                 path="*"
