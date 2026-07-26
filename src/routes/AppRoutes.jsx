@@ -11,21 +11,155 @@ import Community from "../pages/Community";
 import Announcements from "../pages/Announcements";
 import Reports from "../pages/Reports";
 
+import ProtectedRoute from "./ProtectedRoute";
+import RoleRoute from "./RoleRoute";
+
 const AppRoutes = () => {
     return (
         <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/patients" element={<Patients />} />
-            <Route path="/clinics" element={<Clinics />} />
-            <Route path="/medications" element={<Medications />} />
-            <Route path="/appointments" element={<Appointments />} />
-            <Route path="/recommendations" element={<Recommendations />} />
-            <Route path="/community" element={<Community />} />
-            <Route path="/announcements" element={<Announcements />} />
-            <Route path="/reports" element={<Reports />} />
+            <Route
+                path="/"
+                element={<Navigate to="/dashboard" replace />}
+            />
+
+            <Route
+                path="/dashboard"
+                element={
+                    <ProtectedRoute>
+                        <Dashboard />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/home"
+                element={
+                    <ProtectedRoute>
+                        <Home />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/patients"
+                element={
+                    <ProtectedRoute>
+                        <RoleRoute
+                            allowedRoles={[
+                                "ADMIN",
+                                "DOCTOR",
+                                "NURSE",
+                                "RECEPTIONIST"
+                            ]}
+                        >
+                            <Patients />
+                        </RoleRoute>
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/clinics"
+                element={
+                    <ProtectedRoute>
+                        <RoleRoute
+                            allowedRoles={[
+                                "ADMIN",
+                                "RECEPTIONIST"
+                            ]}
+                        >
+                            <Clinics />
+                        </RoleRoute>
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/medications"
+                element={
+                    <ProtectedRoute>
+                        <RoleRoute
+                            allowedRoles={[
+                                "ADMIN",
+                                "DOCTOR",
+                                "NURSE"
+                            ]}
+                        >
+                            <Medications />
+                        </RoleRoute>
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/appointments"
+                element={
+                    <ProtectedRoute>
+                        <RoleRoute
+                            allowedRoles={[
+                                "ADMIN",
+                                "DOCTOR",
+                                "NURSE",
+                                "RECEPTIONIST",
+                                "PATIENT"
+                            ]}
+                        >
+                            <Appointments />
+                        </RoleRoute>
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/recommendations"
+                element={
+                    <ProtectedRoute>
+                        <RoleRoute
+                            allowedRoles={["PATIENT"]}
+                        >
+                            <Recommendations />
+                        </RoleRoute>
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/community"
+                element={
+                    <ProtectedRoute>
+                        <Community />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/announcements"
+                element={
+                    <ProtectedRoute>
+                        <Announcements />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/reports"
+                element={
+                    <ProtectedRoute>
+                        <RoleRoute
+                            allowedRoles={["ADMIN"]}
+                        >
+                            <Reports />
+                        </RoleRoute>
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="*"
+                element={<Navigate to="/dashboard" replace />}
+            />
+
         </Routes>
     );
 };

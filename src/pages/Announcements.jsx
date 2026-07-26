@@ -1,37 +1,137 @@
-import { useState } from "react";
-import { useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import ThemeContext from "../context/ThemeContext";
 
+import {
+    getAllAnnouncements,
+    createAnnouncement,
+    updateAnnouncement,
+    deleteAnnouncement
+} from "../services/announcementService";
+
+import { getRole } from "../services/authService";
+
+import AnnouncementCard from "../components/AnnouncementCard";
+import AddAnnouncementModal from "../components/AddAnnouncementModal";
 
 export default function Announcements() {
+
     const { darkMode } = useContext(ThemeContext);
 
+    const role = getRole();
 
-    const [announcements] = useState([
-        {
-            id: 1,
-            title: "Clinic Closing Early",
-            message: "Hillbrow Clinic will close at 15:00 today due to maintenance.",
-            postedBy: "Administrator",
-            date: "17 June 2026"
-        },
-        {
-            id: 2,
-            title: "Flu Vaccination Campaign",
-            message: "Free flu vaccinations are now available at all Ubuntu Health clinics.",
-            postedBy: "Administrator",
-            date: "16 June 2026"
-        },
-        {
-            id: 3,
-            title: "New Doctor Available",
-            message: "A new general practitioner has joined the Soweto Clinic team.",
-            postedBy: "Administrator",
-            date: "15 June 2026"
+    const canCreate =
+        role === "ADMIN" ||
+        role === "DOCTOR" ||
+        role === "NURSE";
+
+    const canDelete =
+        role === "ADMIN";
+
+    const [announcements, setAnnouncements] = useState([]);
+
+    const [loading, setLoading] = useState(true);
+
+    const [openModal, setOpenModal] = useState(false);
+
+    const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+
+    useEffect(() => {
+        loadAnnouncements();
+    }, []);
+
+    const loadAnnouncements = async () => {
+
+        try {
+
+            setLoading(true);
+
+            const data = await getAllAnnouncements();
+
+            setAnnouncements(data);
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Failed to load announcements.");
+
+        } finally {
+
+            setLoading(false);
+
         }
-    ]);
+
+    };
+
+    const handleCreate = () => {
+
+        setSelectedAnnouncement(null);
+
+        setOpenModal(true);
+
+    };
+
+    const handleEdit = (announcement) => {
+
+        setSelectedAnnouncement(announcement);
+
+        setOpenModal(true);
+
+    };
+
+    const handleSave = async (announcementData) => {
+
+        try {
+
+            if (selectedAnnouncement) {
+
+                await updateAnnouncement(
+                    selectedAnnouncement.id,
+                    announcementData
+                );
+
+            } else {
+
+                await createAnnouncement(announcementData);
+
+            }
+
+            setOpenModal(false);
+
+            loadAnnouncements();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Unable to save announcement.");
+
+        }
+
+    };
+
+    const handleDelete = async (id) => {
+
+        if (!window.confirm("Delete this announcement?")) return;
+
+        try {
+
+            await deleteAnnouncement(id);
+
+            loadAnnouncements();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Unable to delete announcement.");
+
+        }
+
+    };
 
     return (
+
         <div
             className="page"
             style={{
@@ -42,42 +142,90 @@ export default function Announcements() {
             }}
         >
 
-            <h1 className="page-title">
-                📢 Official Announcements
-            </h1>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "30px"
+                }}
+            >
 
+                <div>
 
-            <p style={{ marginBottom: "30px", color: darkMode ? "#ccc" : "gray" }}>
-                Stay informed with official updates from Ubuntu Health.
-            </p>
+                    <h1 className="page-title">
+                        📢 Official Announcements
+                    </h1>
 
-            {announcements.map((announcement) => (
-
-                <div
-                    key={announcement.id}
-                    className="card"
-                    style={{ marginBottom: "20px" }}
-                >
-
-                    <h2>{announcement.title}</h2>
-
-                    <p>{announcement.message}</p>
-
-                    <hr />
-
-                    <small>
-                        <strong>Posted By:</strong> {announcement.postedBy}
-                    </small>
-
-                    <br />
-
-                    <small>
-                        <strong>Date:</strong> {announcement.date}
-                    </small>
+                    <p
+                        style={{
+                            color: darkMode ? "#ccc" : "gray"
+                        }}
+                    >
+                        Stay informed with official updates from Ubuntu Health.
+                    </p>
 
                 </div>
 
-            ))}
+                {canCreate && (
+
+                    <button
+                        onClick={handleCreate}
+                        style={{
+                            background: "#0d6efd",
+                            color: "#fff",
+                            border: "none",
+                            padding: "12px 20px",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                            fontWeight: "bold"
+                        }}
+                    >
+                        + New Announcement
+                    </button>
+
+                )}
+
+            </div>
+
+            {loading ? (
+
+                <h3>Loading announcements...</h3>
+
+            ) : announcements.length === 0 ? (
+
+                <div className="card">
+
+                    <h3>No announcements available.</h3>
+
+                </div>
+
+            ) : (
+
+                announcements.map((announcement) => (
+
+                    <AnnouncementCard
+                        key={announcement.id}
+                        announcement={announcement}
+                        onEdit={handleEdit}
+                        onDelete={
+                            canDelete
+                                ? handleDelete
+                                : undefined
+                        }
+                    />
+
+                ))
+
+            )}
+
+            <AddAnnouncementModal
+                open={openModal}
+                announcement={selectedAnnouncement}
+                onClose={() => setOpenModal(false)}
+                onSave={handleSave}
+            />
+
         </div>
 
     );
