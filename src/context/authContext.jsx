@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 import {
     getUser,
@@ -64,3 +64,6 @@ export function AuthProvider({ children }) {
     );
 
 }
+
+
+export const useAuth = () => useContext(AuthContext);

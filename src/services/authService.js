@@ -1,6 +1,7 @@
 import axios from "axios";
 import api from "./api";
 
+
 const API_URL = "http://localhost:8080/api/auth";
 
 
@@ -16,6 +17,7 @@ export const register = async (userData) => {
     );
 
     return response.data;
+
 };
 
 
@@ -31,6 +33,7 @@ export const login = async (loginData) => {
     );
 
     return response.data;
+
 };
 
 
@@ -40,26 +43,31 @@ export const login = async (loginData) => {
 
 export const saveUser = (loginResponse) => {
 
-    localStorage.setItem(
+    sessionStorage.setItem(
         "token",
         loginResponse.token
     );
 
-    localStorage.setItem(
+
+    sessionStorage.setItem(
         "email",
         loginResponse.email
     );
 
-    localStorage.setItem(
+
+    sessionStorage.setItem(
         "role",
         loginResponse.role
     );
 
-    localStorage.setItem(
+
+    sessionStorage.setItem(
         "user",
         JSON.stringify(loginResponse)
     );
+
 };
+
 
 
 // =========================
@@ -68,9 +76,10 @@ export const saveUser = (loginResponse) => {
 
 export const getToken = () => {
 
-    return localStorage.getItem("token");
+    return sessionStorage.getItem("token");
 
 };
+
 
 
 // =========================
@@ -79,9 +88,10 @@ export const getToken = () => {
 
 export const getEmail = () => {
 
-    return localStorage.getItem("email");
+    return sessionStorage.getItem("email");
 
 };
+
 
 
 // =========================
@@ -90,16 +100,10 @@ export const getEmail = () => {
 
 export const getRole = () => {
 
-    return localStorage.getItem("role");
+    return sessionStorage.getItem("role");
 
 };
 
-
-export const hasRole = (role) => {
-
-    return getRole() === role;
-
-};
 
 
 // =========================
@@ -108,13 +112,14 @@ export const hasRole = (role) => {
 
 export const getUser = () => {
 
-    const user = localStorage.getItem("user");
+    const user = sessionStorage.getItem("user");
 
     return user
         ? JSON.parse(user)
         : null;
 
 };
+
 
 
 // =========================
@@ -126,7 +131,7 @@ export const isAuthenticated = () => {
     const token = getToken();
 
     console.log(
-        "Token from localStorage:",
+        "Token from sessionStorage:",
         token
     );
 
@@ -135,22 +140,36 @@ export const isAuthenticated = () => {
 };
 
 
+
 // =========================
 // LOGOUT
 // =========================
 
 export const logout = () => {
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("email");
-    localStorage.removeItem("role");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("email");
+    sessionStorage.removeItem("role");
+    sessionStorage.removeItem("user");
 
 };
 
 
+
 // =========================
-// AUTH HEADER
+// ROLE CHECK
+// =========================
+
+export const hasRole = (role) => {
+
+    return getRole() === role;
+
+};
+
+
+
+// =========================
+// API EXPORT
 // =========================
 
 export { api };
