@@ -8,8 +8,10 @@ export default function AnnouncementCard({
 
     const role = getRole();
 
+
     const canManage =
         role === "ADMIN";
+
 
     return (
         <div
@@ -45,7 +47,7 @@ export default function AnnouncementCard({
                             lineHeight: "1.7"
                         }}
                     >
-                        {announcement.message}
+                        {announcement.description}
                     </p>
 
                 </div>

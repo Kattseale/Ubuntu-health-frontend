@@ -1,31 +1,45 @@
 import { useEffect, useState } from "react";
 
 export default function AddAnnouncementModal({
-    open,
-    onClose,
-    onSave,
-    announcement
-}) {
+                                                 open,
+                                                 onClose,
+                                                 onSave,
+                                                 announcement
+                                             }) {
 
     const [form, setForm] = useState({
         title: "",
-        message: ""
+        description: "",
+        priority: "MEDIUM"
     });
+
 
     useEffect(() => {
 
         if (announcement) {
 
             setForm({
+
                 title: announcement.title || "",
-                message: announcement.message || ""
+
+                description:
+                    announcement.description || "",
+
+                priority:
+                    announcement.priority || "MEDIUM"
+
             });
 
         } else {
 
             setForm({
+
                 title: "",
-                message: ""
+
+                description: "",
+
+                priority: "MEDIUM"
+
             });
 
         }
@@ -57,7 +71,12 @@ export default function AddAnnouncementModal({
 
             <div
                 style={{
-                    background: "#fff",
+                    background:
+                        window.localStorage.getItem("theme") === "dark"
+                            ?
+                            "#1e1e1e"
+                            :
+                            "#fff",
                     padding: "30px",
                     width: "500px",
                     borderRadius: "12px",
@@ -91,17 +110,46 @@ export default function AddAnnouncementModal({
                     </div>
 
                     <div style={{ marginBottom: "20px" }}>
+                        <div style={{ marginBottom:"15px" }}>
 
+                            <label>Priority</label>
+
+                            <select
+                                value={form.priority}
+                                onChange={(e)=>
+                                    setForm({
+                                        ...form,
+                                        priority:e.target.value
+                                    })
+                                }
+                                style={inputStyle}
+                            >
+
+                                <option value="LOW">
+                                    ℹ️ Information
+                                </option>
+
+                                <option value="MEDIUM">
+                                    📢 Important
+                                </option>
+
+                                <option value="HIGH">
+                                    🚨 Urgent
+                                </option>
+
+                            </select>
+
+                        </div>
                         <label>Message</label>
 
                         <textarea
                             rows="6"
                             required
-                            value={form.message}
+                            value={form.description}
                             onChange={(e) =>
                                 setForm({
                                     ...form,
-                                    message: e.target.value
+                                    description: e.target.value
                                 })
                             }
                             style={{
