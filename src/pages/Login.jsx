@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 import { login, saveUser } from "../services/authService";
 
 export default function Login() {
 
     const navigate = useNavigate();
+
+    const { loginUser } = useAuth();
 
     const [formData, setFormData] = useState({
         email: "",
@@ -27,26 +30,38 @@ export default function Login() {
 
         e.preventDefault();
 
+
         try {
 
             setLoading(true);
 
+
             const response = await login(formData);
+
+
+            console.log("Login response:", response);
+
 
             saveUser(response);
 
+
+            loginUser(response);
+
+
             navigate("/home");
 
-            window.location.href="/home";
 
-        } catch (error) {
+        } catch(error) {
+
 
             console.error(error);
+
 
             alert(
                 error.response?.data?.message ||
                 "Invalid email or password."
             );
+
 
         } finally {
 
