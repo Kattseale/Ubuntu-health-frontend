@@ -3,11 +3,11 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 import { login, saveUser } from "../services/authService";
+import { validateLogin } from "../utils/validation";
 
 export default function Login() {
 
     const navigate = useNavigate();
-
     const { loginUser } = useAuth();
 
     const [formData, setFormData] = useState({
@@ -17,51 +17,59 @@ export default function Login() {
 
     const [loading, setLoading] = useState(false);
 
+    const [errors, setErrors] = useState({
+        email: "",
+        password: ""
+    });
+
     const handleChange = (e) => {
 
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
+        const { name, value } = e.target;
 
+        const updatedForm = {
+            ...formData,
+            [name]: value
+        };
+
+        setFormData(updatedForm);
+
+        const validationErrors = validateLogin(updatedForm);
+        setErrors(validationErrors);
     };
 
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
+        const validationErrors = validateLogin(formData);
+
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
 
         try {
 
             setLoading(true);
 
-
             const response = await login(formData);
-
 
             console.log("Login response:", response);
 
-
             saveUser(response);
-
 
             loginUser(response);
 
-
             navigate("/home");
 
-
-        } catch(error) {
-
+        } catch (error) {
 
             console.error(error);
-
 
             alert(
                 error.response?.data?.message ||
                 "Invalid email or password."
             );
-
 
         } finally {
 
@@ -72,6 +80,7 @@ export default function Login() {
     };
 
     return (
+
         <div
             style={{
                 minHeight: "100vh",
@@ -81,6 +90,7 @@ export default function Login() {
                 background: "linear-gradient(135deg,#0d6efd,#198754)"
             }}
         >
+
             <div
                 style={{
                     background: "#fff",
@@ -105,13 +115,15 @@ export default function Login() {
                     style={{
                         textAlign: "center",
                         color: "#666",
-                        marginBottom: "35px"
+                        marginBottom: "30px"
                     }}
                 >
                     Welcome Back
                 </p>
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} noValidate>
+
+                    {/* EMAIL */}
 
                     <input
                         type="email"
@@ -119,9 +131,20 @@ export default function Login() {
                         placeholder="Email Address"
                         value={formData.email}
                         onChange={handleChange}
-                        required
                         style={inputStyle}
                     />
+
+                    <small
+                        style={{
+                            ...hintStyle,
+                            color: errors.email ? "#dc3545" : "#666"
+                        }}
+                    >
+                        {errors.email ||
+                            "Enter a valid email address (example@gmail.com)."}
+                    </small>
+
+                    {/* PASSWORD */}
 
                     <input
                         type="password"
@@ -129,14 +152,27 @@ export default function Login() {
                         placeholder="Password"
                         value={formData.password}
                         onChange={handleChange}
-                        required
                         style={inputStyle}
                     />
+
+                    <small
+                        style={{
+                            ...hintStyle,
+                            color: errors.password ? "#dc3545" : "#666"
+                        }}
+                    >
+                        {errors.password ||
+                            "Password must be at least 8 characters."}
+                    </small>
 
                     <button
                         type="submit"
                         disabled={loading}
-                        style={buttonStyle}
+                        style={{
+                            ...buttonStyle,
+                            opacity: loading ? 0.7 : 1,
+                            cursor: loading ? "not-allowed" : "pointer"
+                        }}
                     >
                         {loading ? "Signing In..." : "Sign In"}
                     </button>
@@ -148,30 +184,46 @@ export default function Login() {
                         }}
                     >
                         Don't have an account?{" "}
+
                         <Link
                             to="/register"
                             style={{
                                 color: "#0d6efd",
-                                fontWeight: "bold"
+                                fontWeight: "bold",
+                                textDecoration: "none"
                             }}
                         >
                             Register
                         </Link>
+
                     </p>
 
                 </form>
 
             </div>
+
         </div>
-    );}
+
+    );
+
+}
+
 const inputStyle = {
     width: "100%",
     padding: "14px",
-    marginBottom: "18px",
+    marginTop: "10px",
+    marginBottom: "5px",
     borderRadius: "8px",
     border: "1px solid #ccc",
     fontSize: "16px",
     boxSizing: "border-box"
+};
+
+const hintStyle = {
+    display: "block",
+    marginBottom: "15px",
+    fontSize: "13px",
+    fontWeight: "500"
 };
 
 const buttonStyle = {
@@ -183,5 +235,6 @@ const buttonStyle = {
     borderRadius: "8px",
     fontSize: "16px",
     cursor: "pointer",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    marginTop: "10px"
 };
