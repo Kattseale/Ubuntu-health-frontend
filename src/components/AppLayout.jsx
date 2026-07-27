@@ -107,6 +107,12 @@ export default function AppLayout() {
                     🏠 Home
                 </NavLink>
 
+                {(role === "PATIENT" || role === "ADMIN") && (
+                    <NavLink to="/announcements" style={navStyle}>
+                        📢 Announcements
+                    </NavLink>
+                )}
+
                 {role === "PATIENT" && (
                     <>
                         <NavLink to="/appointments" style={navStyle}>
@@ -116,13 +122,8 @@ export default function AppLayout() {
                         <NavLink to="/community" style={navStyle}>
                             👥 Community
                         </NavLink>
-
-                        <NavLink to="/announcements" style={navStyle}>
-                            📢 Announcements
-                        </NavLink>
                     </>
                 )}
-
                 {role === "ADMIN" && (
                     <>
                         <NavLink to="/dashboard" style={navStyle}>

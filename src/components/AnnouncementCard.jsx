@@ -1,17 +1,8 @@
-import { getRole } from "../services/authService";
-
 export default function AnnouncementCard({
     announcement,
     onEdit,
     onDelete
 }) {
-
-    const role = getRole();
-
-
-    const canManage =
-        role === "ADMIN";
-
 
     return (
         <div
@@ -40,7 +31,36 @@ export default function AnnouncementCard({
                     >
                         📢 {announcement.title}
                     </h3>
-
+                    <span
+                        style={{
+                            display: "inline-block",
+                            padding: "5px 12px",
+                            borderRadius: "20px",
+                            fontSize: "13px",
+                            fontWeight: "bold",
+                            marginBottom: "10px",
+                            background:
+                                announcement.priority === "HIGH"
+                                    ? "#dc3545"
+                                    : announcement.priority === "MEDIUM"
+                                        ? "#ffc107"
+                                        : "#0d6efd",
+                            color:
+                                announcement.priority === "MEDIUM"
+                                    ? "#000"
+                                    : "#fff"
+                        }}
+                    >
+    {
+        announcement.priority === "HIGH"
+            ? "🚨 Urgent"
+            :
+            announcement.priority === "MEDIUM"
+                ? "📢 Important"
+                :
+                "ℹ️ Information"
+    }
+</span>
                     <p
                         style={{
                             color: "#555",
@@ -52,13 +72,14 @@ export default function AnnouncementCard({
 
                 </div>
 
-                {canManage && (
+                {onEdit && (
                     <div
                         style={{
                             display: "flex",
                             gap: "10px"
                         }}
                     >
+                        {onEdit && (
                         <button
                             onClick={() => onEdit(announcement)}
                             style={{
@@ -72,7 +93,8 @@ export default function AnnouncementCard({
                         >
                             Edit
                         </button>
-
+                            )}
+                        {onDelete && (
                         <button
                             onClick={() => onDelete(announcement.id)}
                             style={{
@@ -86,6 +108,7 @@ export default function AnnouncementCard({
                         >
                             Delete
                         </button>
+                            )}
                     </div>
                 )}
             </div>
@@ -109,7 +132,11 @@ export default function AnnouncementCard({
                 </span>
 
                 <span>
-                    📅 {announcement.createdAt}
+                    📅 {
+                    new Date(
+                        announcement.createdAt
+                    ).toLocaleString()
+                }
                 </span>
             </div>
         </div>

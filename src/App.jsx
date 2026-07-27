@@ -1,12 +1,23 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import RoleProtectedRoute from "./components/RoleProtectedRoute";
+import {
+    BrowserRouter,
+    Routes,
+    Route
+} from "react-router-dom";
+
 import { useState } from "react";
+
 import "./styles/responsive.css";
+
 import { AuthProvider } from "./context/AuthContext";
+
 import AppLayout from "./components/AppLayout";
+import RoleProtectedRoute from "./components/RoleProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import ThemeContext from "./context/ThemeContext";
 
+
+// Pages
 import Home from "./pages/Home";
 import Clinics from "./pages/Clinics";
 import Patients from "./pages/Patients";
@@ -19,156 +30,302 @@ import Dashboard from "./pages/Dashboard";
 import HomeM from "./pages/HomeM";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import ProtectedRoute from "./components/ProtectedRoute";
+
 
 function App() {
 
     const [darkMode, setDarkMode] = useState(false);
 
+
     return (
 
-        <BrowserRouter>
-        <AuthProvider>
+        <BrowserRouter
+            future={{
+                v7_startTransition: true,
+                v7_relativeSplatPath: true
+            }}
+        >
 
-            <ThemeContext.Provider
-                value={{
-                    darkMode,
-                    setDarkMode
-                }}
-            >
+            <AuthProvider>
 
-            <div
-                style={{
-                    backgroundColor: darkMode ? "#121212" : "#f4f8fb",
-                    color: darkMode ? "white" : "black",
-                    minHeight: "100vh"
-                }}
-            >
 
-                <Routes>
+                <ThemeContext.Provider
+                    value={{
+                        darkMode,
+                        setDarkMode
+                    }}
+                >
 
-                    {/* PUBLIC ROUTES */}
 
-                    <Route
-                        path="/"
-                        element={<HomeM />}
-                    />
+                    <div
+                        style={{
+                            backgroundColor: darkMode
+                                ? "#121212"
+                                : "#f4f8fb",
 
-                    <Route
-                        path="/login"
-                        element={<Login />}
-                    />
+                            color: darkMode
+                                ? "white"
+                                : "black",
 
-                    <Route
-                        path="/register"
-                        element={<Register />}
-                    />
-
-                    {/* PROTECTED ROUTES */}
-
-                    <Route
-                        element={
-                            <ProtectedRoute>
-                                <AppLayout />
-                            </ProtectedRoute>
-                        }
+                            minHeight: "100vh"
+                        }}
                     >
 
-                        {/* Everyone */}
 
-                        <Route
-                            path="/home"
-                            element={<Home />}
-                        />
+                        <Routes>
 
-                        {/* PATIENT */}
 
-                        <Route
-                            path="/appointments"
-                            element={
-                                <RoleProtectedRoute allowedRoles={["PATIENT"]}>
-                                    <Appointments />
-                                </RoleProtectedRoute>
-                            }
-                        />
+                            {/* PUBLIC ROUTES */}
 
-                        <Route
-                            path="/community"
-                            element={
-                                <RoleProtectedRoute allowedRoles={["PATIENT"]}>
-                                    <Community />
-                                </RoleProtectedRoute>
-                            }
-                        />
+                            <Route
+                                path="/"
+                                element={<HomeM />}
+                            />
 
-                        <Route
-                            path="/announcements"
-                            element={
-                                <RoleProtectedRoute allowedRoles={["PATIENT"]}>
-                                    <Announcements />
-                                </RoleProtectedRoute>
-                            }
-                        />
+                            <Route
+                                path="/login"
+                                element={<Login />}
+                            />
 
-                        {/* ADMIN */}
+                            <Route
+                                path="/register"
+                                element={<Register />}
+                            />
 
-                        <Route
-                            path="/dashboard"
-                            element={
-                                <RoleProtectedRoute allowedRoles={["ADMIN"]}>
-                                    <Dashboard />
-                                </RoleProtectedRoute>
-                            }
-                        />
 
-                        <Route
-                            path="/patients"
-                            element={
-                                <RoleProtectedRoute allowedRoles={["ADMIN"]}>
-                                    <Patients />
-                                </RoleProtectedRoute>
-                            }
-                        />
 
-                        <Route
-                            path="/clinics"
-                            element={
-                                <RoleProtectedRoute allowedRoles={["ADMIN"]}>
-                                    <Clinics />
-                                </RoleProtectedRoute>
-                            }
-                        />
+                            {/* PROTECTED ROUTES */}
 
-                        <Route
-                            path="/medications"
-                            element={
-                                <RoleProtectedRoute allowedRoles={["ADMIN"]}>
-                                    <Medications />
-                                </RoleProtectedRoute>
-                            }
-                        />
+                            <Route
 
-                        <Route
-                            path="/reports"
-                            element={
-                                <RoleProtectedRoute allowedRoles={["ADMIN"]}>
-                                    <Reports />
-                                </RoleProtectedRoute>
-                            }
-                        />
+                                element={
 
-                    </Route>
+                                    <ProtectedRoute>
 
-                </Routes>
-            </div>
+                                        <AppLayout />
 
-            </ThemeContext.Provider>
+                                    </ProtectedRoute>
 
-        </AuthProvider>
+                                }
+
+                            >
+
+
+
+                                {/* ALL USERS */}
+
+                                <Route
+                                    path="/home"
+                                    element={<Home />}
+                                />
+
+
+
+                                {/* PATIENT ONLY */}
+
+
+                                <Route
+
+                                    path="/appointments"
+
+                                    element={
+
+                                        <RoleProtectedRoute
+                                            allowedRoles={[
+                                                "PATIENT"
+                                            ]}
+                                        >
+
+                                            <Appointments />
+
+                                        </RoleProtectedRoute>
+
+                                    }
+
+                                />
+
+
+
+                                <Route
+
+                                    path="/community"
+
+                                    element={
+
+                                        <RoleProtectedRoute
+                                            allowedRoles={[
+                                                "PATIENT"
+                                            ]}
+                                        >
+
+                                            <Community />
+
+                                        </RoleProtectedRoute>
+
+                                    }
+
+                                />
+
+
+
+                                {/* PATIENT + ADMIN */}
+
+                                <Route
+
+                                    path="/announcements"
+
+                                    element={
+
+                                        <RoleProtectedRoute
+
+                                            allowedRoles={[
+                                                "PATIENT",
+                                                "ADMIN"
+                                            ]}
+
+                                        >
+
+                                            <Announcements />
+
+                                        </RoleProtectedRoute>
+
+                                    }
+
+                                />
+
+
+                                {/* ADMIN ONLY */}
+
+
+                                <Route
+
+                                    path="/dashboard"
+
+                                    element={
+
+                                        <RoleProtectedRoute
+                                            allowedRoles={[
+                                                "ADMIN"
+                                            ]}
+                                        >
+
+                                            <Dashboard />
+
+                                        </RoleProtectedRoute>
+
+                                    }
+
+                                />
+
+
+
+                                <Route
+
+                                    path="/patients"
+
+                                    element={
+
+                                        <RoleProtectedRoute
+                                            allowedRoles={[
+                                                "ADMIN"
+                                            ]}
+                                        >
+
+                                            <Patients />
+
+                                        </RoleProtectedRoute>
+
+                                    }
+
+                                />
+
+
+
+                                <Route
+
+                                    path="/clinics"
+
+                                    element={
+
+                                        <RoleProtectedRoute
+                                            allowedRoles={[
+                                                "ADMIN"
+                                            ]}
+                                        >
+
+                                            <Clinics />
+
+                                        </RoleProtectedRoute>
+
+                                    }
+
+                                />
+
+
+
+                                <Route
+
+                                    path="/medications"
+
+                                    element={
+
+                                        <RoleProtectedRoute
+                                            allowedRoles={[
+                                                "ADMIN"
+                                            ]}
+                                        >
+
+                                            <Medications />
+
+                                        </RoleProtectedRoute>
+
+                                    }
+
+                                />
+
+
+
+                                <Route
+
+                                    path="/reports"
+
+                                    element={
+
+                                        <RoleProtectedRoute
+                                            allowedRoles={[
+                                                "ADMIN"
+                                            ]}
+                                        >
+
+                                            <Reports />
+
+                                        </RoleProtectedRoute>
+
+                                    }
+
+                                />
+
+
+                            </Route>
+
+
+                        </Routes>
+
+
+                    </div>
+
+
+                </ThemeContext.Provider>
+
+
+            </AuthProvider>
+
+
         </BrowserRouter>
 
     );
 
 }
+
 
 export default App;

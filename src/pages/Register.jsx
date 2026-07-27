@@ -34,15 +34,16 @@ export default function Register() {
 
             setLoading(true);
 
-            const response = await register(formData);
+            console.log("Sending registration data:", formData);
 
-            alert(response.message);
+            await register(formData);
 
             navigate("/login");
 
+
         } catch (error) {
 
-            console.error(error);
+            console.error("Registration error:", error.response?.data || error);
 
             alert(
                 error.response?.data?.message ||

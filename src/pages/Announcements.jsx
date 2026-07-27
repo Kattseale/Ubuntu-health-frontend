@@ -1,4 +1,6 @@
 import { useState, useEffect, useContext } from "react";
+import { Navigate } from "react-router-dom";
+
 import ThemeContext from "../context/ThemeContext";
 
 import {
@@ -13,19 +15,13 @@ import { getRole } from "../services/authService";
 import AnnouncementCard from "../components/AnnouncementCard";
 import AddAnnouncementModal from "../components/AddAnnouncementModal";
 
+
 export default function Announcements() {
 
     const { darkMode } = useContext(ThemeContext);
 
     const role = getRole();
 
-    const canCreate =
-        role === "ADMIN" ||
-        role === "DOCTOR" ||
-        role === "NURSE";
-
-    const canDelete =
-        role === "ADMIN";
 
     const [announcements, setAnnouncements] = useState([]);
 
@@ -35,9 +31,13 @@ export default function Announcements() {
 
     const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
 
-    useEffect(() => {
-        loadAnnouncements();
-    }, []);
+
+
+    const canCreate = role === "ADMIN";
+
+    const canDelete = role === "ADMIN";
+
+
 
     const loadAnnouncements = async () => {
 
@@ -63,6 +63,49 @@ export default function Announcements() {
 
     };
 
+
+
+    useEffect(() => {
+
+        const fetchAnnouncements = async () => {
+
+            try {
+
+                setLoading(true);
+
+                const data = await getAllAnnouncements();
+
+                setAnnouncements(data);
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert("Failed to load announcements.");
+
+            } finally {
+
+                setLoading(false);
+
+            }
+
+        };
+
+
+        fetchAnnouncements();
+
+    }, []);
+
+
+    // ROLE PROTECTION
+    if (role !== "ADMIN" && role !== "PATIENT") {
+
+        return <Navigate to="/home" replace />;
+
+    }
+
+
+
     const handleCreate = () => {
 
         setSelectedAnnouncement(null);
@@ -70,6 +113,8 @@ export default function Announcements() {
         setOpenModal(true);
 
     };
+
+
 
     const handleEdit = (announcement) => {
 
@@ -79,77 +124,124 @@ export default function Announcements() {
 
     };
 
+
+
     const handleSave = async (announcementData) => {
 
         try {
 
+
             if (selectedAnnouncement) {
+
 
                 await updateAnnouncement(
                     selectedAnnouncement.id,
                     announcementData
                 );
 
+
             } else {
 
-                await createAnnouncement(announcementData);
+
+                await createAnnouncement(
+                    announcementData
+                );
+
 
             }
+
 
             setOpenModal(false);
 
             loadAnnouncements();
 
+
         } catch (error) {
+
 
             console.error(error);
 
             alert("Unable to save announcement.");
 
+
         }
 
     };
 
+
+
     const handleDelete = async (id) => {
 
-        if (!window.confirm("Delete this announcement?")) return;
+
+        if (!window.confirm("Delete this announcement?")) {
+
+            return;
+
+        }
+
+
 
         try {
+
 
             await deleteAnnouncement(id);
 
             loadAnnouncements();
 
+
         } catch (error) {
+
 
             console.error(error);
 
             alert("Unable to delete announcement.");
 
+
         }
 
+
     };
+
+
+
+
 
     return (
 
         <div
             className="page"
             style={{
-                backgroundColor: darkMode ? "#121212" : "#f4f8fb",
-                color: darkMode ? "white" : "black",
+
+                backgroundColor: darkMode
+                    ? "#121212"
+                    : "#f4f8fb",
+
+                color: darkMode
+                    ? "white"
+                    : "black",
+
                 minHeight: "100vh",
+
                 padding: "20px"
+
             }}
         >
 
+
             <div
                 style={{
+
                     display: "flex",
+
                     justifyContent: "space-between",
+
                     alignItems: "center",
+
                     marginBottom: "30px"
+
                 }}
             >
+
 
                 <div>
 
@@ -157,74 +249,140 @@ export default function Announcements() {
                         📢 Official Announcements
                     </h1>
 
+
                     <p
                         style={{
-                            color: darkMode ? "#ccc" : "gray"
+
+                            color: darkMode
+                                ? "#ccc"
+                                : "gray"
+
                         }}
                     >
                         Stay informed with official updates from Ubuntu Health.
                     </p>
 
+
                 </div>
+
+
 
                 {canCreate && (
 
                     <button
                         onClick={handleCreate}
+
                         style={{
-                            background: "#0d6efd",
-                            color: "#fff",
-                            border: "none",
-                            padding: "12px 20px",
-                            borderRadius: "8px",
-                            cursor: "pointer",
-                            fontWeight: "bold"
+
+                            background:"#0d6efd",
+
+                            color:"#fff",
+
+                            border:"none",
+
+                            padding:"12px 20px",
+
+                            borderRadius:"8px",
+
+                            cursor:"pointer",
+
+                            fontWeight:"bold"
+
                         }}
                     >
+
                         + New Announcement
+
                     </button>
 
                 )}
 
+
+
             </div>
+
+
+
+
 
             {loading ? (
 
-                <h3>Loading announcements...</h3>
+
+                <h3>
+                    Loading announcements...
+                </h3>
+
+
 
             ) : announcements.length === 0 ? (
 
+
+
                 <div className="card">
 
-                    <h3>No announcements available.</h3>
+                    <h3>
+                        No announcements available.
+                    </h3>
 
                 </div>
 
+
+
+
             ) : (
+
+
 
                 announcements.map((announcement) => (
 
+
                     <AnnouncementCard
+
                         key={announcement.id}
+
                         announcement={announcement}
-                        onEdit={handleEdit}
+
+
+                        onEdit={
+                            canCreate
+                                ? handleEdit
+                                : undefined
+                        }
+
+
                         onDelete={
                             canDelete
                                 ? handleDelete
                                 : undefined
                         }
+
                     />
+
 
                 ))
 
+
+
             )}
 
+
+
+
+
+
             <AddAnnouncementModal
+
                 open={openModal}
+
                 announcement={selectedAnnouncement}
+
                 onClose={() => setOpenModal(false)}
+
                 onSave={handleSave}
+
             />
+
+
 
         </div>
 

@@ -576,22 +576,3 @@ const navLink = {
     color: "#333",
     fontWeight: "600"
 };
-
-const buttonPrimary = {
-    background: "#fff",
-    color: "#0d6efd",
-    padding: "15px 35px",
-    borderRadius: "8px",
-    textDecoration: "none",
-    fontWeight: "bold"
-};
-
-const buttonSecondary = {
-    background: "transparent",
-    color: "#fff",
-    border: "2px solid white",
-    padding: "15px 35px",
-    borderRadius: "8px",
-    textDecoration: "none",
-    fontWeight: "bold"
-};
