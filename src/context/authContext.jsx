@@ -5,17 +5,21 @@ import {
     useState
 } from "react";
 
+
 import {
     getUser,
-    isAuthenticated,
-    logout as authLogout
+    logout as authLogout,
+    isAuthenticated
 } from "../services/authService";
 
 
-const AuthContext = createContext(null);
+
+const AuthContext = createContext();
+
 
 
 export function AuthProvider({ children }) {
+
 
     const [user, setUser] = useState(null);
 
@@ -27,10 +31,11 @@ export function AuthProvider({ children }) {
 
     useEffect(() => {
 
+
         const tokenExists = isAuthenticated();
 
 
-        if (tokenExists) {
+        if(tokenExists){
 
             setAuthenticated(true);
 
@@ -42,19 +47,32 @@ export function AuthProvider({ children }) {
         setLoading(false);
 
 
+
+        const logoutOnExit = () => {
+
+            authLogout();
+
+        };
+
+
+        window.addEventListener(
+            "pagehide",
+            logoutOnExit
+        );
+
+
+        return () => {
+
+            window.removeEventListener(
+                "pagehide",
+                logoutOnExit
+            );
+
+        };
+
+
     }, []);
 
-
-
-    const loginUser = (userData) => {
-
-        console.log("AuthContext loginUser:", userData);
-
-        setUser(userData);
-
-        setAuthenticated(true);
-
-    };
 
 
 
@@ -62,20 +80,28 @@ export function AuthProvider({ children }) {
 
         authLogout();
 
-        setUser(null);
-
         setAuthenticated(false);
+
+        setUser(null);
 
     };
 
 
 
-    if (loading) {
 
-        return null;
+    if(loading){
+
+        return <div>Loading...</div>;
 
     }
 
+    const loginUser = (userData) => {
+
+        setUser(userData);
+
+        setAuthenticated(true);
+
+    };
 
 
     return (
@@ -101,8 +127,9 @@ export function AuthProvider({ children }) {
 
 
 
-export const useAuth = () => {
+
+export function useAuth(){
 
     return useContext(AuthContext);
 
-};
+}
