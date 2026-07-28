@@ -44,7 +44,7 @@ export default function Home() {
             >
 
                 <h1>
-                    Ubuntu Health Management System
+                    Ubuntu-Health Clinic System
                 </h1>
 
                 <h3
@@ -71,110 +71,110 @@ export default function Home() {
 
             {/* PATIENT SERVICES */}
 
-            <h2 style={{ color: "#198754" }}>
-                👥 Patient Services
-            </h2>
+            {/* PATIENT SERVICES */}
 
-            <p
-                style={{
-                    color: darkMode ? "#ccc" : "#666",
-                    marginBottom: "25px"
-                }}
-            >
-                Services available to patients.
-            </p>
+            {role === "PATIENT" && (
+                <>
+                    <h2 style={{ color: "#198754" }}>
+                        👥 Patient Services
+                    </h2>
 
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit,minmax(250px,1fr))",
-                    gap: "25px",
-                    marginBottom: "50px"
-                }}
-            >
-
-                {/* APPOINTMENTS */}
-
-                <div
-                    style={cardStyle}
-                    onMouseEnter={(e)=>{
-                        e.currentTarget.style.transform="translateY(-8px)";
-                    }}
-                    onMouseLeave={(e)=>{
-                        e.currentTarget.style.transform="translateY(0)";
-                    }}
-                >
-
-                    <h2>📅 Appointments</h2>
-
-                    <p>
-                        Schedule and manage appointments.
+                    <p
+                        style={{
+                            color: darkMode ? "#ccc" : "#666",
+                            marginBottom: "25px"
+                        }}
+                    >
+                        Services available to patients.
                     </p>
 
-                    <button
-                        style={buttonStyle}
-                        onClick={()=>navigate("/appointments")}
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fit,minmax(250px,1fr))",
+                            gap: "25px",
+                            marginBottom: "50px"
+                        }}
                     >
-                        Manage Appointments
-                    </button>
 
-                </div>
+                        {/* APPOINTMENTS */}
 
-                {/* COMMUNITY */}
+                        <div
+                            style={cardStyle}
+                            onMouseEnter={(e)=>{
+                                e.currentTarget.style.transform="translateY(-8px)";
+                            }}
+                            onMouseLeave={(e)=>{
+                                e.currentTarget.style.transform="translateY(0)";
+                            }}
+                        >
 
-                <div
-                    style={cardStyle}
-                    onMouseEnter={(e)=>{
-                        e.currentTarget.style.transform="translateY(-8px)";
-                    }}
-                    onMouseLeave={(e)=>{
-                        e.currentTarget.style.transform="translateY(0)";
-                    }}
-                >
+                            <h2>📅 Appointments</h2>
 
-                    <h2>👥 Community</h2>
+                            <p>Schedule and manage appointments.</p>
 
-                    <p>
-                        Share healthcare updates with other patients.
-                    </p>
+                            <button
+                                style={buttonStyle}
+                                onClick={()=>navigate("/appointments")}
+                            >
+                                Manage Appointments
+                            </button>
 
-                    <button
-                        style={buttonStyle}
-                        onClick={()=>navigate("/community")}
-                    >
-                        Open Community
-                    </button>
+                        </div>
 
-                </div>
+                        {/* COMMUNITY */}
 
-                {/* ANNOUNCEMENTS */}
+                        <div
+                            style={cardStyle}
+                            onMouseEnter={(e)=>{
+                                e.currentTarget.style.transform="translateY(-8px)";
+                            }}
+                            onMouseLeave={(e)=>{
+                                e.currentTarget.style.transform="translateY(0)";
+                            }}
+                        >
 
-                <div
-                    style={cardStyle}
-                    onMouseEnter={(e)=>{
-                        e.currentTarget.style.transform="translateY(-8px)";
-                    }}
-                    onMouseLeave={(e)=>{
-                        e.currentTarget.style.transform="translateY(0)";
-                    }}
-                >
+                            <h2>👥 Community</h2>
 
-                    <h2>📢 Announcements</h2>
+                            <p>Share healthcare updates with other patients.</p>
 
-                    <p>
-                        View official clinic announcements.
-                    </p>
+                            <button
+                                style={buttonStyle}
+                                onClick={()=>navigate("/community")}
+                            >
+                                Open Community
+                            </button>
 
-                    <button
-                        style={buttonStyle}
-                        onClick={()=>navigate("/announcements")}
-                    >
-                        View Announcements
-                    </button>
+                        </div>
 
-                </div>
+                        {/* ANNOUNCEMENTS */}
 
-            </div>
+                        <div
+                            style={cardStyle}
+                            onMouseEnter={(e)=>{
+                                e.currentTarget.style.transform="translateY(-8px)";
+                            }}
+                            onMouseLeave={(e)=>{
+                                e.currentTarget.style.transform="translateY(0)";
+                            }}
+                        >
+
+                            <h2>📢 Announcements</h2>
+
+                            <p>View official clinic announcements.</p>
+
+                            <button
+                                style={buttonStyle}
+                                onClick={()=>navigate("/announcements")}
+                            >
+                                View Announcements
+                            </button>
+
+                        </div>
+
+                    </div>
+                </>
+            )}
 
             {/* ADMINISTRATION */}
             {role === "ADMIN" && (

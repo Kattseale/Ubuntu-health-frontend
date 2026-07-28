@@ -1,30 +1,23 @@
-
 import api from "./api";
 
-
-const API_URL = "http://localhost:8080/api/auth";
-
+const API_URL = "/auth";
 
 // =========================
 // REGISTER
 // =========================
-
 export const register = async (userData) => {
 
-    const response = await api().post(
+    const response = await api.post(
         `${API_URL}/register`,
         userData
     );
 
     return response.data;
-
 };
-
 
 // =========================
 // LOGIN
 // =========================
-
 export const login = async (loginData) => {
 
     const response = await api.post(
@@ -33,7 +26,6 @@ export const login = async (loginData) => {
     );
 
     return response.data;
-
 };
 
 

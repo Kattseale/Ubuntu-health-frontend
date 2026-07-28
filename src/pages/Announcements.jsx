@@ -318,7 +318,14 @@ export default function Announcements() {
 
 
 
-                <div className="card">
+                <div
+                    className="card"
+                    style={{
+                        backgroundColor: darkMode ? "#1e1e1e" : "white",
+                        color: darkMode ? "white" : "black",
+                        border: darkMode ? "1px solid #333" : "1px solid #ddd"
+                    }}
+                >
 
                     <h3>
                         No announcements available.
@@ -337,6 +344,12 @@ export default function Announcements() {
 
 
                     <AnnouncementCard
+                        key={announcement.id}
+                        announcement={announcement}
+                        darkMode={darkMode}
+                        onEdit={canCreate ? handleEdit : undefined}
+                        onDelete={canDelete ? handleDelete : undefined}
+
 
                         key={announcement.id}
 
@@ -367,10 +380,12 @@ export default function Announcements() {
 
 
 
-
-
-
             <AddAnnouncementModal
+                open={openModal}
+                announcement={selectedAnnouncement}
+                darkMode={darkMode}
+                onClose={() => setOpenModal(false)}
+                onSave={handleSave}
 
                 open={openModal}
 

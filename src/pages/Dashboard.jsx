@@ -6,6 +6,7 @@ import { getAllPatients } from "../services/patientService";
 import { getAllClinics } from "../services/clinicService";
 import { getAllMedications } from "../services/medicationService";
 import { getAllAppointments } from "../services/appointmentService";
+import { getAllAnnouncements } from "../services/announcementService";
 
 export default function Dashboard() {
 
@@ -20,6 +21,7 @@ export default function Dashboard() {
 
     const [appointments, setAppointments] = useState([]);
     const [recentAppointments, setRecentAppointments] = useState([]);
+    const [announcements, setAnnouncements] = useState([]);
 
     useEffect(() => {
 
@@ -31,6 +33,8 @@ export default function Dashboard() {
                 const clinics = await getAllClinics();
                 const medications = await getAllMedications();
                 const appointments = await getAllAppointments();
+                const announcements = await getAllAnnouncements();
+                setAnnouncements(announcements.slice(0, 3));
                 setAppointments(appointments);
 
                 const today = new Date().toISOString().split("T")[0];
@@ -377,16 +381,36 @@ export default function Dashboard() {
                     }}
                 >
 
-                    <ul
-                        style={{
-                            lineHeight: "2",
-                            paddingLeft: "20px"
-                        }}
-                    >
-                        <li>Flu vaccination campaign starts Monday.</li>
-                        <li>Clinic 3 will be closed for maintenance on Friday.</li>
-                        <li>Please verify patient contact details during registration.</li>
-                    </ul>
+                    {announcements.length === 0 ? (
+
+                        <p>No announcements available.</p>
+
+                    ) : (
+
+                        announcements.map((announcement) => (
+
+                            <div
+                                key={announcement.id}
+                                style={{
+                                    padding: "12px 0",
+                                    borderBottom: "1px solid #444"
+                                }}
+                            >
+                                <strong>{announcement.title}</strong>
+
+                                <p
+                                    style={{
+                                        marginTop: "5px",
+                                        color: darkMode ? "#ccc" : "#666"
+                                    }}
+                                >
+                                    {announcement.message}
+                                </p>
+                            </div>
+
+                        ))
+
+                    )}
 
                 </div>
             </div>

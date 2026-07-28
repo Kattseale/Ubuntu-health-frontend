@@ -1,37 +1,29 @@
-import { useEffect, useState } from "react";
-import ClinicMap from "../components/ClinicMap";
+import { useEffect, useState, useContext } from "react";
 import {
     getAllClinics,
     createClinic,
     updateClinic,
     deleteClinic
 } from "../services/clinicService";
-import { useContext } from "react";
 import ThemeContext from "../context/ThemeContext";
 
 export default function Clinics() {
+    const { darkMode } = useContext(ThemeContext);
 
     const [clinics, setClinics] = useState([]);
-
     const [editingId, setEditingId] = useState(null);
-
     const [errors, setErrors] = useState({});
-
-    const { darkMode } = useContext(ThemeContext);
-    const inputStyle = {
-        backgroundColor: darkMode ? "#2b2b2b" : "white",
-        color: darkMode ? "white" : "black",
-        border: darkMode ? "1px solid #555" : "1px solid #ccc"
-    };
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-    const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
 
     const recordsPerPage = 5;
-    const filteredClinics = clinics.filter(c =>
-        c.clinicName.toLowerCase().includes(search.toLowerCase())
-    );
+
+    const inputStyle = {
+        backgroundColor: darkMode ? "#2b2b2b" : "#fff",
+        color: darkMode ? "#fff" : "#000",
+        border: darkMode ? "1px solid #555" : "1px solid #ccc"
+    };
 
     const [clinic, setClinic] = useState({
         clinicName: "",
@@ -54,16 +46,7 @@ export default function Clinics() {
     };
 
     useEffect(() => {
-        const loadClinics = async () => {
-            try {
-                const data = await getAllClinics();
-                setClinics(data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        loadClinics();
+        fetchClinics();
     }, []);
 
     const handleChange = (e) => {
@@ -74,29 +57,19 @@ export default function Clinics() {
     };
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
         setErrors({});
 
         try {
-
             if (editingId) {
-
                 await updateClinic(editingId, clinic);
                 setSuccessMessage("✅ Clinic updated successfully!");
-                setTimeout(() => {
-                    setSuccessMessage("");
-                }, 3000);
-
             } else {
-
                 await createClinic(clinic);
                 setSuccessMessage("✅ Clinic added successfully!");
-                setTimeout(() => {
-                    setSuccessMessage("");
-                }, 3000);
-
             }
+
+            setTimeout(() => setSuccessMessage(""), 3000);
 
             setClinic({
                 clinicName: "",
@@ -110,103 +83,81 @@ export default function Clinics() {
             });
 
             setEditingId(null);
-
             await fetchClinics();
-            setCurrentPage(1);
-
         } catch (error) {
-
             console.error(error);
 
             if (error.response?.status === 400) {
-
                 setErrors(error.response.data);
-
             } else {
-
                 setErrorMessage("❌ Something went wrong.");
-
-                setTimeout(() => {
-                    setErrorMessage("");
-                }, 3000);
-
+                setTimeout(() => setErrorMessage(""), 3000);
             }
-
         }
-
     };
 
     const handleDelete = async (id) => {
-
         if (!window.confirm("Delete this clinic?")) return;
 
         try {
-
             await deleteClinic(id);
-
             await fetchClinics();
-            setCurrentPage(1);
 
             setSuccessMessage("🗑️ Clinic deleted successfully!");
-            setTimeout(() => {
-                setSuccessMessage("");
-            }, 3000);
-
+            setTimeout(() => setSuccessMessage(""), 3000);
         } catch (error) {
-
             console.error(error);
-
         }
-
     };
 
     const indexOfLastRecord = currentPage * recordsPerPage;
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+    const currentRecords = clinics.slice(indexOfFirstRecord, indexOfLastRecord);
+    const totalPages = Math.ceil(clinics.length / recordsPerPage);
 
-    const currentRecords = clinics.slice(
-        indexOfFirstRecord,
-        indexOfLastRecord
-    );
-
-    const totalPages = Math.ceil(
-        clinics.length / recordsPerPage
-    );
     return (
-
-        <div className="page"
+        <div
+            className="page"
             style={{
                 backgroundColor: darkMode ? "#121212" : "#f4f8fb",
-                color: darkMode ? "white" : "black",
+                color: darkMode ? "#fff" : "#000",
                 minHeight: "100vh",
                 padding: "20px"
             }}
         >
+            <h1>🏥 Clinic Management</h1>
 
-            <h1>Clinics</h1>
+            <p
+                style={{
+                    color: darkMode ? "#ccc" : "#666",
+                    marginBottom: "25px"
+                }}
+            >
+                Create, update and manage Ubuntu Health clinic locations.
+            </p>
 
             {successMessage && (
-                <div className="page"
+                <div
                     style={{
                         background: darkMode ? "#1e4620" : "#d1e7dd",
                         color: darkMode ? "#8ff0a4" : "#0f5132",
                         padding: "12px",
-                        marginBottom: "20px",
                         borderRadius: "8px",
-                        border: darkMode ? "1px solid #2f7d32" : "1px solid #badbcc"
+                        marginBottom: "20px"
                     }}
                 >
                     {successMessage}
                 </div>
             )}
+
             {errorMessage && (
-                <div className="page"
+                <div
                     style={{
                         background: darkMode ? "#4a1f1f" : "#f8d7da",
                         color: darkMode ? "#ff9999" : "#842029",
                         padding: "12px",
-                        marginBottom: "20px",
                         borderRadius: "8px",
-                        border: darkMode ? "1px solid #842029" : "1px solid #f5c2c7"
+                        marginBottom: "20px"
                     }}
                 >
                     {errorMessage}
@@ -214,38 +165,32 @@ export default function Clinics() {
             )}
 
             {Object.keys(errors).length > 0 && (
-
-                <div className="page"
+                <div
                     style={{
                         background: "#ffe6e6",
                         color: "#b30000",
                         padding: "10px",
-                        marginBottom: "20px",
-                        borderRadius: "5px"
+                        borderRadius: "8px",
+                        marginBottom: "20px"
                     }}
                 >
-
                     {Object.entries(errors).map(([field, message]) => (
-
                         <p key={field}>
                             <strong>{field}:</strong> {message}
                         </p>
-
                     ))}
-
                 </div>
-
             )}
 
             <div
                 className="card"
                 style={{
-                    backgroundColor: darkMode ? "#1e1e1e" : "white",
-                    color: darkMode ? "white" : "black"
+                    backgroundColor: darkMode ? "#1e1e1e" : "#fff",
+                    color: darkMode ? "#fff" : "#000",
+                    marginBottom: "30px"
                 }}
             >
                 <form onSubmit={handleSubmit}>
-
                     <input
                         style={inputStyle}
                         type="text"
@@ -331,131 +276,149 @@ export default function Clinics() {
                     <button
                         className="btn-primary"
                         type="submit"
-                        style={{
-                            marginTop: "15px"
-                        }}
+                        style={{ marginTop: "15px" }}
                     >
-                        {editingId ? "Update Clinic" : "Save Clinic"}
+                        {editingId ? "✏️ Update Clinic" : "➕ Add Clinic"}
                     </button>
-
                 </form>
-
             </div>
-
-            <hr />
 
             <div
                 className="card"
                 style={{
-                    backgroundColor: darkMode ? "#1e1e1e" : "white",
-                    color: darkMode ? "white" : "black"
+                    backgroundColor: darkMode ? "#1e1e1e" : "#fff",
+                    color: darkMode ? "#fff" : "#000"
                 }}
             >
                 <div className="table-container">
-                <table
-                    style={{
-                        width: "100%",
-                        borderCollapse: "collapse",
-                        backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
-                        color: darkMode ? "#ffffff" : "#000000"
-                    }}
-                >
-
-                    <thead>
-
-                    <tr
+                    <table
                         style={{
-                            backgroundColor: darkMode ? "#333" : "#e9ecef"
+                            width: "100%",
+                            borderCollapse: "collapse"
                         }}
                     >
-                        <th style={{ padding: "12px", border: "1px solid #555" }}>ID</th>
-                        <th style={{ padding: "12px", border: "1px solid #555" }}>Clinic Name</th>
-                        <th style={{ padding: "12px", border: "1px solid #555" }}>City</th>
-                        <th style={{ padding: "12px", border: "1px solid #555" }}>Province</th>
-                        <th style={{ padding: "12px", border: "1px solid #555" }}>Email</th>
-                        <th style={{ padding: "12px", border: "1px solid #555" }}>Actions</th>
-                    </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                    {currentRecords.map((clinic) => (
-
+                        <thead>
                         <tr
-                            key={clinic.id}
                             style={{
-                                backgroundColor: darkMode ? "#2b2b2b" : "#ffffff",
-                                color: darkMode ? "#ffffff" : "#000000"
+                                backgroundColor: darkMode ? "#333" : "#e9ecef"
                             }}
                         >
+                            <th>ID</th>
+                            <th>Clinic Name</th>
+                            <th>City</th>
+                            <th>Province</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
 
-                            <td style={{ padding: "10px", border: "1px solid #555" }}>
-                                {clinic.id}
-                            </td>
-                            <td style={{ padding: "10px", border: "1px solid #555" }}>
-                                {clinic.clinicName}
-                            </td>
-                            <td style={{ padding: "10px", border: "1px solid #555" }}>
-                                {clinic.city}
-                            </td>
-                            <td style={{ padding: "10px", border: "1px solid #555" }}>
-                                {clinic.province}
-                            </td>
-                            <td style={{ padding: "10px", border: "1px solid #555" }}>
-                                {clinic.email}
-                            </td>
-
-                            <td>
-
-                                <td style={{ padding: "10px", border: "1px solid #555" }}>
-                                <button
-                                    className="btn-primary"
-                                    onClick={() => {
-
-                                        setClinic({
-                                            clinicName: clinic.clinicName,
-                                            province: clinic.province,
-                                            city: clinic.city,
-                                            address: clinic.address,
-                                            latitude: clinic.latitude,
-                                            longitude: clinic.longitude,
-                                            phoneNumber: clinic.phoneNumber,
-                                            email: clinic.email
-                                        });
-
-                                        setEditingId(clinic.id);
-
+                        <tbody>
+                        {currentRecords.map((clinic) => (
+                            <tr
+                                key={clinic.id}
+                                style={{
+                                    backgroundColor: darkMode ? "#2b2b2b" : "#ffffff",
+                                    color: darkMode ? "#ffffff" : "#000000"
+                                }}
+                            >
+                                <td
+                                    style={{
+                                        padding: "10px",
+                                        border: "1px solid #555"
                                     }}
                                 >
-                                    Edit
-                                </button>
-
-                                <button
-                                    className="btn-danger"
-                                    onClick={() => handleDelete(clinic.id)}
-                                >
-                                    Delete
-                                </button>
-
+                                    {clinic.id}
                                 </td>
 
-                            </td>
+                                <td
+                                    style={{
+                                        padding: "10px",
+                                        border: "1px solid #555"
+                                    }}
+                                >
+                                    {clinic.clinicName}
+                                </td>
 
-                        </tr>
+                                <td
+                                    style={{
+                                        padding: "10px",
+                                        border: "1px solid #555"
+                                    }}
+                                >
+                                    {clinic.city}
+                                </td>
 
-                    ))}
+                                <td
+                                    style={{
+                                        padding: "10px",
+                                        border: "1px solid #555"
+                                    }}
+                                >
+                                    {clinic.province}
+                                </td>
 
-                    </tbody>
+                                <td
+                                    style={{
+                                        padding: "10px",
+                                        border: "1px solid #555"
+                                    }}
+                                >
+                                    {clinic.email}
+                                </td>
 
-                </table>
+                                <td
+                                    style={{
+                                        padding: "10px",
+                                        border: "1px solid #555",
+                                        whiteSpace: "nowrap"
+                                    }}
+                                >
+                                    <button
+                                        className="btn-primary"
+                                        type="button"
+                                        onClick={() => {
+                                            setClinic({
+                                                clinicName: clinic.clinicName,
+                                                province: clinic.province,
+                                                city: clinic.city,
+                                                address: clinic.address,
+                                                latitude: clinic.latitude,
+                                                longitude: clinic.longitude,
+                                                phoneNumber: clinic.phoneNumber,
+                                                email: clinic.email
+                                            });
+
+                                            setEditingId(clinic.id);
+
+                                            window.scrollTo({
+                                                top: 0,
+                                                behavior: "smooth"
+                                            });
+                                        }}
+                                    >
+                                        ✏️ Edit
+                                    </button>
+
+                                    <button
+                                        className="btn-danger"
+                                        type="button"
+                                        onClick={() => handleDelete(clinic.id)}
+                                        style={{ marginLeft: "10px" }}
+                                    >
+                                        🗑 Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
 
                     <div
                         style={{
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
-                            gap: "10px",
+                            gap: "15px",
                             marginTop: "20px",
                             flexWrap: "wrap"
                         }}
@@ -463,66 +426,32 @@ export default function Clinics() {
                         <button
                             className="btn-primary"
                             disabled={currentPage === 1}
-                            onClick={() => setCurrentPage(currentPage - 1)}
+                            onClick={() =>
+                                setCurrentPage((prev) => prev - 1)
+                            }
                         >
                             Previous
                         </button>
 
                         <span>
-        Page {currentPage} of {totalPages}
-    </span>
+                            Page {currentPage} of {totalPages || 1}
+                        </span>
 
                         <button
                             className="btn-primary"
-                            disabled={currentPage === totalPages}
-                            onClick={() => setCurrentPage(currentPage + 1)}
+                            disabled={
+                                currentPage === totalPages ||
+                                totalPages === 0
+                            }
+                            onClick={() =>
+                                setCurrentPage((prev) => prev + 1)
+                            }
                         >
                             Next
                         </button>
                     </div>
-                    <hr />
-
-                    <div
-                        className="card"
-                        style={{
-                            backgroundColor: darkMode ? "#1e1e1e" : "white",
-                            color: darkMode ? "white" : "black"
-                        }}
-                    >
-
-                        <h2>Clinic Locations</h2>
-                        <input
-                            type="text"
-                            placeholder="Search clinic..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            style={{
-                                width: "100%",
-                                maxWidth: "500px",
-                                padding: "12px",
-                                marginBottom: "20px",
-                                borderRadius: "8px",
-                                border: darkMode ? "1px solid #555" : "1px solid #ccc",
-                                backgroundColor: darkMode ? "#2b2b2b" : "white",
-                                color: darkMode ? "white" : "black",
-                                boxSizing: "border-box"
-                            }}
-                        />
-                        <div
-                            style={{
-                                width: "100%",
-                                overflow: "hidden",
-                                borderRadius: "12px"
-                            }}
-                        >
-                            <ClinicMap clinics={filteredClinics} />
-                        </div>
-
-                    </div>
                 </div>
-
             </div>
-
         </div>
     );
 }

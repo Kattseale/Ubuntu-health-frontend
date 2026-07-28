@@ -59,13 +59,10 @@ export default function AddAnnouncementModal({
 
         <div
             style={{
-                position: "fixed",
-                inset: 0,
-                background: "rgba(0,0,0,.5)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                zIndex: 1000
+                backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
+                color: darkMode ? "#ffffff" : "#000000",
+                borderRadius: "10px",
+                padding: "20px"
             }}
         >
 
@@ -153,8 +150,9 @@ export default function AddAnnouncementModal({
                                 })
                             }
                             style={{
-                                ...inputStyle,
-                                resize: "vertical"
+                                backgroundColor: darkMode ? "#2c2c2c" : "#ffffff",
+                                color: darkMode ? "#ffffff" : "#000000",
+                                border: "1px solid #666"
                             }}
                         />
 

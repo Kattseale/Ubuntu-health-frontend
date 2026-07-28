@@ -1,17 +1,19 @@
 export default function AnnouncementCard({
-    announcement,
-    onEdit,
-    onDelete
-}) {
+                                             announcement,
+                                             onEdit,
+                                             onDelete,
+                                             darkMode
+                                         }) {
 
     return (
         <div
             style={{
-                background: "#fff",
-                borderRadius: "12px",
+                backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
+                color: darkMode ? "#ffffff" : "#000000",
+                border: darkMode ? "1px solid #333" : "1px solid #ddd",
+                borderRadius: "10px",
                 padding: "20px",
-                marginBottom: "20px",
-                boxShadow: "0 4px 10px rgba(0,0,0,.1)"
+                marginBottom: "20px"
             }}
         >
             <div
