@@ -60,7 +60,7 @@ export default function AppLayout() {
                 <div>
 
                     <h2 style={{ margin: 0 }}>
-                        Ubuntu Health
+                        Ubuntu Health Clinic
                     </h2>
 
                     <small>

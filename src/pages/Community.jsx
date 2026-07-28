@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../context/ThemeContext";
 
 import {
@@ -8,11 +7,12 @@ import {
     updatePost,
 } from "../services/communityService";
 
-import { getAllPatients } from "../services/patientService";
-import { getAllClinics } from "../services/clinicService";
 
 export default function Community() {
+
     const { darkMode } = useContext(ThemeContext);
+
+
     const inputStyle = {
         backgroundColor: darkMode ? "#2b2b2b" : "white",
         color: darkMode ? "white" : "black",
@@ -22,25 +22,37 @@ export default function Community() {
         boxSizing: "border-box"
     };
 
+
     const [posts, setPosts] = useState([]);
-    const [patients, setPatients] = useState([]);
-    const [clinics, setClinics] = useState([]);
+
     const [successMessage, setSuccessMessage] = useState("");
+
     const [errorMessage, setErrorMessage] = useState("");
 
     const [editingId, setEditingId] = useState(null);
+
     const [search, setSearch] = useState("");
+
     const [loading, setLoading] = useState(true);
 
+
     const [post, setPost] = useState({
-        message: "",
-        patientId: "",
-        clinicId: ""
+
+        title: "",
+
+        content: ""
+
     });
 
+
+
     useEffect(() => {
+
         loadData();
+
     }, []);
+
+
 
     async function loadData() {
 
@@ -48,411 +60,578 @@ export default function Community() {
 
             setLoading(true);
 
-            const [
-                postsData,
-                patientsData,
-                clinicsData
-            ] = await Promise.all([
-                getAllPosts(),
-                getAllPatients(),
-                getAllClinics()
-            ]);
+
+            const postsData = await getAllPosts();
+
+
             console.log(postsData);
 
+
             setPosts(postsData);
-            setPatients(patientsData);
-            setClinics(clinicsData);
+
 
         } catch (error) {
 
             console.error(error);
+
+            setErrorMessage(
+                "Failed to load community posts."
+            );
 
 
         } finally {
 
             setLoading(false);
 
-
         }
 
     }
+
+
+
     const handleChange = (e) => {
 
         setPost({
+
             ...post,
+
             [e.target.name]: e.target.value
+
         });
 
     };
+
+
+
 
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
+
         try {
 
-            if (editingId) {
-                await updatePost(editingId, post);
-                setSuccessMessage("✅ Post updated successfully!");
-                setTimeout(() => {
-                    setSuccessMessage("");
-                }, 3000);
-            } else {
-                await createPost(post);
-                setSuccessMessage("✅ Post created successfully!");
-                setTimeout(() => {
-                    setSuccessMessage("");
-                }, 3000);
-            }
-            setTimeout(() => {
-                setSuccessMessage("");
-            }, 3000);
 
-            const emptyPost = {
-                message:"",
-                patientId:"",
-                clinicId:""
-            };
-            setPost(emptyPost);
+            if (editingId) {
+
+
+                await updatePost(
+                    editingId,
+                    post
+                );
+
+
+                setSuccessMessage(
+                    "Post updated successfully."
+                );
+
+
+            } else {
+
+
+                await createPost(post);
+
+
+                setSuccessMessage(
+                    "Post created successfully."
+                );
+
+
+            }
+
+
+
+            setPost({
+
+                title: "",
+
+                content: ""
+
+            });
+
 
             setEditingId(null);
 
-            await loadData();
+
+            loadData();
+
+
 
         } catch (error) {
 
-            console.error(error);
-            setErrorMessage("Unable to save post!");
 
-            setTimeout(() => {
-                setErrorMessage("");
-            }, 3000);
+            console.error(error);
+
+
+            setErrorMessage(
+                "Failed to save post."
+            );
+
 
         }
 
     };
 
+
+
+
     const handleEdit = (communityPost) => {
 
-        setEditingId(communityPost.id);
+
+        setEditingId(
+            communityPost.id
+        );
+
 
         setPost({
-            message: communityPost.message,
-            patientId: communityPost.patientId,
-            clinicId: communityPost.clinicId
+
+            title: communityPost.title,
+
+            content: communityPost.content
+
         });
 
+
         window.scrollTo({
+
             top: 0,
+
             behavior: "smooth"
+
         });
+
 
     };
 
 
 
-    const filteredPosts = [...posts]
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        .filter(post =>
-            post.message.toLowerCase().includes(search.toLowerCase()) ||
 
-            post.patientName?.toLowerCase().includes(search.toLowerCase()) ||
+    const filteredPosts = posts.filter((communityPost) => {
 
-            post.clinicName?.toLowerCase().includes(search.toLowerCase())
-        );
-    if (loading) {
+
+        const searchText =
+            search.toLowerCase();
+
+
+
         return (
-            <div className="page">
-                <h2>Loading Community...</h2>
-            </div>
+
+            (communityPost.title || "")
+                .toLowerCase()
+                .includes(searchText)
+
+
+            ||
+
+            (communityPost.content || "")
+                .toLowerCase()
+                .includes(searchText)
+
+
+            ||
+
+            (communityPost.userName || "")
+                .toLowerCase()
+                .includes(searchText)
+
         );
+
+
+    });
+
+
+
+
+
+    if (loading) {
+
+        return (
+
+            <div className="page">
+
+                <h2>
+                    Loading Community...
+                </h2>
+
+            </div>
+
+        );
+
     }
+
+
+
 
     return (
 
         <div
+
             className="page"
+
             style={{
-                backgroundColor: darkMode ? "#121212" : "#f4f8fb",
-                color: darkMode ? "white" : "black",
+
+                backgroundColor:
+                    darkMode ? "#121212" : "#f4f8fb",
+
+                color:
+                    darkMode ? "white" : "black",
+
                 minHeight: "100vh",
+
                 padding: "20px"
+
             }}
+
         >
-            <div className="page"
-                 style={{ marginBottom: "30px" }}>
 
-                <h1>👥 Community</h1>
-                {successMessage && (
-                    <div className="page"
+
+
+            <h1>
+                👥 Community
+            </h1>
+
+
+
+            {
+                successMessage && (
+
+                    <div
+
                         style={{
-                            background: darkMode ? "#1e4620" : "#d1e7dd",
-                            color: darkMode ? "#8ff0a4" : "#0f5132",
+
+                            background:
+                                darkMode
+                                    ? "#1e4620"
+                                    : "#d1e7dd",
+
                             padding: "12px",
+
                             marginBottom: "20px",
-                            borderRadius: "8px",
-                            border: darkMode ? "1px solid #2f7d32" : "1px solid #badbcc"
+
+                            borderRadius: "8px"
+
                         }}
+
                     >
+
                         {successMessage}
+
                     </div>
-                )}
-                {errorMessage && (
-                    <div className="page"
+
+                )
+            }
+
+
+
+
+            {
+                errorMessage && (
+
+                    <div
+
                         style={{
-                            background: darkMode ? "#4a1f1f" : "#f8d7da",
-                            color: darkMode ? "#ff9999" : "#842029",
+
+                            background:
+                                darkMode
+                                    ? "#4a1f1f"
+                                    : "#f8d7da",
+
                             padding: "12px",
+
                             marginBottom: "20px",
-                            borderRadius: "8px",
-                            border: darkMode ? "1px solid #842029" : "1px solid #f5c2c7"
+
+                            borderRadius: "8px"
+
                         }}
+
                     >
+
                         {errorMessage}
+
                     </div>
-                )}
 
-                <p
-                    style={{
-                        color: darkMode ? "#cccccc" : "#666",
-                        fontSize: "16px"
-                    }}
-                >
-                    Share health tips, clinic updates and community experiences with other patients.
-                </p>
+                )
+            }
 
-            </div>
+
+
+
+
+            <p>
+
+                Share health tips, clinic experiences and healthcare discussions with your community.
+
+            </p>
+
+
+
 
             <div
+
                 className="card"
+
                 style={{
-                    backgroundColor: darkMode ? "#1e1e1e" : "white",
-                    color: darkMode ? "white" : "black"
+
+                    backgroundColor:
+                        darkMode ? "#1e1e1e" : "white",
+
+                    padding:"20px"
+
                 }}
+
             >
+
 
                 <form onSubmit={handleSubmit}>
 
-                    <select
-                        name="patientId"
-                        value={post.patientId}
+
+                    <input
+
+                        type="text"
+
+                        name="title"
+
+                        value={post.title}
+
                         onChange={handleChange}
+
+                        placeholder="Post title"
+
                         style={inputStyle}
+
                         required
-                    >
-                        <option value="">Select Patient</option>
 
-                        {patients.map((patient) => (
+                    />
 
-                            <option
-                                key={patient.id}
-                                value={patient.id}
-                            >
-                                {patient.firstName} {patient.lastName}
-                            </option>
 
-                        ))}
-
-                    </select>
 
                     <br /><br />
 
-                    <select
-                        name="clinicId"
-                        value={post.clinicId}
-                        onChange={handleChange}
-                        style={inputStyle}
-                        required
-                    >
-                        <option value="">Select Clinic</option>
 
-                        {clinics.map((clinic) => (
-
-                            <option
-                                key={clinic.id}
-                                value={clinic.id}
-                            >
-                                {clinic.clinicName}
-                            </option>
-
-                        ))}
-
-                    </select>
-
-                    <br /><br />
 
                     <textarea
-                        name="message"
-                        value={post.message}
+
+                        name="content"
+
+                        value={post.content}
+
                         onChange={handleChange}
-                        maxLength={300}
-                        rows={4}
-                        style={{
-                            width: "100%",
-                            padding: "10px",
-                            backgroundColor: darkMode ? "#2c2c2c" : "white",
-                            color: darkMode ? "white" : "black",
-                            border: "1px solid #666",
-                            minHeight: "120px",
-                            resize: "vertical"
-                        }}
+
+                        placeholder="Share your healthcare experience..."
+
+                        rows="5"
+
+                        style={inputStyle}
+
                         required
+
                     />
-                    <p
-                        style={{
-                            textAlign: "right",
-                            color: darkMode ? "#ccc" : "#666",
-                            marginTop: "5px",
-                            marginBottom: "15px"
-                        }}
-                    >
-                        {post.message.length}/300 characters
+
+                    {
+                        post.content.length > 0 &&
+                        post.content.length < 5 && (
+
+                            <p style={{
+                                color:"red"
+                            }}>
+                                Content must be at least 5 characters.
+                            </p>
+
+                        )
+                    }
+
+
+                    <p style={{
+                        textAlign:"right"
+                    }}>
+
+                        {post.content.length}/3000
+
                     </p>
 
-                    <br /><br />
+
 
                     <button
+
                         className="btn-primary"
+
                         type="submit"
-                        disabled={!post.message.trim()}
+
+                        disabled={
+                            !post.title.trim()
+                            ||
+                            !post.content.trim()
+                        }
+
                     >
-                        {editingId ? "Update Post" : "Create Post"}
+
+                        {
+                            editingId
+                                ? "Update Post"
+                                : "Create Post"
+                        }
+
+
                     </button>
+
+
 
                 </form>
 
+
             </div>
+
+
+
+
 
             <br />
 
+
+
             <input
+
                 type="text"
-                placeholder="🔍 Search by patient, clinic or message..."
+
+                placeholder="🔍 Search posts..."
+
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+
+                onChange={(e)=>setSearch(e.target.value)}
+
                 style={{
+
                     ...inputStyle,
-                    marginBottom: "15px"
+
+                    marginBottom:"15px"
+
                 }}
+
             />
-            <button
-                className="btn-secondary"
-                onClick={() => setSearch("")}
-                style={{ marginBottom: "20px" }}
-            >
-                Clear Search
-            </button>
 
-            {filteredPosts.length === 0 ? (
 
-                <div
-                    className="card"
-                    style={{
-                        backgroundColor: darkMode ? "#1e1e1e" : "white",
-                        color: darkMode ? "white" : "black"
-                    }}
-                >
 
-                    <div className="page"
-                        style={{
-                            textAlign: "center",
-                            padding: "40px"
-                        }}
-                    >
-                        <h2>👥</h2>
 
-                        <h3>No community posts yet</h3>
+            {
+                filteredPosts.length === 0 ? (
 
-                        <p style={{ color: darkMode ? "#ccc" : "#777" }}>
-                            Be the first to share an update with your healthcare community.
+
+                    <div className="card">
+
+
+                        <h3>
+                            No community posts yet
+                        </h3>
+
+
+                        <p>
+                            Be the first person to share.
                         </p>
+
+
                     </div>
 
-                </div>
 
-            ) : (
 
-                filteredPosts.map((communityPost) => (
+                ) : (
 
-                    <div
-                        key={communityPost.id}
-                        className="card"
-                        style={{
-                            backgroundColor: darkMode ? "#1e1e1e" : "white",
-                            color: darkMode ? "white" : "black",
-                            marginBottom: "20px",
-                            padding: "20px",
-                            borderRadius: "10px",
-                            boxShadow: "0 2px 10px rgba(0,0,0,0.1)"
-                        }}
-                    >
+
+                    filteredPosts.map((communityPost)=>(
+
 
                         <div
+
+                            key={communityPost.id}
+
+                            className="card"
+
                             style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center"
+
+                                backgroundColor:
+                                    darkMode
+                                        ? "#1e1e1e"
+                                        : "white",
+
+                                padding:"20px",
+
+                                marginBottom:"20px"
+
                             }}
+
                         >
 
-                            <div>
 
-                                <h3 style={{ marginBottom: "5px" }}>
-                                    👤 {communityPost.patientName}
-                                </h3>
 
-                                <p
-                                    style={{
-                                        margin: 0,
-                                        color: darkMode ? "#bbb" : "#666"
-                                    }}
-                                >
-                                    🏥 {communityPost.clinicName}
-                                </p>
+                            <h3>
 
-                            </div>
+                                👤 {communityPost.userName}
 
-                            <small
-                                style={{
-                                    color: darkMode ? "#999" : "#777"
-                                }}
-                            >
-                                🕒 {new Date(communityPost.createdAt).toLocaleString()}
+                            </h3>
+
+
+
+                            <small>
+
+                                🕒 {
+                                new Date(
+                                    communityPost.createdAt
+                                )
+                                    .toLocaleString()
+                            }
+
                             </small>
 
-                        </div>
 
-                        <hr />
 
-                        <p
-                            style={{
-                                fontSize: "16px",
-                                lineHeight: "1.7"
-                            }}
-                        >
-                            {communityPost.message}
-                        </p>
+                            <hr />
 
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "flex-end",
-                                marginTop: "20px"
-                            }}
-                        >
+
+
+                            <h2>
+
+                                {communityPost.title}
+
+                            </h2>
+
+
+
+                            <p>
+
+                                {communityPost.content}
+
+                            </p>
+
+
+
                             <button
+
                                 className="btn-primary"
-                                onClick={() => handleEdit(communityPost)}
+
+                                onClick={()=>
+                                    handleEdit(
+                                        communityPost
+                                    )
+                                }
+
                             >
-                                ✏️ Edit Post
+
+                                ✏️ Edit
+
                             </button>
+
+
+
                         </div>
 
-                    </div>
 
-                ))
+                    ))
 
-            )}
+
+                )
+
+            }
+
+
 
         </div>
 

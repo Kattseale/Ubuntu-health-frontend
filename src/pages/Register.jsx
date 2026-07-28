@@ -3,7 +3,9 @@ import { useNavigate, Link } from "react-router-dom";
 import { register } from "../services/authService";
 import { validateRegisterForm } from "../utils/validation";
 
-export default function Register() {
+
+export function Register() {
+
 
     const navigate = useNavigate();
 
@@ -60,12 +62,14 @@ export default function Register() {
 
         } catch (error) {
 
-            console.error("Registration error:", error.response?.data || error);
+            console.error("Registration error:", error);
 
-            alert(
+            const message =
                 error.response?.data?.message ||
-                "Registration failed."
-            );
+                error.response?.data?.error ||
+                "Registration failed.";
+
+            alert(message);
 
         } finally {
 
