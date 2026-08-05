@@ -486,7 +486,7 @@ export function Register() {
                         style={inputStyle}
                     >
                         <option value="PATIENT">Patient</option>
-                        <option value="DOCTOR">Doctor</option>
+                        
                         <option value="ADMIN">Administrator</option>
                     </select>
 
