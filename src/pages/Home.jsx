@@ -71,8 +71,6 @@ export default function Home() {
 
             {/* PATIENT SERVICES */}
 
-            {/* PATIENT SERVICES */}
-
             {role === "PATIENT" && (
                 <>
                     <h2 style={{ color: "#198754" }}>

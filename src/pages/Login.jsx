@@ -1,14 +1,14 @@
-import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 import { login, saveUser } from "../services/authService";
-
+import { useState } from "react";
 export default function Login() {
 
     const navigate = useNavigate();
 
     const { loginUser } = useAuth();
+    const [showPassword, setShowPassword] = useState(false);
 
     const [formData, setFormData] = useState({
         email: "",
@@ -123,23 +123,46 @@ export default function Login() {
                         style={inputStyle}
                     />
 
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                        style={inputStyle}
-                    />
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        style={buttonStyle}
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            marginBottom: "18px"
+                        }}
                     >
-                        {loading ? "Signing In..." : "Sign In"}
-                    </button>
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            placeholder="Password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            style={{
+                                ...inputStyle,
+                                marginBottom: 0,
+                                flex: 1
+                            }}
+                        />
+
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            style={{
+                                background: "#0d6efd",
+                                color: "white",
+                                border: "none",
+                                padding: "12px 16px",
+                                borderRadius: "8px",
+                                cursor: "pointer",
+                                fontWeight: "bold",
+                                height: "48px",
+                                minWidth: "70px"
+                            }}
+                        >
+                            {showPassword ? "Hide" : "Show"}
+                        </button>
+                    </div>
 
                     <p
                         style={{
@@ -158,7 +181,13 @@ export default function Login() {
                             Register
                         </Link>
                     </p>
-
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        style={buttonStyle}
+                    >
+                        {loading ? "Signing In..." : "Login"}
+                    </button>
                 </form>
 
             </div>

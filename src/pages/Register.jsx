@@ -7,6 +7,7 @@ export function Register() {
 
 
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
 
     const [formData, setFormData] = useState({
         firstName: "",
@@ -163,13 +164,29 @@ export function Register() {
                     </select>
 
                     {/* Keep ALL your existing inputs here */}
-
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        style={{
+                            background: "#0d6efd",
+                            color: "white",
+                            border: "none",
+                            padding: "12px 16px",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                            height: "48px",
+                            minWidth: "70px"
+                        }}
+                    >
+                        {showPassword ? "Hide" : "Show"}
+                    </button>
                     <button
                         type="submit"
                         disabled={loading}
                         style={buttonStyle}
                     >
-                        {loading ? "Creating Account..." : "Register"}
+                        {loading ? "Signing In..." : "register"}
                     </button>
 
                     <p
