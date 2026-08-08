@@ -115,3 +115,278 @@ table {
     }
 
 }
+/* =========================================
+   HOME / WELCOME PAGE RESPONSIVENESS
+========================================= */
+
+.home-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 60px;
+    gap: 30px;
+}
+
+.home-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.home-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.home-hero {
+    background: #0d6efd;
+    color: #1f2937;
+    text-align: center;
+    padding: 80px 30px;
+}
+
+.home-hero-title {
+    font-size: 58px;
+    margin: 20px 0;
+    line-height: 1.2;
+    color: #fff;
+}
+
+.home-hero-text {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 20px;
+    line-height: 1.8;
+}
+
+.home-hero-buttons {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.home-stats {
+    padding: 70px 40px;
+    background: #ffffff;
+}
+
+.home-features {
+    background: #f8fbff;
+    padding: 80px 40px;
+}
+
+.home-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(280px, 1fr)
+    );
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.home-about {
+    padding: 90px 60px;
+    background: #ffffff;
+}
+
+.home-about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 70px;
+    align-items: center;
+}
+
+.home-about-image,
+.home-about-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.home-footer {
+    background: #111827;
+    color: #d1d5db;
+    padding: 50px 30px;
+    text-align: center;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+
+    .home-navbar {
+        padding: 25px 30px;
+    }
+
+    .home-nav-links {
+        gap: 15px;
+    }
+
+    .home-hero-title {
+        font-size: 46px;
+    }
+
+    .home-about {
+        padding: 70px 40px;
+    }
+
+    .home-about-container {
+        gap: 40px;
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .home-navbar {
+        flex-direction: column;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .home-brand {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .home-brand h2 {
+        font-size: 18px;
+    }
+
+    .home-brand small {
+        font-size: 12px;
+    }
+
+    .home-nav-links {
+        width: 100%;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .home-nav-links a {
+        font-size: 14px;
+    }
+
+    .home-hero {
+        padding: 55px 20px;
+    }
+
+    .home-hero-title {
+        font-size: 36px;
+        line-height: 1.25;
+    }
+
+    .home-hero-text {
+        font-size: 16px;
+        line-height: 1.7;
+    }
+
+    .home-hero-buttons {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .home-hero-buttons a {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .home-stats {
+        padding: 45px 20px;
+    }
+
+    .home-features {
+        padding: 55px 20px;
+    }
+
+    .home-feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .home-about {
+        padding: 55px 20px;
+    }
+
+    .home-about-container {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .home-about-image,
+    .home-about-text {
+        width: 100%;
+    }
+
+    .home-about-text h2 {
+        font-size: 32px !important;
+    }
+
+    .home-footer {
+        padding: 40px 20px;
+    }
+}
+/* ================================
+   REGISTER PAGE - MOBILE
+================================ */
+
+@media (max-width: 600px) {
+
+    .register-card {
+        width: calc(100% - 30px) !important;
+        padding: 25px 20px !important;
+    }
+
+    .register-card h1 {
+        font-size: 28px !important;
+    }
+
+    .register-card input,
+    .register-card select {
+        font-size: 15px !important;
+    }
+
+    .register-card button {
+        font-size: 14px;
+    }
+    .register-card div {
+        max-width: 100%;
+    }
+}
+/* ================================
+   LOGIN PAGE - MOBILE
+================================ */
+
+@media (max-width: 600px) {
+
+    .login-card {
+        width: calc(100% - 30px) !important;
+        padding: 25px 20px !important;
+    }
+
+    .login-card h1 {
+        font-size: 28px !important;
+    }
+
+    .login-card input {
+        font-size: 15px !important;
+    }
+
+    .login-card button {
+        font-size: 14px;
+    }
+}

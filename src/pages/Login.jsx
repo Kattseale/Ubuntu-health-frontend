@@ -82,12 +82,14 @@ export default function Login() {
             }}
         >
             <div
+                className="login-card"
                 style={{
                     background: "#fff",
                     width: "420px",
                     padding: "40px",
                     borderRadius: "15px",
-                    boxShadow: "0 15px 40px rgba(0,0,0,.2)"
+                    boxShadow: "0 15px 40px rgba(0,0,0,.2)",
+                    boxSizing: "border-box"
                 }}
             >
 
@@ -111,6 +113,20 @@ export default function Login() {
                     Welcome Back
                 </p>
 
+                <Link
+                    to="/"
+                    style={{
+                        display: "block",
+                        textAlign: "center",
+                        marginBottom: "20px",
+                        color: "#0d6efd",
+                        fontWeight: "bold",
+                        textDecoration: "none"
+                    }}
+                >
+                    ← Back to Welcome
+                </Link>
+
                 <form onSubmit={handleSubmit}>
 
                     <input
@@ -128,6 +144,7 @@ export default function Login() {
                             display: "flex",
                             alignItems: "center",
                             gap: "10px",
+                            width: "100%",
                             marginBottom: "18px"
                         }}
                     >
@@ -140,8 +157,8 @@ export default function Login() {
                             required
                             style={{
                                 ...inputStyle,
-                                marginBottom: 0,
-                                flex: 1
+                                flex: 1,
+                                marginBottom: 0
                             }}
                         />
 
@@ -150,24 +167,33 @@ export default function Login() {
                             onClick={() => setShowPassword(!showPassword)}
                             style={{
                                 background: "#0d6efd",
-                                color: "white",
+                                color: "#fff",
                                 border: "none",
-                                padding: "12px 16px",
-                                borderRadius: "8px",
-                                cursor: "pointer",
-                                fontWeight: "bold",
+                                borderRadius: "6px",
+                                padding: "12px 14px",
                                 height: "48px",
-                                minWidth: "70px"
+                                minWidth: "70px",
+                                cursor: "pointer",
+                                fontSize: "13px",
+                                fontWeight: "600"
                             }}
                         >
                             {showPassword ? "Hide" : "Show"}
                         </button>
                     </div>
 
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        style={buttonStyle}
+                    >
+                        {loading ? "Signing In..." : "Login"}
+                    </button>
+
                     <p
                         style={{
                             textAlign: "center",
-                            marginTop: "25px"
+                            marginTop: "20px"
                         }}
                     >
                         Don't have an account?{" "}
@@ -181,13 +207,6 @@ export default function Login() {
                             Register
                         </Link>
                     </p>
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        style={buttonStyle}
-                    >
-                        {loading ? "Signing In..." : "Login"}
-                    </button>
                 </form>
 
             </div>
