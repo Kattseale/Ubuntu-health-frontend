@@ -36,6 +36,7 @@ import { Register } from "./pages/Register";
 import AdminAppointments from "./pages/AdminAppointments";
 
 
+
 function App() {
 
     const [darkMode, setDarkMode] = useState(false);

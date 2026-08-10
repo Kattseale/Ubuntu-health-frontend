@@ -376,7 +376,6 @@ export default function Navbar() {
                                 Patients
                             </Link>
 
-
                             <Link
                                 to="/medications"
                                 style={getLinkStyle(
