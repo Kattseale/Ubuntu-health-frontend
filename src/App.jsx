@@ -3,9 +3,9 @@ import {
     Routes,
     Route
 } from "react-router-dom";
-import { useEffect } from "react";
 
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 
 import "./styles/responsive.css";
 
@@ -17,8 +17,10 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 import ThemeContext from "./context/ThemeContext";
 
+// =========================================================
+// PAGES
+// =========================================================
 
-// Pages
 import Home from "./pages/Home";
 import Clinics from "./pages/Clinics";
 import Patients from "./pages/Patients";
@@ -30,13 +32,18 @@ import Announcements from "./pages/Announcements";
 import Dashboard from "./pages/Dashboard";
 import HomeM from "./pages/HomeM";
 import Login from "./pages/Login";
-import {Register} from "./pages/Register";
+import { Register } from "./pages/Register";
+import AdminAppointments from "./pages/AdminAppointments";
 
 
 function App() {
 
     const [darkMode, setDarkMode] = useState(false);
 
+
+    // =====================================================
+    // PREVENT BROWSER BACK BUTTON
+    // =====================================================
 
     useEffect(() => {
 
@@ -46,13 +53,11 @@ function App() {
             window.location.href
         );
 
-
         window.onpopstate = () => {
 
             window.history.go(1);
 
         };
-
 
         return () => {
 
@@ -60,15 +65,12 @@ function App() {
 
         };
 
-
     }, []);
-
 
 
     return (
 
         <BrowserRouter
-
             future={{
                 v7_startTransition: true,
                 v7_relativeSplatPath: true
@@ -100,6 +102,10 @@ function App() {
 
                         <Routes>
 
+                            {/* =================================================
+                                PUBLIC ROUTES
+                            ================================================= */}
+
                             <Route
                                 path="/"
                                 element={<HomeM />}
@@ -116,8 +122,11 @@ function App() {
                             />
 
 
-                            <Route
+                            {/* =================================================
+                                PROTECTED APPLICATION ROUTES
+                            ================================================= */}
 
+                            <Route
                                 element={
 
                                     <ProtectedRoute>
@@ -127,131 +136,222 @@ function App() {
                                     </ProtectedRoute>
 
                                 }
-
                             >
+
+                                {/* =================================================
+                                    HOME
+                                ================================================= */}
 
                                 <Route
                                     path="/home"
                                     element={<Home />}
                                 />
 
+
+                                {/* =================================================
+                                    PATIENT APPOINTMENTS
+                                ================================================= */}
+
                                 <Route
                                     path="/appointments"
                                     element={
+
                                         <RoleProtectedRoute
                                             allowedRoles={[
                                                 "PATIENT"
                                             ]}
                                         >
+
                                             <Appointments />
+
                                         </RoleProtectedRoute>
+
                                     }
                                 />
 
+
+                                {/* =================================================
+                                    COMMUNITY
+                                ================================================= */}
 
                                 <Route
                                     path="/community"
                                     element={
+
                                         <RoleProtectedRoute
                                             allowedRoles={[
                                                 "PATIENT"
                                             ]}
                                         >
+
                                             <Community />
+
                                         </RoleProtectedRoute>
+
                                     }
                                 />
 
 
+                                {/* =================================================
+                                    ANNOUNCEMENTS
+                                ================================================= */}
+
                                 <Route
                                     path="/announcements"
                                     element={
+
                                         <RoleProtectedRoute
                                             allowedRoles={[
                                                 "PATIENT",
                                                 "ADMIN"
                                             ]}
                                         >
+
                                             <Announcements />
+
                                         </RoleProtectedRoute>
+
                                     }
                                 />
 
+
+                                {/* =================================================
+                                    ADMIN DASHBOARD
+                                ================================================= */}
 
                                 <Route
                                     path="/dashboard"
                                     element={
+
                                         <RoleProtectedRoute
                                             allowedRoles={[
                                                 "ADMIN"
                                             ]}
                                         >
+
                                             <Dashboard />
+
                                         </RoleProtectedRoute>
+
                                     }
                                 />
 
+
+                                {/* =================================================
+                                    ADMIN PATIENTS
+                                ================================================= */}
 
                                 <Route
                                     path="/patients"
                                     element={
+
                                         <RoleProtectedRoute
                                             allowedRoles={[
                                                 "ADMIN"
                                             ]}
                                         >
+
                                             <Patients />
+
                                         </RoleProtectedRoute>
+
                                     }
                                 />
 
+
+                                {/* =================================================
+                                    ADMIN CLINICS
+                                ================================================= */}
 
                                 <Route
                                     path="/clinics"
                                     element={
+
                                         <RoleProtectedRoute
                                             allowedRoles={[
                                                 "ADMIN"
                                             ]}
                                         >
+
                                             <Clinics />
+
                                         </RoleProtectedRoute>
+
                                     }
                                 />
 
+
+                                {/* =================================================
+                                    ADMIN MEDICATIONS
+                                ================================================= */}
 
                                 <Route
                                     path="/medications"
                                     element={
+
                                         <RoleProtectedRoute
                                             allowedRoles={[
                                                 "ADMIN"
                                             ]}
                                         >
+
                                             <Medications />
+
                                         </RoleProtectedRoute>
+
                                     }
                                 />
 
+
+                                {/* =================================================
+                                    ADMIN REPORTS
+                                ================================================= */}
 
                                 <Route
                                     path="/reports"
                                     element={
+
                                         <RoleProtectedRoute
                                             allowedRoles={[
                                                 "ADMIN"
                                             ]}
                                         >
+
                                             <Reports />
+
                                         </RoleProtectedRoute>
+
                                     }
                                 />
 
 
+                                {/* =================================================
+                                    ADMIN APPOINTMENTS
+                                    
+                                    THIS WAS PREVIOUSLY RENDERING REPORTS.
+                                    IT NOW RENDERS AdminAppointments.
+                                ================================================= */}
+
+                                <Route
+                                    path="/admin/appointments"
+                                    element={
+
+                                        <RoleProtectedRoute
+                                            allowedRoles={[
+                                                "ADMIN"
+                                            ]}
+                                        >
+
+                                            <AdminAppointments />
+
+                                        </RoleProtectedRoute>
+
+                                    }
+                                />
+
                             </Route>
 
                         </Routes>
-
 
                     </div>
 
@@ -264,4 +364,6 @@ function App() {
     );
 
 }
+
 export default App;
+

@@ -1,4 +1,5 @@
 import { getRole } from "../services/authService";
+import Dashboard from "./Dashboard";
 
 export default function RoleDashboard() {
 
@@ -7,50 +8,77 @@ export default function RoleDashboard() {
     switch (role) {
 
         case "ADMIN":
-            return (
-                <>
-                    <h2>Administrator Dashboard</h2>
-                    <p>Manage the entire Ubuntu Health system.</p>
-                </>
-            );
+            return <Dashboard />;
 
         case "DOCTOR":
             return (
-                <>
-                    <h2>Doctor Dashboard</h2>
-                    <p>View your patients, appointments and medical records.</p>
-                </>
+                <div className="page">
+
+                    <h2>
+                        Doctor Dashboard
+                    </h2>
+
+                    <p>
+                        View your patients, appointments and medical records.
+                    </p>
+
+                </div>
             );
 
         case "NURSE":
             return (
-                <>
-                    <h2>Nurse Dashboard</h2>
-                    <p>Manage patient care and medication administration.</p>
-                </>
+                <div className="page">
+
+                    <h2>
+                        Nurse Dashboard
+                    </h2>
+
+                    <p>
+                        Manage patient care and medication administration.
+                    </p>
+
+                </div>
             );
 
         case "RECEPTIONIST":
             return (
-                <>
-                    <h2>Receptionist Dashboard</h2>
-                    <p>Manage appointments, patient registrations and clinics.</p>
-                </>
+                <div className="page">
+
+                    <h2>
+                        Receptionist Dashboard
+                    </h2>
+
+                    <p>
+                        Manage appointments, patient registrations and clinics.
+                    </p>
+
+                </div>
             );
 
         case "PATIENT":
             return (
-                <>
-                    <h2>Patient Dashboard</h2>
-                    <p>View your appointments, recommendations and community posts.</p>
-                </>
+                <div className="page">
+
+                    <h2>
+                        Patient Dashboard
+                    </h2>
+
+                    <p>
+                        View your appointments, recommendations and community posts.
+                    </p>
+
+                </div>
             );
 
         default:
             return (
-                <h2>Welcome to Ubuntu Health</h2>
+                <div className="page">
+
+                    <h2>
+                        Welcome to Ubuntu Health
+                    </h2>
+
+                </div>
             );
-
     }
-
 }

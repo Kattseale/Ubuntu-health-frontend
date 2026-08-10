@@ -37,16 +37,34 @@ export default function Dashboard() {
                 setAnnouncements(announcements.slice(0, 3));
                 setAppointments(appointments);
 
-                const today = new Date().toISOString().split("T")[0];
+                const today = new Date();
+
+                const todayString =
+                    `${today.getFullYear()}-` +
+                    `${String(today.getMonth() + 1).padStart(2, "0")}-` +
+                    `${String(today.getDate()).padStart(2, "0")}`;
 
                 const todaysAppointments = appointments
-                    .filter(a => a.appointmentDate === today)
+                    .filter(
+                        (appointment) =>
+                            appointment.appointmentDate === todayString
+                    )
                     .sort((a, b) => {
-                        const dateA = new Date(`${a.appointmentDate}T${a.appointmentTime}`);
-                        const dateB = new Date(`${b.appointmentDate}T${b.appointmentTime}`);
+
+                        const dateA = new Date(
+                            `${a.appointmentDate}T${a.appointmentTime}`
+                        );
+
+                        const dateB = new Date(
+                            `${b.appointmentDate}T${b.appointmentTime}`
+                        );
+
                         return dateA - dateB;
                     });
-                setRecentAppointments(todaysAppointments);
+
+                setRecentAppointments(
+                    todaysAppointments
+                );
 
                 setStats({
                     patients: patients.length,
@@ -353,10 +371,38 @@ export default function Dashboard() {
                                 <td
                                     style={{
                                         padding: "10px",
-                                        border: "1px solid #555"
+                                        border: "1px solid #555",
+                                        textAlign: "center"
                                     }}
                                 >
-                                    {appointment.status}
+    <span
+        style={{
+            display: "inline-block",
+            padding: "6px 12px",
+            borderRadius: "20px",
+            fontWeight: "600",
+            fontSize: "13px",
+            backgroundColor:
+                appointment.status === "CONFIRMED"
+                    ? "#dbeafe"
+                    : appointment.status === "COMPLETED"
+                        ? "#d1fae5"
+                        : appointment.status === "CANCELLED"
+                            ? "#fee2e2"
+                            : "#e5e7eb",
+
+            color:
+                appointment.status === "CONFIRMED"
+                    ? "#1d4ed8"
+                    : appointment.status === "COMPLETED"
+                        ? "#047857"
+                        : appointment.status === "CANCELLED"
+                            ? "#b91c1c"
+                            : "#374151"
+        }}
+    >
+        {appointment.status || "UNKNOWN"}
+    </span>
                                 </td>
                             </tr>
 
