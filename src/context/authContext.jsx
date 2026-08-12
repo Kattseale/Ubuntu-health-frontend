@@ -5,76 +5,86 @@ import {
     useState
 } from "react";
 
-
 import {
     getUser,
     logout as authLogout,
     isAuthenticated
 } from "../services/authService";
 
-
-
 const AuthContext = createContext();
-
-
 
 export function AuthProvider({ children }) {
 
-
     const [user, setUser] = useState(null);
 
-    const [authenticated, setAuthenticated] = useState(false);
+    const [authenticated, setAuthenticated] =
+        useState(false);
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] =
+        useState(true);
 
 
+    // =========================================
+    // RESTORE LOGIN SESSION
+    // =========================================
 
     useEffect(() => {
 
+        try {
 
-        const tokenExists = isAuthenticated();
+            const tokenExists =
+                isAuthenticated();
 
+            if (tokenExists) {
 
-        if(tokenExists){
+                setAuthenticated(true);
 
-            setAuthenticated(true);
+                setUser(getUser());
 
-            setUser(getUser());
+            } else {
 
-        }
+                setAuthenticated(false);
 
+                setUser(null);
 
-        setLoading(false);
+            }
 
+        } catch (error) {
 
-
-        const logoutOnExit = () => {
-
-            authLogout();
-
-        };
-
-
-        window.addEventListener(
-            "pagehide",
-            logoutOnExit
-        );
-
-
-        return () => {
-
-            window.removeEventListener(
-                "pagehide",
-                logoutOnExit
+            console.error(
+                "Unable to restore authentication:",
+                error
             );
 
-        };
+            setAuthenticated(false);
 
+            setUser(null);
+
+        } finally {
+
+            setLoading(false);
+
+        }
 
     }, []);
 
 
+    // =========================================
+    // LOGIN
+    // =========================================
 
+    const loginUser = (userData) => {
+
+        setUser(userData);
+
+        setAuthenticated(true);
+
+    };
+
+
+    // =========================================
+    // LOGOUT
+    // =========================================
 
     const logout = () => {
 
@@ -87,34 +97,34 @@ export function AuthProvider({ children }) {
     };
 
 
+    // =========================================
+    // LOADING
+    // =========================================
 
+    if (loading) {
 
-    if(loading){
-
-        return <div>Loading...</div>;
+        return (
+            <div>
+                Loading...
+            </div>
+        );
 
     }
 
-    const loginUser = (userData) => {
 
-        setUser(userData);
-
-        setAuthenticated(true);
-
-    };
-
+    // =========================================
+    // PROVIDER
+    // =========================================
 
     return (
 
         <AuthContext.Provider
-
             value={{
                 user,
                 authenticated,
                 loginUser,
                 logout
             }}
-
         >
 
             {children}
@@ -126,10 +136,14 @@ export function AuthProvider({ children }) {
 }
 
 
+// =========================================
+// USE AUTH
+// =========================================
 
-
-export function useAuth(){
+export function useAuth() {
 
     return useContext(AuthContext);
 
 }
+
+export default AuthContext;

@@ -1,144 +1,131 @@
+import { getRole } from "../services/authService";
+
 export default function AnnouncementCard({
-    announcement,
-    onEdit,
-    onDelete
-}) {
+                                             announcement,
+                                             darkMode,
+                                             onEdit,
+                                             onDelete
+                                         }) {
+    const role = getRole();
+    const isAdmin = role === "ADMIN";
+
+    const getPriorityColor = (priority) => {
+        switch (priority) {
+            case "HIGH":
+                return "#dc3545";
+            case "MEDIUM":
+                return "#fd7e14";
+            case "LOW":
+                return "#198754";
+            default:
+                return "#6c757d";
+        }
+    };
+
+    const getPriorityLabel = (priority) => {
+        switch (priority) {
+            case "HIGH":
+                return "🚨 Urgent";
+            case "MEDIUM":
+                return "📢 Important";
+            case "LOW":
+                return "ℹ️ Information";
+            default:
+                return priority;
+        }
+    };
 
     return (
         <div
+            className="card"
             style={{
-                background: "#fff",
-                borderRadius: "12px",
+                backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
+                color: darkMode ? "#ffffff" : "#000000",
+                borderRadius: "10px",
                 padding: "20px",
                 marginBottom: "20px",
-                boxShadow: "0 4px 10px rgba(0,0,0,.1)"
+                boxShadow: "0 2px 8px rgba(0,0,0,0.15)"
             }}
         >
             <div
                 style={{
                     display: "flex",
                     justifyContent: "space-between",
-                    alignItems: "flex-start"
+                    alignItems: "flex-start",
+                    marginBottom: "15px"
                 }}
             >
                 <div>
-
-                    <h3
-                        style={{
-                            marginBottom: "8px",
-                            color: "#0d6efd"
-                        }}
-                    >
-                        📢 {announcement.title}
+                    <h3 style={{ margin: 0 }}>
+                        {announcement.title}
                     </h3>
+
                     <span
                         style={{
                             display: "inline-block",
-                            padding: "5px 12px",
+                            marginTop: "8px",
+                            padding: "5px 10px",
                             borderRadius: "20px",
+                            backgroundColor: getPriorityColor(
+                                announcement.priority
+                            ),
+                            color: "#fff",
                             fontSize: "13px",
-                            fontWeight: "bold",
-                            marginBottom: "10px",
-                            background:
-                                announcement.priority === "HIGH"
-                                    ? "#dc3545"
-                                    : announcement.priority === "MEDIUM"
-                                        ? "#ffc107"
-                                        : "#0d6efd",
-                            color:
-                                announcement.priority === "MEDIUM"
-                                    ? "#000"
-                                    : "#fff"
+                            fontWeight: "bold"
                         }}
                     >
-    {
-        announcement.priority === "HIGH"
-            ? "🚨 Urgent"
-            :
-            announcement.priority === "MEDIUM"
-                ? "📢 Important"
-                :
-                "ℹ️ Information"
-    }
-</span>
-                    <p
-                        style={{
-                            color: "#555",
-                            lineHeight: "1.7"
-                        }}
-                    >
-                        {announcement.description}
-                    </p>
-
+                        {getPriorityLabel(announcement.priority)}
+                    </span>
                 </div>
 
-                {onEdit && (
+                {isAdmin && (
                     <div
                         style={{
                             display: "flex",
                             gap: "10px"
                         }}
                     >
-                        {onEdit && (
                         <button
+                            className="btn-primary"
                             onClick={() => onEdit(announcement)}
-                            style={{
-                                background: "#ffc107",
-                                border: "none",
-                                color: "#000",
-                                padding: "8px 14px",
-                                borderRadius: "6px",
-                                cursor: "pointer"
-                            }}
                         >
-                            Edit
+                            ✏️ Edit
                         </button>
-                            )}
-                        {onDelete && (
+
                         <button
+                            className="btn-danger"
                             onClick={() => onDelete(announcement.id)}
-                            style={{
-                                background: "#dc3545",
-                                border: "none",
-                                color: "#fff",
-                                padding: "8px 14px",
-                                borderRadius: "6px",
-                                cursor: "pointer"
-                            }}
                         >
-                            Delete
+                            🗑 Delete
                         </button>
-                            )}
                     </div>
                 )}
             </div>
 
-            <hr
+            <p
                 style={{
-                    margin: "18px 0"
-                }}
-            />
-
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    color: "#777",
-                    fontSize: "14px"
+                    lineHeight: "1.7",
+                    whiteSpace: "pre-wrap"
                 }}
             >
-                <span>
-                    👤 {announcement.createdBy}
-                </span>
+                {announcement.description}
+            </p>
 
-                <span>
-                    📅 {
-                    new Date(
+            {announcement.createdAt && (
+                <p
+                    style={{
+                        marginTop: "20px",
+                        fontSize: "13px",
+                        color: darkMode ? "#bbbbbb" : "#666666"
+                    }}
+                >
+                    Posted:
+                    {" "}
+                    {new Date(
                         announcement.createdAt
-                    ).toLocaleString()
-                }
-                </span>
-            </div>
+                    ).toLocaleString()}
+                </p>
+            )}
         </div>
     );
 }

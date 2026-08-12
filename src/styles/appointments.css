@@ -1,0 +1,1805 @@
+/* =========================================================
+       APPOINTMENTS PAGE
+       ========================================================= */
+
+.appointments-page {
+    width: 100%;
+    min-height: 100vh;
+    padding: 45px 24px 60px;
+    box-sizing: border-box;
+    background: #ffffff;
+    color: #111111;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.appointments-header {
+    width: 100%;
+    max-width: 1350px;
+    margin: 0 auto 30px;
+}
+
+.appointments-header h1 {
+    margin: 0;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.appointments-header p {
+    margin: 12px 0 0;
+    font-size: 22px;
+    color: #666666;
+}
+
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+
+.appointment-success,
+.appointment-error,
+.appointment-validation-errors {
+    width: 100%;
+    max-width: 1350px;
+    margin: 0 auto 20px;
+    padding: 14px 18px;
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+
+.appointment-success {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.appointment-error {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.appointment-validation-errors {
+    background: #ffe6e6;
+    color: #b30000;
+}
+
+.appointment-validation-errors p {
+    margin: 5px 0;
+}
+
+/* =========================================================
+   MAIN CARD
+   ========================================================= */
+
+.appointment-card {
+    width: 100%;
+    max-width: 1350px;
+    margin: 0 auto;
+    padding: 42px;
+    box-sizing: border-box;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================================
+   BOOKING SECTION
+   ========================================================= */
+
+.appointment-booking-section {
+    width: 100%;
+}
+
+.appointment-section-heading {
+    margin-bottom: 30px;
+}
+
+.appointment-section-heading h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.appointment-section-heading p {
+    margin: 8px 0 0;
+    font-size: 16px;
+    color: #666666;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.appointment-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.appointment-top-row {
+    width: 100%;
+    display: grid;
+    grid-template-columns:
+        minmax(220px, 1fr)
+        minmax(560px, 2.5fr)
+        minmax(220px, 1fr);
+    gap: 40px;
+    align-items: start;
+}
+
+/* =========================================================
+   FIELDS
+   ========================================================= */
+
+.appointment-field {
+    width: 100%;
+    min-width: 0;
+}
+
+.appointment-field label {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.appointment-field select {
+    width: 100%;
+    height: 56px;
+    padding: 0 16px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #cccccc;
+    background: #ffffff;
+    color: #111111;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.appointment-field select:focus {
+    outline: none;
+    border-color: #0d6efd;
+}
+
+/* =========================================================
+   CALENDAR
+   ========================================================= */
+
+.calendar-wrapper {
+    width: 100%;
+    min-width: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-sizing: border-box;
+    background: #ffffff;
+}
+
+.appointment-calendar {
+    width: 100%;
+    box-sizing: border-box;
+
+    --rdp-accent-color: #0d6efd;
+    --rdp-accent-background-color: #0d6efd;
+    --rdp-selected-color: #ffffff;
+    --rdp-selected-background: #0d6efd;
+}
+
+/* Calendar sizing */
+
+.appointment-calendar .rdp-month_grid {
+    width: 100%;
+}
+
+.appointment-calendar .rdp-table {
+    width: 100%;
+}
+
+.appointment-calendar .rdp-head_cell {
+    width: 14.285%;
+}
+
+.appointment-calendar .rdp-day {
+    width: 14.285%;
+}
+
+.appointment-calendar .rdp-month_caption {
+    padding: 20px 20px 12px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.appointment-calendar .rdp-day_button {
+    width: 100%;
+    height: 58px;
+    font-size: 17px;
+    border-radius: 8px;
+}
+
+/* =========================================================
+   CALENDAR - FULLY BOOKED
+   ========================================================= */
+
+.appointment-calendar .fully-booked-date {
+    color: #999999 !important;
+    background-color: #eeeeee !important;
+    text-decoration: line-through;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   TIME SECTION
+   ========================================================= */
+
+.appointment-time-section {
+    width: 100%;
+    margin-top: 5px;
+}
+
+.appointment-time-section > label {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.appointment-times-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 12px;
+}
+
+/* =========================================================
+   TIME BUTTONS
+   ========================================================= */
+
+.appointment-time-button {
+    min-height: 55px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #cccccc;
+    background: #ffffff;
+    color: #111111;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+
+    transition:
+            background 0.2s ease,
+            border 0.2s ease,
+            transform 0.1s ease;
+}
+
+.appointment-time-button:hover:not(:disabled) {
+    border-color: #0d6efd;
+}
+
+.appointment-time-button:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.appointment-time-button.selected {
+    background: #0d6efd;
+    border: 2px solid #0d6efd;
+    color: #ffffff;
+}
+
+.appointment-time-button.booked {
+    background: #e5e5e5;
+    color: #999999;
+    border-color: #dddddd;
+    cursor: not-allowed;
+}
+
+.appointment-time-button span {
+    display: block;
+    margin-top: 3px;
+    font-size: 11px;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading-message,
+.appointments-loading {
+    margin: 0;
+    color: #666666;
+    font-size: 16px;
+}
+
+/* =========================================================
+   SUBMIT SECTION
+   ========================================================= */
+
+.appointment-submit-section {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 5px;
+}
+
+/* =========================================================
+   BOOK BUTTON
+   ========================================================= */
+
+.appointment-submit-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: auto;
+    min-width: 245px;
+    min-height: 56px;
+
+    padding: 14px 24px;
+    margin: 0;
+
+    box-sizing: border-box;
+
+    border: none;
+    border-radius: 9px;
+
+    background: #164e9c;
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    transition:
+            background 0.2s ease,
+            opacity 0.2s ease,
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+}
+
+.appointment-submit-button:hover:not(:disabled) {
+    background: #123f7d;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
+}
+
+.appointment-submit-button:active:not(:disabled) {
+    background: #0e315f;
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.appointment-submit-button:disabled {
+    background: #3d4b5f;
+    color: #aeb6c2;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* =========================================================
+   INFORMATION
+   ========================================================= */
+
+.appointment-info {
+    margin-top: 25px;
+    padding: 0;
+    font-size: 16px;
+    color: #666666;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   MY APPOINTMENTS
+   ========================================================= */
+
+.my-appointments-section {
+    width: 100%;
+    margin-top: 55px;
+    padding-top: 40px;
+    border-top: 1px solid #e1e5ea;
+}
+
+.my-appointments-heading,
+.cancelled-appointments-heading {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.my-appointments-heading h2,
+.cancelled-appointments-heading h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.my-appointments-heading p,
+.cancelled-appointments-heading p {
+    margin: 8px 0 0;
+    color: #666666;
+    font-size: 16px;
+}
+
+/* =========================================================
+   APPOINTMENT COUNT
+   ========================================================= */
+
+.appointment-count {
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+    border-radius: 20px;
+
+    background: #0d6efd;
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.cancelled-count {
+    background: #6c757d;
+}
+
+/* =========================================================
+   APPOINTMENT LIST
+   ========================================================= */
+
+.appointments-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* =========================================================
+   APPOINTMENT BOOKING CARD
+   ========================================================= */
+
+.appointment-booking-card {
+    width: 100%;
+    padding: 25px;
+    box-sizing: border-box;
+
+    border: 1px solid #dce6ef;
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+}
+
+.appointment-booking-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+}
+
+/* =========================================================
+   BOOKING CARD HEADER
+   ========================================================= */
+
+.booking-card-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 25px;
+
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e1e5ea;
+}
+
+.booking-card-header h3 {
+    margin: 0 0 10px;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   STATUS BADGES
+   ========================================================= */
+
+.booking-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 12px;
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+}
+
+.booking-status.confirmed {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.booking-status.cancelled-status {
+    background: #e5e5e5;
+    color: #666666;
+}
+
+/* =========================================================
+   BOOKING DATE / TIME
+   ========================================================= */
+
+.booking-date-time {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+
+    text-align: right;
+    white-space: nowrap;
+}
+
+.booking-date-time strong {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.booking-date-time span {
+    font-size: 16px;
+    color: #666666;
+}
+
+/* =========================================================
+   BOOKING DETAILS
+   ========================================================= */
+
+.booking-card-details {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 22px 0;
+}
+
+.booking-card-details > div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.booking-card-details span {
+    font-size: 13px;
+    color: #777777;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.booking-card-details strong {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   BOOKING ACTIONS
+   ========================================================= */
+
+.booking-card-actions {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 5px;
+}
+
+/* =========================================================
+   CANCEL BUTTON
+   ========================================================= */
+
+.cancel-appointment-button {
+    min-width: 190px;
+    min-height: 45px;
+
+    padding: 10px 18px;
+
+    border: 1px solid #dc3545;
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #dc3545;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+            background 0.2s ease,
+            color 0.2s ease,
+            transform 0.1s ease;
+}
+
+.cancel-appointment-button:hover:not(:disabled) {
+    background: #dc3545;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.cancel-appointment-button:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.cancel-appointment-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   CANCELLED APPOINTMENTS
+   ========================================================= */
+
+.appointment-booking-card.cancelled {
+    opacity: 0.85;
+}
+
+.appointment-booking-card.cancelled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.cancelled-appointments-section {
+    width: 100%;
+    margin-top: 45px;
+    padding-top: 40px;
+    border-top: 1px solid #e1e5ea;
+}
+
+.cancelled-booking-message {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 12px 15px;
+
+    border-radius: 8px;
+
+    background: #f1f1f1;
+    color: #666666;
+
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   EMPTY STATES
+   ========================================================= */
+
+.no-appointments {
+    width: 100%;
+    padding: 40px 20px;
+    box-sizing: border-box;
+
+    text-align: center;
+
+    border: 1px dashed #ccd5dd;
+    border-radius: 12px;
+
+    background: #f8fbff;
+}
+
+.no-appointments-icon {
+    font-size: 38px;
+    margin-bottom: 10px;
+}
+
+.no-appointments h3 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.no-appointments p {
+    margin: 8px 0 0;
+    color: #666666;
+    font-size: 15px;
+}
+
+.no-cancelled-appointments {
+    width: 100%;
+    padding: 22px;
+    box-sizing: border-box;
+
+    border-radius: 10px;
+
+    background: #f8f8f8;
+    color: #777777;
+
+    text-align: center;
+}
+
+.no-cancelled-appointments p {
+    margin: 0;
+    font-size: 15px;
+}
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+.appointments-page.dark-mode {
+    background: #0f1115 !important;
+    color: #f5f7fa;
+}
+
+/* Main text */
+
+.appointments-page.dark-mode h1,
+.appointments-page.dark-mode h2,
+.appointments-page.dark-mode h3,
+.appointments-page.dark-mode label,
+.appointments-page.dark-mode strong {
+    color: #f5f7fa;
+}
+
+/* Header */
+
+.appointments-page.dark-mode .appointments-header p {
+    color: #aeb6c2;
+}
+
+/* Main card */
+
+.appointments-page.dark-mode .appointment-card {
+    background: #181b21 !important;
+    color: #f5f7fa !important;
+
+    border: 1px solid #303640;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Section text */
+
+.appointments-page.dark-mode .appointment-section-heading p,
+.appointments-page.dark-mode .my-appointments-heading p,
+.appointments-page.dark-mode .cancelled-appointments-heading p {
+    color: #aeb6c2 !important;
+}
+
+/* =========================================================
+   DARK MODE - MESSAGES
+   ========================================================= */
+
+.appointments-page.dark-mode .appointment-success {
+    background: #163c2b;
+    color: #86efac;
+    border: 1px solid #276749;
+}
+
+.appointments-page.dark-mode .appointment-error,
+.appointments-page.dark-mode .appointment-validation-errors {
+    background: #401d23;
+    color: #fca5a5;
+    border: 1px solid #7f1d1d;
+}
+
+/* =========================================================
+   DARK MODE - SELECTS
+   ========================================================= */
+
+.appointments-page.dark-mode .appointment-field select {
+    background: #242830 !important;
+    color: #f5f7fa !important;
+    border: 1px solid #414752 !important;
+}
+
+.appointments-page.dark-mode .appointment-field select:focus {
+    border-color: #3b82f6 !important;
+    outline: none;
+}
+
+.appointments-page.dark-mode .appointment-field select option {
+    background: #242830;
+    color: #f5f7fa;
+}
+
+/* =========================================================
+   DARK MODE - CALENDAR
+   ========================================================= */
+
+.appointments-page.dark-mode .calendar-wrapper {
+    background: #252525 !important;
+    border: 1px solid #444444 !important;
+}
+
+.appointments-page.dark-mode .appointment-calendar {
+    --rdp-accent-color: #4dabf7;
+    --rdp-accent-background-color: #0d6efd;
+    --rdp-selected-color: #ffffff;
+    --rdp-selected-background: #0d6efd;
+
+    width: 100%;
+    color: #ffffff;
+    background: #252525;
+}
+
+/* Calendar table */
+
+.appointments-page.dark-mode .appointment-calendar .rdp-month_grid,
+.appointments-page.dark-mode .appointment-calendar .rdp-table {
+    width: 100%;
+    background: #252525;
+}
+
+/* Month title */
+
+.appointments-page.dark-mode .appointment-calendar .rdp-month_caption,
+.appointments-page.dark-mode .appointment-calendar .rdp-caption_label {
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+/* Navigation */
+
+.appointments-page.dark-mode .appointment-calendar .rdp-button {
+    color: #ffffff !important;
+}
+
+.appointments-page.dark-mode .appointment-calendar .rdp-button:hover:not(:disabled) {
+    background: #333333;
+}
+
+.appointments-page.dark-mode .appointment-calendar .rdp-chevron {
+    fill: #ffffff !important;
+}
+
+/* Weekday names */
+
+.appointments-page.dark-mode .appointment-calendar .rdp-weekday {
+    color: #bdbdbd !important;
+    font-weight: 600;
+}
+
+/* =========================================================
+   DARK MODE - CALENDAR NUMBERS
+   ========================================================= */
+
+/* Normal dates */
+
+.appointments-page.dark-mode
+.appointment-calendar
+.rdp-day_button {
+    color: #ffffff !important;
+    background-color: transparent !important;
+    opacity: 1 !important;
+    font-weight: 500;
+}
+
+/* Available dates */
+
+.appointments-page.dark-mode
+.appointment-calendar
+.rdp-day:not(.rdp-disabled)
+.rdp-day_button {
+    color: #ffffff !important;
+}
+
+/* Hover */
+
+.appointments-page.dark-mode
+.appointment-calendar
+.rdp-day:not(.rdp-disabled)
+.rdp-day_button:hover {
+    background-color: #3a3a3a !important;
+    color: #ffffff !important;
+}
+
+/* Selected date */
+
+.appointments-page.dark-mode
+.appointment-calendar
+.rdp-selected
+.rdp-day_button {
+    background-color: #0d6efd !important;
+    color: #ffffff !important;
+    border: 2px solid #4dabf7;
+    font-weight: 700 !important;
+}
+
+/* Today */
+
+.appointments-page.dark-mode
+.appointment-calendar
+.rdp-today
+.rdp-day_button {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    border: 1px solid #4dabf7;
+}
+
+/* Selected + today */
+
+.appointments-page.dark-mode
+.appointment-calendar
+.rdp-selected.rdp-today
+.rdp-day_button {
+    background-color: #0d6efd !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+}
+
+/* Disabled dates */
+
+.appointments-page.dark-mode
+.appointment-calendar
+.rdp-disabled
+.rdp-day_button {
+    color: #777777 !important;
+    opacity: 1 !important;
+}
+
+/* Outside month */
+
+.appointments-page.dark-mode
+.appointment-calendar
+.rdp-outside
+.rdp-day_button {
+    color: #555555 !important;
+    opacity: 1 !important;
+}
+
+/* Fully booked */
+
+.appointments-page.dark-mode
+.appointment-calendar
+.fully-booked-date {
+    background-color: #383838 !important;
+    color: #888888 !important;
+    opacity: 1 !important;
+    text-decoration: line-through;
+    border-radius: 8px;
+}
+
+/* Calendar footer */
+
+.appointments-page.dark-mode
+.appointment-calendar
+.rdp-footer {
+    background: #252525;
+    color: #bdbdbd;
+}
+
+/* Calendar focus */
+
+.appointments-page.dark-mode
+.appointment-calendar
+.rdp-day_button:focus-visible {
+    outline: 2px solid #4dabf7;
+    outline-offset: 2px;
+}
+
+/* =========================================================
+   DARK MODE - TIME BUTTONS
+   ========================================================= */
+
+.appointments-page.dark-mode .appointment-time-button {
+    background: #242830 !important;
+    color: #f5f7fa !important;
+    border-color: #414752 !important;
+}
+
+.appointments-page.dark-mode
+.appointment-time-button:hover:not(:disabled) {
+    background: #303641 !important;
+    border-color: #60a5fa !important;
+}
+
+.appointments-page.dark-mode
+.appointment-time-button.selected {
+    background: #2563eb !important;
+    border: 2px solid #2563eb !important;
+    color: #ffffff !important;
+}
+
+.appointments-page.dark-mode
+.appointment-time-button.booked {
+    background: #25282e !important;
+    color: #6b7280 !important;
+    border-color: #363a42 !important;
+}
+
+/* =========================================================
+   DARK MODE - BOOK BUTTON
+   ========================================================= */
+
+.appointments-page.dark-mode .appointment-submit-button {
+    background: #164e9c !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.appointments-page.dark-mode
+.appointment-submit-button:hover:not(:disabled) {
+    background: #123f7d !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.appointments-page.dark-mode
+.appointment-submit-button:disabled {
+    background: #303944 !important;
+    color: #7f8996 !important;
+    opacity: 1 !important;
+    box-shadow: none;
+}
+
+/* =========================================================
+   DARK MODE - INFORMATION
+   ========================================================= */
+
+.appointments-page.dark-mode .appointment-info {
+    background: #202b3a !important;
+    color: #bfdbfe !important;
+    border-color: #30445e !important;
+}
+
+/* =========================================================
+   DARK MODE - APPOINTMENT CARDS
+   ========================================================= */
+
+.appointments-page.dark-mode
+.appointment-booking-card {
+    background: #20242b !important;
+    color: #f5f7fa !important;
+    border-color: #363c46 !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.appointments-page.dark-mode
+.appointment-booking-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+.appointments-page.dark-mode
+.appointment-booking-card.cancelled {
+    background: #1c1e23 !important;
+    border-color: #3a3d43 !important;
+}
+
+/* Card header */
+
+.appointments-page.dark-mode .booking-card-header {
+    border-bottom-color: #363c46;
+}
+
+.appointments-page.dark-mode .booking-card-header h3 {
+    color: #f5f7fa;
+}
+
+/* Date/time */
+
+.appointments-page.dark-mode .booking-date-time strong {
+    color: #f5f7fa;
+}
+
+.appointments-page.dark-mode .booking-date-time span {
+    color: #aeb6c2;
+}
+
+/* Details */
+
+.appointments-page.dark-mode .booking-card-details span {
+    color: #89919d;
+}
+
+.appointments-page.dark-mode .booking-card-details strong {
+    color: #f5f7fa;
+}
+
+/* =========================================================
+   DARK MODE - STATUS
+   ========================================================= */
+
+.appointments-page.dark-mode .booking-status.confirmed {
+    background: #163c2b;
+    color: #86efac;
+}
+
+.appointments-page.dark-mode .booking-status.cancelled-status {
+    background: #3b2528;
+    color: #fca5a5;
+}
+
+/* =========================================================
+   DARK MODE - COUNTS
+   ========================================================= */
+
+.appointments-page.dark-mode .appointment-count {
+    background: #263b63;
+    color: #93c5fd;
+}
+
+.appointments-page.dark-mode .cancelled-count {
+    background: #3b2528;
+    color: #fca5a5;
+}
+
+/* =========================================================
+   DARK MODE - CANCEL BUTTON
+   ========================================================= */
+
+.appointments-page.dark-mode .cancel-appointment-button {
+    background: #3b2528;
+    color: #fca5a5;
+    border-color: #6b3036;
+}
+
+.appointments-page.dark-mode
+.cancel-appointment-button:hover:not(:disabled) {
+    background: #dc3545;
+    color: #ffffff;
+}
+
+/* =========================================================
+   DARK MODE - CANCELLED MESSAGE
+   ========================================================= */
+
+.appointments-page.dark-mode .cancelled-booking-message {
+    background: #2a2525 !important;
+    color: #aeb6c2 !important;
+}
+
+/* =========================================================
+   DARK MODE - DIVIDERS
+   ========================================================= */
+
+.appointments-page.dark-mode .booking-card-header,
+.appointments-page.dark-mode .my-appointments-section,
+.appointments-page.dark-mode .cancelled-appointments-section {
+    border-color: #303640 !important;
+}
+
+/* =========================================================
+   DARK MODE - EMPTY STATES
+   ========================================================= */
+
+.appointments-page.dark-mode .no-appointments,
+.appointments-page.dark-mode .no-cancelled-appointments {
+    background: #20242b !important;
+    color: #aeb6c2 !important;
+    border-color: #3b424d !important;
+}
+
+.appointments-page.dark-mode .no-appointments h3 {
+    color: #f5f7fa;
+}
+
+.appointments-page.dark-mode .no-appointments p {
+    color: #89919d;
+}
+
+.appointments-page.dark-mode .appointments-loading,
+.appointments-page.dark-mode .loading-message {
+    color: #aeb6c2;
+}
+
+/* =========================================================
+   LARGE TABLETS
+   1100px and below
+   ========================================================= */
+
+@media (max-width: 1100px) {
+    .appointment-card {
+        padding: 32px;
+    }
+
+    .appointment-top-row {
+        grid-template-columns:
+            minmax(200px, 1fr)
+            minmax(450px, 2fr)
+            minmax(200px, 1fr);
+
+        gap: 25px;
+    }
+
+    .appointment-field label {
+        font-size: 18px;
+    }
+
+    .appointment-calendar .rdp-day_button {
+        height: 52px;
+        font-size: 15px;
+    }
+
+    .booking-card-details {
+        gap: 15px;
+    }
+}
+
+/* =========================================================
+   TABLET
+   900px and below
+   ========================================================= */
+
+@media (max-width: 900px) {
+    .appointments-page {
+        padding: 35px 20px 50px;
+    }
+
+    .appointment-card {
+        padding: 28px;
+    }
+
+    .appointment-top-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+    }
+
+    .clinic-field {
+        grid-column: 1;
+    }
+
+    .reason-field {
+        grid-column: 2;
+    }
+
+    .date-field {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .appointment-calendar .rdp-day_button {
+        height: 56px;
+        font-size: 16px;
+    }
+
+    .appointment-section-heading h2 {
+        font-size: 25px;
+    }
+
+    .my-appointments-heading h2,
+    .cancelled-appointments-heading h2 {
+        font-size: 25px;
+    }
+
+    .booking-card-details {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* =========================================================
+   MOBILE
+   700px and below
+   ========================================================= */
+
+@media (max-width: 700px) {
+    .appointments-page {
+        padding: 25px 15px 40px;
+    }
+
+    /* Header */
+
+    .appointments-header {
+        margin-bottom: 22px;
+    }
+
+    .appointments-header h1 {
+        font-size: 32px;
+        line-height: 1.15;
+    }
+
+    .appointments-header p {
+        font-size: 18px;
+        line-height: 1.4;
+    }
+
+    /* Main card */
+
+    .appointment-card {
+        padding: 22px 18px;
+        border-radius: 14px;
+    }
+
+    /* Booking heading */
+
+    .appointment-section-heading {
+        margin-bottom: 24px;
+    }
+
+    .appointment-section-heading h2 {
+        font-size: 23px;
+        line-height: 1.25;
+    }
+
+    .appointment-section-heading p {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    /* Form */
+
+    .appointment-form {
+        gap: 25px;
+    }
+
+    .appointment-top-row {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 25px;
+    }
+
+    .clinic-field,
+    .date-field,
+    .reason-field {
+        width: 100%;
+        grid-column: auto;
+    }
+
+    /* Labels */
+
+    .appointment-field label {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    /* Selects */
+
+    .appointment-field select {
+        width: 100%;
+        height: 54px;
+        font-size: 16px;
+    }
+
+    /* Calendar */
+
+    .calendar-wrapper {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .appointment-calendar {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .appointment-calendar .rdp {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .appointment-calendar .rdp-month_grid,
+    .appointment-calendar .rdp-table {
+        width: 100%;
+    }
+
+    .appointment-calendar .rdp-month_caption {
+        padding: 16px 14px 10px;
+        font-size: 21px;
+    }
+
+    .appointment-calendar .rdp-day_button {
+        width: 100%;
+        height: 48px;
+        font-size: 14px;
+    }
+
+    .appointment-calendar .rdp-head_cell {
+        font-size: 13px;
+    }
+
+    /* Time */
+
+    .appointment-time-section > label {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+
+    .appointment-times-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 9px;
+    }
+
+    .appointment-time-button {
+        min-height: 52px;
+        padding: 8px 4px;
+        font-size: 14px;
+    }
+
+    /* Book button */
+
+    .appointment-submit-section {
+        width: 100%;
+    }
+
+    .appointment-submit-button {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 56px;
+
+        padding: 14px 24px !important;
+
+        font-size: 17px !important;
+    }
+
+    /* Info */
+
+    .appointment-info {
+        margin-top: 20px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    /* My appointments */
+
+    .my-appointments-section {
+        margin-top: 40px;
+        padding-top: 30px;
+    }
+
+    .my-appointments-heading,
+    .cancelled-appointments-heading {
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .my-appointments-heading h2,
+    .cancelled-appointments-heading h2 {
+        font-size: 22px;
+        line-height: 1.25;
+    }
+
+    .my-appointments-heading p,
+    .cancelled-appointments-heading p {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .appointment-count {
+        min-width: 36px;
+        height: 36px;
+        padding: 0 10px;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    /* Appointment cards */
+
+    .appointment-booking-card {
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .booking-card-header {
+        flex-direction: column;
+        gap: 15px;
+        padding-bottom: 17px;
+    }
+
+    .booking-card-header h3 {
+        font-size: 18px;
+        line-height: 1.3;
+        margin-bottom: 8px;
+    }
+
+    /* Date/time */
+
+    .booking-date-time {
+        width: 100%;
+        align-items: flex-start;
+        text-align: left;
+        gap: 5px;
+    }
+
+    .booking-date-time strong {
+        font-size: 16px;
+    }
+
+    .booking-date-time span {
+        font-size: 15px;
+    }
+
+    /* Details */
+
+    .booking-card-details {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 18px 0;
+    }
+
+    .booking-card-details > div {
+        gap: 4px;
+    }
+
+    .booking-card-details span {
+        font-size: 11px;
+    }
+
+    .booking-card-details strong {
+        font-size: 15px;
+    }
+
+    /* Cancel button */
+
+    .booking-card-actions {
+        justify-content: stretch;
+        padding-top: 2px;
+    }
+
+    .cancel-appointment-button {
+        width: 100%;
+        min-width: 0;
+        min-height: 48px;
+        font-size: 14px;
+    }
+
+    /* Cancelled */
+
+    .cancelled-appointments-section {
+        margin-top: 35px;
+        padding-top: 30px;
+    }
+
+    .cancelled-booking-message {
+        font-size: 13px;
+        line-height: 1.5;
+        padding: 11px 13px;
+    }
+
+    /* Empty states */
+
+    .no-appointments {
+        padding: 30px 15px;
+    }
+
+    .no-appointments-icon {
+        font-size: 32px;
+    }
+
+    .no-appointments h3 {
+        font-size: 18px;
+    }
+
+    .no-appointments p {
+        font-size: 14px;
+    }
+
+    .no-cancelled-appointments {
+        padding: 18px;
+        font-size: 14px;
+    }
+
+    /* Dark calendar mobile */
+
+    .appointments-page.dark-mode .appointment-calendar {
+        background: #252525;
+        color: #ffffff;
+    }
+
+    .appointments-page.dark-mode
+    .appointment-calendar
+    .rdp-day_button {
+        color: #ffffff !important;
+    }
+
+    .appointments-page.dark-mode
+    .appointment-calendar
+    .rdp-weekday {
+        color: #aaaaaa !important;
+    }
+
+    .appointments-page.dark-mode
+    .appointment-calendar
+    .rdp-selected
+    .rdp-day_button {
+        background: #0d6efd !important;
+        color: #ffffff !important;
+    }
+}
+
+/* =========================================================
+   SMALL MOBILE
+   500px and below
+   ========================================================= */
+
+@media (max-width: 500px) {
+    .appointments-page {
+        padding: 20px 10px 35px;
+    }
+
+    .appointments-header h1 {
+        font-size: 28px;
+    }
+
+    .appointments-header p {
+        font-size: 16px;
+    }
+
+    .appointment-card {
+        padding: 18px 14px;
+        border-radius: 12px;
+    }
+
+    .appointment-section-heading h2 {
+        font-size: 21px;
+    }
+
+    .appointment-field label {
+        font-size: 17px;
+    }
+
+    /* Calendar */
+
+    .appointment-calendar .rdp-month_caption {
+        padding: 14px 10px 8px;
+        font-size: 19px;
+    }
+
+    .appointment-calendar .rdp-day_button {
+        height: 43px;
+        font-size: 13px;
+    }
+
+    .appointment-calendar .rdp-head_cell {
+        font-size: 11px;
+    }
+
+    .appointment-calendar .rdp-footer {
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    /* Times */
+
+    .appointment-times-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .appointment-time-button {
+        min-height: 50px;
+        font-size: 14px;
+    }
+
+    /* Appointment history */
+
+    .my-appointments-heading h2,
+    .cancelled-appointments-heading h2 {
+        font-size: 20px;
+    }
+
+    .my-appointments-heading p,
+    .cancelled-appointments-heading p {
+        font-size: 13px;
+    }
+
+    .appointment-booking-card {
+        padding: 17px;
+        border-radius: 10px;
+    }
+
+    .booking-card-header h3 {
+        font-size: 17px;
+    }
+
+    .booking-status {
+        padding: 5px 10px;
+        font-size: 11px;
+    }
+
+    .booking-date-time strong {
+        font-size: 15px;
+    }
+
+    .booking-date-time span {
+        font-size: 14px;
+    }
+
+    .booking-card-details {
+        gap: 13px;
+    }
+
+    .booking-card-details strong {
+        font-size: 14px;
+    }
+
+    .cancel-appointment-button {
+        min-height: 46px;
+        font-size: 13px;
+    }
+
+    .no-appointments {
+        padding: 25px 12px;
+    }
+
+    /* Calendar numbers stay visible */
+
+    .appointments-page.dark-mode
+    .appointment-calendar
+    .rdp-day_button {
+        color: #ffffff !important;
+        opacity: 1 !important;
+    }
+
+    .appointments-page.dark-mode
+    .appointment-calendar
+    .rdp-weekday {
+        color: #aaaaaa !important;
+    }
+
+    .appointments-page.dark-mode
+    .appointment-calendar
+    .rdp-month_caption {
+        color: #ffffff !important;
+    }
+}
+
+/* =========================================================
+   VERY SMALL PHONES
+   380px and below
+   ========================================================= */
+
+@media (max-width: 380px) {
+    .appointments-header h1 {
+        font-size: 25px;
+    }
+
+    .appointments-header p {
+        font-size: 15px;
+    }
+
+    .appointment-card {
+        padding: 15px 10px;
+    }
+
+    .appointment-section-heading h2 {
+        font-size: 19px;
+    }
+
+    .appointment-calendar .rdp-day_button {
+        height: 39px;
+        font-size: 12px;
+    }
+
+    .appointment-calendar .rdp-head_cell {
+        font-size: 10px;
+    }
+
+    .appointment-times-grid {
+        gap: 6px;
+    }
+
+    .appointment-time-button {
+        min-height: 47px;
+        font-size: 13px;
+    }
+
+    .appointment-booking-card {
+        padding: 14px;
+    }
+
+    .booking-card-header h3 {
+        font-size: 16px;
+    }
+
+    .booking-card-details strong {
+        font-size: 13px;
+    }
+
+    .cancel-appointment-button {
+        min-height: 44px;
+        font-size: 12px;
+    }
+}
+

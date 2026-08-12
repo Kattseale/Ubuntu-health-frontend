@@ -1,88 +1,254 @@
-import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useContext } from "react";
+
 import ThemeContext from "../context/ThemeContext";
-import { logout } from "../services/authService";
-import { getEmail, getRole } from "../services/authService";
+
+import Navbar from "./Navbar";
+
+import {
+    getEmail,
+    getRole,
+    logout
+} from "../services/authService";
+
 
 export default function AppLayout() {
 
-    const { darkMode, setDarkMode } = useContext(ThemeContext);
+    const { darkMode, setDarkMode } =
+        useContext(ThemeContext);
 
     const navigate = useNavigate();
+
     const email = getEmail();
     const role = getRole();
-    console.log("Current role:", role);
+
+
+    // =====================================================
+    // LOGOUT
+    // =====================================================
 
     const handleLogout = () => {
+
         logout();
+
         navigate("/login");
+
     };
 
-    const navStyle = ({ isActive }) => ({
-        textDecoration: "none",
-        color: isActive ? "#0d6efd" : (darkMode ? "#fff" : "#333"),
-        fontWeight: isActive ? "bold" : "500",
-        padding: "10px 15px",
-        borderRadius: "8px",
-        transition: "0.3s"
-    });
+
+    // =====================================================
+    // PAGE STYLES
+    // =====================================================
+
+    const pageStyle = {
+
+        minHeight: "100vh",
+
+        backgroundColor:
+            darkMode
+                ? "#121212"
+                : "#f4f8fb",
+
+        color:
+            darkMode
+                ? "#ffffff"
+                : "#212529",
+
+        transition: "background-color 0.3s ease, color 0.3s ease"
+
+    };
+
+
+    // =====================================================
+    // TOP HEADER
+    // =====================================================
+
+    const headerStyle = {
+
+        backgroundColor:
+            darkMode
+                ? "#1b1b1b"
+                : "#0d6efd",
+
+        color: "white",
+
+        padding: "12px 24px",
+
+        display: "flex",
+
+        alignItems: "center",
+
+        justifyContent: "space-between",
+
+        gap: "20px",
+
+        flexWrap: "wrap",
+
+        boxShadow:
+            "0 3px 10px rgba(0,0,0,0.15)"
+
+    };
+
 
     return (
 
-        <div
-            style={{
-                minHeight: "100vh",
-                background: darkMode ? "#121212" : "#f4f8fb",
-                color: darkMode ? "#fff" : "#000"
-            }}
-        >
+        <div style={pageStyle}>
 
-            {/* HEADER */}
+            {/* =================================================
+                TOP HEADER
+            ================================================= */}
 
-            <header
-                style={{
-                    background: "#0d6efd",
-                    color: "#fff",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "20px 40px"
-                }}
-            >
-<span
-    style={{
-        alignSelf: "center",
-        fontWeight: "bold"
-    }}
->
-    {email}
-</span>
-                <div>
+            <header style={headerStyle}>
 
-                    <h2 style={{ margin: 0 }}>
-                        Ubuntu Health Clinic
-                    </h2>
 
-                    <small>
-                        {role}
-                    </small>
-
-                </div>
+                {/* =================================================
+                    EMAIL
+                ================================================= */}
 
                 <div
                     style={{
-                        display: "flex",
-                        gap: "10px"
+                        flex: "1 1 200px",
+                        minWidth: 0
                     }}
                 >
 
+                    <div
+                        style={{
+                            fontSize: "18px",
+                            fontWeight: "bold",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap"
+                        }}
+                    >
+                        {email || "User"}
+                    </div>
+
+                </div>
+
+
+                {/* =================================================
+                    BRAND
+                ================================================= */}
+
+                <div
+                    style={{
+                        flex: "1 1 250px",
+                        textAlign: "center"
+                    }}
+                >
+
+                    <div
+                        style={{
+                            fontSize: "28px",
+                            fontWeight: "bold",
+                            lineHeight: "1.1"
+                        }}
+                    >
+                        Ubuntu Health Clinic
+                    </div>
+
+                    <div
+                        style={{
+                            fontSize: "16px",
+                            marginTop: "3px"
+                        }}
+                    >
+                        {role || "USER"}
+                    </div>
+
+                </div>
+
+
+                {/* =================================================
+                    ACTION BUTTONS
+                ================================================= */}
+
+                <div
+                    style={{
+                        flex: "1 1 200px",
+
+                        display: "flex",
+
+                        justifyContent: "flex-end",
+
+                        alignItems: "center",
+
+                        gap: "10px",
+
+                        flexWrap: "wrap"
+                    }}
+                >
+
+
+                    {/* DARK MODE */}
+
                     <button
-                        onClick={() => setDarkMode(!darkMode)}
+                        onClick={() =>
+                            setDarkMode(!darkMode)
+                        }
+                        aria-label={
+                            darkMode
+                                ? "Switch to light mode"
+                                : "Switch to dark mode"
+                        }
+                        style={{
+                            border: "none",
+
+                            borderRadius: "6px",
+
+                            padding: "8px 12px",
+
+                            fontSize: "20px",
+
+                            backgroundColor:
+                                darkMode
+                                    ? "#333333"
+                                    : "#ffffff",
+
+                            color:
+                                darkMode
+                                    ? "#ffffff"
+                                    : "#212529",
+
+                            cursor: "pointer",
+
+                            minWidth: "45px",
+
+                            minHeight: "38px"
+                        }}
                     >
                         {darkMode ? "☀️" : "🌙"}
                     </button>
 
-                    <button onClick={handleLogout}>
+
+                    {/* LOGOUT */}
+
+                    <button
+                        onClick={handleLogout}
+                        style={{
+                            border: "none",
+
+                            borderRadius: "6px",
+
+                            padding: "8px 14px",
+
+                            fontSize: "16px",
+
+                            fontWeight: "bold",
+
+                            backgroundColor:
+                                darkMode
+                                    ? "#ffffff"
+                                    : "#ffffff",
+
+                            color: "#212529",
+
+                            cursor: "pointer",
+
+                            minHeight: "38px"
+                        }}
+                    >
                         Logout
                     </button>
 
@@ -90,70 +256,22 @@ export default function AppLayout() {
 
             </header>
 
-            {/* NAVIGATION */}
 
-            <nav
-                style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "10px",
-                    padding: "15px 30px",
-                    background: darkMode ? "#1f1f1f" : "#fff",
-                    borderBottom: "1px solid #ddd"
-                }}
-            >
+            {/* =================================================
+                NAVIGATION
+            ================================================= */}
 
-                <NavLink to="/home" style={navStyle}>
-                    🏠 Home
-                </NavLink>
+            <Navbar />
 
-                {(role === "PATIENT" || role === "ADMIN") && (
-                    <NavLink to="/announcements" style={navStyle}>
-                        📢 Announcements
-                    </NavLink>
-                )}
 
-                {role === "PATIENT" && (
-                    <>
-                        <NavLink to="/appointments" style={navStyle}>
-                            📅 Appointments
-                        </NavLink>
-
-                        <NavLink to="/community" style={navStyle}>
-                            👥 Community
-                        </NavLink>
-                    </>
-                )}
-                {role === "ADMIN" && (
-                    <>
-                        <NavLink to="/dashboard" style={navStyle}>
-                            📊 Dashboard
-                        </NavLink>
-
-                        <NavLink to="/patients" style={navStyle}>
-                            👥 Patients
-                        </NavLink>
-
-                        <NavLink to="/clinics" style={navStyle}>
-                            🏥 Clinics
-                        </NavLink>
-
-                        <NavLink to="/medications" style={navStyle}>
-                            💊 Medications
-                        </NavLink>
-
-                        <NavLink to="/reports" style={navStyle}>
-                            📈 Reports
-                        </NavLink>
-                    </>
-                )}
-
-            </nav>
-            {/* PAGE CONTENT */}
+            {/* =================================================
+                PAGE CONTENT
+            ================================================= */}
 
             <main
                 style={{
-                    padding: "30px"
+                    width: "100%",
+                    boxSizing: "border-box"
                 }}
             >
 
@@ -164,5 +282,4 @@ export default function AppLayout() {
         </div>
 
     );
-
 }

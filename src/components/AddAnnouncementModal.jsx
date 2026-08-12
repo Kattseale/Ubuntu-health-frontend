@@ -4,94 +4,70 @@ export default function AddAnnouncementModal({
                                                  open,
                                                  onClose,
                                                  onSave,
-                                                 announcement
+                                                 announcement,
+                                                 darkMode
                                              }) {
-
     const [form, setForm] = useState({
         title: "",
         description: "",
         priority: "MEDIUM"
     });
 
-
     useEffect(() => {
-
         if (announcement) {
-
             setForm({
-
                 title: announcement.title || "",
-
-                description:
-                    announcement.description || "",
-
-                priority:
-                    announcement.priority || "MEDIUM"
-
+                description: announcement.description || "",
+                priority: announcement.priority || "MEDIUM"
             });
-
         } else {
-
             setForm({
-
                 title: "",
-
                 description: "",
-
                 priority: "MEDIUM"
-
             });
-
         }
-
     }, [announcement]);
 
     if (!open) return null;
 
     const handleSubmit = (e) => {
-
         e.preventDefault();
-
         onSave(form);
     };
 
     return (
-
         <div
             style={{
                 position: "fixed",
-                inset: 0,
-                background: "rgba(0,0,0,.5)",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                background: "rgba(0,0,0,0.5)",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                zIndex: 1000
+                zIndex: 9999
             }}
         >
-
             <div
                 style={{
-                    background:
-                        window.localStorage.getItem("theme") === "dark"
-                            ?
-                            "#1e1e1e"
-                            :
-                            "#fff",
-                    padding: "30px",
+                    background: darkMode ? "#1e1e1e" : "#ffffff",
+                    color: darkMode ? "#ffffff" : "#000000",
                     width: "500px",
+                    maxWidth: "90%",
                     borderRadius: "12px",
-                    boxShadow: "0 8px 20px rgba(0,0,0,.2)"
+                    padding: "25px",
+                    boxShadow: "0 8px 20px rgba(0,0,0,.3)"
                 }}
             >
-
                 <h2 style={{ marginBottom: "20px" }}>
-                    {announcement ? "Edit Announcement" : "New Announcement"}
+                    {announcement ? "✏️ Edit Announcement" : "📢 New Announcement"}
                 </h2>
 
                 <form onSubmit={handleSubmit}>
-
                     <div style={{ marginBottom: "15px" }}>
-
                         <label>Title</label>
 
                         <input
@@ -104,42 +80,30 @@ export default function AddAnnouncementModal({
                                     title: e.target.value
                                 })
                             }
-                            style={inputStyle}
+                            style={inputStyle(darkMode)}
                         />
+                    </div>
 
+                    <div style={{ marginBottom: "15px" }}>
+                        <label>Priority</label>
+
+                        <select
+                            value={form.priority}
+                            onChange={(e) =>
+                                setForm({
+                                    ...form,
+                                    priority: e.target.value
+                                })
+                            }
+                            style={inputStyle(darkMode)}
+                        >
+                            <option value="LOW">ℹ️ Information</option>
+                            <option value="MEDIUM">📢 Important</option>
+                            <option value="HIGH">🚨 Urgent</option>
+                        </select>
                     </div>
 
                     <div style={{ marginBottom: "20px" }}>
-                        <div style={{ marginBottom:"15px" }}>
-
-                            <label>Priority</label>
-
-                            <select
-                                value={form.priority}
-                                onChange={(e)=>
-                                    setForm({
-                                        ...form,
-                                        priority:e.target.value
-                                    })
-                                }
-                                style={inputStyle}
-                            >
-
-                                <option value="LOW">
-                                    ℹ️ Information
-                                </option>
-
-                                <option value="MEDIUM">
-                                    📢 Important
-                                </option>
-
-                                <option value="HIGH">
-                                    🚨 Urgent
-                                </option>
-
-                            </select>
-
-                        </div>
                         <label>Message</label>
 
                         <textarea
@@ -153,21 +117,19 @@ export default function AddAnnouncementModal({
                                 })
                             }
                             style={{
-                                ...inputStyle,
+                                ...inputStyle(darkMode),
                                 resize: "vertical"
                             }}
                         />
-
                     </div>
 
                     <div
                         style={{
                             display: "flex",
                             justifyContent: "flex-end",
-                            gap: "12px"
+                            gap: "10px"
                         }}
                     >
-
                         <button
                             type="button"
                             onClick={onClose}
@@ -182,27 +144,24 @@ export default function AddAnnouncementModal({
                         >
                             {announcement ? "Update" : "Publish"}
                         </button>
-
                     </div>
-
                 </form>
-
             </div>
-
         </div>
-
     );
 }
 
-const inputStyle = {
+const inputStyle = (darkMode) => ({
     width: "100%",
     padding: "12px",
     marginTop: "8px",
     borderRadius: "8px",
-    border: "1px solid #ccc",
+    border: darkMode ? "1px solid #555" : "1px solid #ccc",
+    background: darkMode ? "#2b2b2b" : "#ffffff",
+    color: darkMode ? "#ffffff" : "#000000",
     fontSize: "15px",
     boxSizing: "border-box"
-};
+});
 
 const saveButton = {
     background: "#0d6efd",

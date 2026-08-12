@@ -66,34 +66,7 @@ export default function Announcements() {
 
 
     useEffect(() => {
-
-        const fetchAnnouncements = async () => {
-
-            try {
-
-                setLoading(true);
-
-                const data = await getAllAnnouncements();
-
-                setAnnouncements(data);
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert("Failed to load announcements.");
-
-            } finally {
-
-                setLoading(false);
-
-            }
-
-        };
-
-
-        fetchAnnouncements();
-
+        loadAnnouncements();
     }, []);
 
 
@@ -103,8 +76,6 @@ export default function Announcements() {
         return <Navigate to="/home" replace />;
 
     }
-
-
 
     const handleCreate = () => {
 
@@ -127,45 +98,31 @@ export default function Announcements() {
 
 
     const handleSave = async (announcementData) => {
-
         try {
-
-
             if (selectedAnnouncement) {
-
-
                 await updateAnnouncement(
                     selectedAnnouncement.id,
                     announcementData
                 );
-
-
             } else {
-
-
-                await createAnnouncement(
-                    announcementData
-                );
-
-
+                await createAnnouncement(announcementData);
             }
 
-
             setOpenModal(false);
-
-            loadAnnouncements();
-
+            setSelectedAnnouncement(null);
+            await loadAnnouncements();
 
         } catch (error) {
+            console.error("Save Error:", error);
 
-
-            console.error(error);
-
-            alert("Unable to save announcement.");
-
-
+            if (error.response) {
+                console.log("Status:", error.response.status);
+                console.log("Data:", error.response.data);
+                alert(JSON.stringify(error.response.data));
+            } else {
+                alert(error.message);
+            }
         }
-
     };
 
 
@@ -179,15 +136,10 @@ export default function Announcements() {
 
         }
 
-
-
         try {
 
-
             await deleteAnnouncement(id);
-
-            loadAnnouncements();
-
+            await loadAnnouncements();
 
         } catch (error) {
 
@@ -201,10 +153,6 @@ export default function Announcements() {
 
 
     };
-
-
-
-
 
     return (
 
@@ -271,24 +219,7 @@ export default function Announcements() {
 
                     <button
                         onClick={handleCreate}
-
-                        style={{
-
-                            background:"#0d6efd",
-
-                            color:"#fff",
-
-                            border:"none",
-
-                            padding:"12px 20px",
-
-                            borderRadius:"8px",
-
-                            cursor:"pointer",
-
-                            fontWeight:"bold"
-
-                        }}
+                        disabled={loading}
                     >
 
                         + New Announcement
@@ -300,9 +231,6 @@ export default function Announcements() {
 
 
             </div>
-
-
-
 
 
             {loading ? (
@@ -318,7 +246,14 @@ export default function Announcements() {
 
 
 
-                <div className="card">
+                <div
+                    className="card"
+                    style={{
+                        backgroundColor: darkMode ? "#1e1e1e" : "white",
+                        color: darkMode ? "white" : "black",
+                        border: darkMode ? "1px solid #333" : "1px solid #ddd"
+                    }}
+                >
 
                     <h3>
                         No announcements available.
@@ -331,58 +266,28 @@ export default function Announcements() {
 
             ) : (
 
-
-
                 announcements.map((announcement) => (
 
 
                     <AnnouncementCard
-
                         key={announcement.id}
-
                         announcement={announcement}
-
-
-                        onEdit={
-                            canCreate
-                                ? handleEdit
-                                : undefined
-                        }
-
-
-                        onDelete={
-                            canDelete
-                                ? handleDelete
-                                : undefined
-                        }
-
+                        darkMode={darkMode}
+                        onEdit={canCreate ? handleEdit : undefined}
+                        onDelete={canDelete ? handleDelete : undefined}
                     />
-
 
                 ))
 
-
-
             )}
 
-
-
-
-
-
             <AddAnnouncementModal
-
                 open={openModal}
-
                 announcement={selectedAnnouncement}
-
+                darkMode={darkMode}
                 onClose={() => setOpenModal(false)}
-
                 onSave={handleSave}
-
             />
-
-
 
         </div>
 

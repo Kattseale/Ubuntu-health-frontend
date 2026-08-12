@@ -1,13 +1,17 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { register } from "../services/authService";
 import { validateRegisterForm } from "../utils/validation";
-
+import "../styles/register.css";
 
 export function Register() {
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+    const [confirmPassword, setConfirmPassword] = useState("");
 
-    const navigate = useNavigate();
+    const [registered, setRegistered] = useState(false);
+    const [registeredEmail, setRegisteredEmail] = useState("");
 
     const [formData, setFormData] = useState({
         firstName: "",
@@ -20,553 +24,660 @@ export function Register() {
 
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
+    const [error, setError] = useState("");
+
+    // ============================================================
+    // HANDLE INPUT
+    // ============================================================
 
     const handleChange = (e) => {
-
         const { name, value } = e.target;
 
-        setFormData({
+        const updatedForm = {
             ...formData,
             [name]: value
-        });
+        };
 
-        const validationErrors = validateRegisterForm({
-            ...formData,
-            [name]: value
-        });
+        setFormData(updatedForm);
+
+        // Validate while typing
+        const validationErrors =
+            validateRegisterForm(updatedForm);
 
         setErrors(validationErrors);
+
+        // Clear general backend error
+        setError("");
     };
 
-    const handleSubmit = async (e) => {
+    // ============================================================
+    // PASSWORD VALIDATION
+    // ============================================================
 
+    const password = formData.password;
+
+    const passwordRequirements = {
+        length:
+            password.length >= 8 &&
+            password.length <= 50,
+
+        uppercase:
+            /[A-Z]/.test(password),
+
+        lowercase:
+            /[a-z]/.test(password),
+
+        number:
+            /\d/.test(password),
+
+        special:
+            /[@$!%*?&]/.test(password)
+    };
+
+    const passwordsMatch =
+        password !== "" &&
+        password === confirmPassword;
+
+    const passwordValid =
+        passwordRequirements.length &&
+        passwordRequirements.uppercase &&
+        passwordRequirements.lowercase &&
+        passwordRequirements.number &&
+        passwordRequirements.special;
+
+    // ============================================================
+    // SUBMIT
+    // ============================================================
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const validationErrors = validateRegisterForm(formData);
+        setError("");
 
+        // ========================================================
+        // FRONTEND VALIDATION
+        // ========================================================
+
+        const validationErrors =
+            validateRegisterForm(formData);
+
+        // Confirm password validation
+        if (!confirmPassword) {
+            validationErrors.confirmPassword =
+                "Please confirm your password.";
+        } else if (!passwordsMatch) {
+            validationErrors.confirmPassword =
+                "Passwords do not match.";
+        }
+
+        // Password validation
+        if (!passwordValid) {
+            validationErrors.password =
+                validationErrors.password ||
+                "Please make sure your password meets all the requirements.";
+        }
+
+        // Stop submission if validation failed
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
         }
 
         try {
-
             setLoading(true);
 
-            console.log("Sending registration data:", formData);
+            // ====================================================
+            // REGISTER USER
+            // ====================================================
 
             await register(formData);
 
-            navigate("/login");
+            // ====================================================
+            // REGISTRATION SUCCESS
+            // ====================================================
 
+            setRegisteredEmail(formData.email);
+
+            setRegistered(true);
 
         } catch (error) {
 
-            console.error("Registration error:", error);
+            console.error(
+                "FULL REGISTRATION ERROR:",
+                error
+            );
+
+            console.error(
+                "STATUS:",
+                error.response?.status
+            );
+
+            console.error(
+                "RESPONSE DATA:",
+                error.response?.data
+            );
 
             const message =
                 error.response?.data?.message ||
                 error.response?.data?.error ||
-                "Registration failed.";
+                error.response?.data?.errors ||
+                "Registration failed. Please try again.";
 
-            alert(message);
+            setError(
+                typeof message === "string"
+                    ? message
+                    : JSON.stringify(message)
+            );
 
         } finally {
-
             setLoading(false);
-
         }
-
     };
 
-    return (
+    // ============================================================
+    // REGISTRATION SUCCESS / EMAIL VERIFICATION
+    // ============================================================
 
-        <div
-            style={{
-                minHeight: "100vh",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                background: "linear-gradient(135deg,#198754,#0d6efd)"
-            }}
-        >
+    if (registered) {
+        return (
+            <div className="register-page">
 
-            <div
-                style={{
-                    background: "#fff",
-                    width: "520px",
-                    padding: "40px",
-                    borderRadius: "15px",
-                    boxShadow: "0 15px 40px rgba(0,0,0,.2)"
-                }}
-            >
+                <div className="verification-card">
 
-                <h1
-                    style={{
-                        textAlign: "center",
-                        color: "#198754"
-                    }}
-                >
-                    Create Account
-                </h1>
+                    <div className="verification-icon">
+                        📧
+                    </div>
 
-                <p
-                    style={{
-                        textAlign: "center",
-                        color: "#666",
-                        marginBottom: "30px"
-                    }}
-                >
-                    Join Ubuntu Health today.
-                </p>
+                    <h1>
+                        Check Your Email
+                    </h1>
 
-                <form onSubmit={handleSubmit} noValidate>
+                    <p>
+                        Your Ubuntu Health account has
+                        been created successfully.
+                    </p>
 
-                    {/* FIRST NAME */}
+                    <p>
+                        We've sent a verification link to:
+                    </p>
 
-                    {/* FIRST NAME */}
+                    <strong className="registered-email">
+                        {registeredEmail}
+                    </strong>
 
-<input
-    type="text"
-    name="firstName"
-    placeholder="First Name"
-    value={formData.firstName}
-    onChange={handleChange}
-    style={inputStyle}
-/>
+                    <p className="verification-instruction">
+                        Please open the email and click the
+                        verification link to activate your account.
+                    </p>
 
-<div
-    style={{
-        background: "#f8f9fa",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        padding: "12px",
-        marginBottom: "15px",
-        fontSize: "13px"
-    }}
->
+                    <p className="spam-message">
+                        Don't see the email? Check your spam
+                        or junk folder.
+                    </p>
 
-    <strong>First Name Requirements</strong>
-
-    <ul
-        style={{
-            marginTop: "8px",
-            paddingLeft: "18px",
-            lineHeight: "22px"
-        }}
-    >
-
-        <li
-            style={{
-                color: /^[A-Za-z ]*$/.test(formData.firstName)
-                    ? "green"
-                    : "#555"
-            }}
-        >
-            ✔ Only letters and spaces
-        </li>
-
-        <li
-            style={{
-                color:
-                    formData.firstName.length >= 2 &&
-                    formData.firstName.length <= 50
-                        ? "green"
-                        : "#555"
-            }}
-        >
-            ✔ Between 2 and 50 characters
-        </li>
-
-    </ul>
-
-</div>
-
-{errors.firstName && (
-    <small style={errorStyle}>
-        {errors.firstName}
-    </small>
-)}
-                    {/* LAST NAME */}
-
-<input
-    type="text"
-    name="lastName"
-    placeholder="Last Name"
-    value={formData.lastName}
-    onChange={handleChange}
-    style={inputStyle}
-/>
-
-<div
-    style={{
-        background: "#f8f9fa",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        padding: "12px",
-        marginBottom: "15px",
-        fontSize: "13px"
-    }}
->
-
-    <strong>Last Name Requirements</strong>
-
-    <ul
-        style={{
-            marginTop: "8px",
-            paddingLeft: "18px",
-            lineHeight: "22px"
-        }}
-    >
-
-        <li
-            style={{
-                color: /^[A-Za-z ]*$/.test(formData.lastName)
-                    ? "green"
-                    : "#555"
-            }}
-        >
-            ✔ Only letters and spaces
-        </li>
-
-        <li
-            style={{
-                color:
-                    formData.lastName.length >= 2 &&
-                    formData.lastName.length <= 50
-                        ? "green"
-                        : "#555"
-            }}
-        >
-            ✔ Between 2 and 50 characters
-        </li>
-
-    </ul>
-
-</div>
-
-{errors.lastName && (
-    <small style={errorStyle}>
-        {errors.lastName}
-    </small>
-)}
-
-                    {/* EMAIL */}
-
-<input
-    type="email"
-    name="email"
-    placeholder="Email Address"
-    value={formData.email}
-    onChange={handleChange}
-    style={inputStyle}
-/>
-
-<div
-    style={{
-        background: "#f8f9fa",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        padding: "12px",
-        marginBottom: "15px",
-        fontSize: "13px"
-    }}
->
-
-    <strong>Email Requirements</strong>
-
-    <ul
-        style={{
-            marginTop: "8px",
-            paddingLeft: "18px",
-            lineHeight: "22px"
-        }}
-    >
-
-        <li
-            style={{
-                color:
-                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
-                        ? "green"
-                        : "#555"
-            }}
-        >
-            ✔ Must be a valid email address
-        </li>
-
-        <li
-            style={{
-                color:
-                    formData.email.length <= 100
-                        ? "green"
-                        : "#555"
-            }}
-        >
-            ✔ Maximum 100 characters
-        </li>
-
-        <li style={{ color: "#555" }}>
-            ✔ Example: john@gmail.com
-        </li>
-
-    </ul>
-
-</div>
-
-{errors.email && (
-    <small style={errorStyle}>
-        {errors.email}
-    </small>
-)}
-
-                    {/* PHONE */}
-
-<input
-    type="text"
-    name="phoneNumber"
-    placeholder="Phone Number"
-    value={formData.phoneNumber}
-    onChange={handleChange}
-    style={inputStyle}
-/>
-
-<div
-    style={{
-        background: "#f8f9fa",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        padding: "12px",
-        marginBottom: "15px",
-        fontSize: "13px"
-    }}
->
-
-    <strong>Phone Number Requirements</strong>
-
-    <ul
-        style={{
-            marginTop: "8px",
-            paddingLeft: "18px",
-            lineHeight: "22px"
-        }}
-    >
-
-        <li
-            style={{
-                color: /^\+?[0-9]*$/.test(formData.phoneNumber)
-                    ? "green"
-                    : "#555"
-            }}
-        >
-            ✔ Only digits (optional + at the beginning)
-        </li>
-
-        <li
-            style={{
-                color:
-                    formData.phoneNumber.length >= 10 &&
-                    formData.phoneNumber.length <= 15
-                        ? "green"
-                        : "#555"
-            }}
-        >
-            ✔ Between 10 and 15 digits
-        </li>
-
-        <li style={{ color: "#555" }}>
-            ✔ Example: 0712345678
-        </li>
-
-    </ul>
-
-</div>
-
-{errors.phoneNumber && (
-    <small style={errorStyle}>
-        {errors.phoneNumber}
-    </small>
-)}
-
-                    {/* PASSWORD */}
-
-                    <input
-    type="password"
-    name="password"
-    placeholder="Password"
-    value={formData.password}
-    onChange={handleChange}
-    style={inputStyle}
-/>
-
-<div
-    style={{
-        background: "#f8f9fa",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        padding: "12px",
-        marginBottom: "15px",
-        fontSize: "13px"
-    }}
->
-    <strong>Password Requirements</strong>
-
-    <ul
-        style={{
-            marginTop: "8px",
-            paddingLeft: "18px",
-            lineHeight: "22px"
-        }}
-    >
-        <li
-            style={{
-                color: /[A-Z]/.test(formData.password)
-                    ? "green"
-                    : "#555"
-            }}
-        >
-            ✔ At least one uppercase letter
-        </li>
-
-        <li
-            style={{
-                color: /[a-z]/.test(formData.password)
-                    ? "green"
-                    : "#555"
-            }}
-        >
-            ✔ At least one lowercase letter
-        </li>
-
-        <li
-            style={{
-                color: /\d/.test(formData.password)
-                    ? "green"
-                    : "#555"
-            }}
-        >
-            ✔ At least one number
-        </li>
-
-        <li
-            style={{
-                color: /[@$!%*?&]/.test(formData.password)
-                    ? "green"
-                    : "#555"
-            }}
-        >
-            ✔ At least one special character (@$!%*?&)
-        </li>
-
-        <li
-            style={{
-                color:
-                    formData.password.length >= 8 &&
-                    formData.password.length <= 50
-                        ? "green"
-                        : "#555"
-            }}
-        >
-            ✔ 8–50 characters
-        </li>
-    </ul>
-</div>
-
-{errors.password && (
-    <small style={errorStyle}>
-        {errors.password}
-    </small>
-)}
-
-                    {/* ROLE */}
-
-                    <select
-                        name="role"
-                        value={formData.role}
-                        onChange={handleChange}
-                        style={inputStyle}
+                    <Link
+                        to="/login"
+                        className="verification-login-button"
                     >
-                        <option value="PATIENT">Patient</option>
-                        
-                        <option value="ADMIN">Administrator</option>
-                    </select>
+                        Go to Login
+                    </Link>
+
+                </div>
+
+            </div>
+        );
+    }
+
+    // ============================================================
+    // REGISTER PAGE
+    // ============================================================
+
+    return (
+        <div className="register-page">
+
+            <div className="register-card">
+
+                {/* ==================================================
+                    HEADER
+                ================================================== */}
+
+                <div className="register-header">
+
+                    <h1>
+                        Create Account
+                    </h1>
+
+                    <p>
+                        Join Ubuntu Health today.
+                    </p>
+
+                </div>
+
+                {/* ==================================================
+                    BACK TO WELCOME
+                ================================================== */}
+
+                <Link
+                    to="/"
+                    className="back-to-welcome"
+                >
+                    ← Back to Welcome
+                </Link>
+
+                {/* ==================================================
+                    GENERAL ERROR
+                ================================================== */}
+
+                {error && (
+                    <div className="register-error">
+                        {error}
+                    </div>
+                )}
+
+                {/* ==================================================
+                    REGISTRATION FORM
+                ================================================== */}
+
+                <form
+                    className="register-form"
+                    onSubmit={handleSubmit}
+                    noValidate
+                >
+
+                    {/* ==================================================
+                        FIRST NAME
+                    ================================================== */}
+
+                    <div className="form-group">
+
+                        <label htmlFor="firstName">
+                            First Name
+                        </label>
+
+                        <input
+                            id="firstName"
+                            type="text"
+                            name="firstName"
+                            placeholder="First Name"
+                            value={formData.firstName}
+                            onChange={handleChange}
+                            autoComplete="given-name"
+                            required
+                        />
+
+                        {errors.firstName && (
+                            <small className="field-error">
+                                {errors.firstName}
+                            </small>
+                        )}
+
+                    </div>
+
+                    {/* ==================================================
+                        LAST NAME
+                    ================================================== */}
+
+                    <div className="form-group">
+
+                        <label htmlFor="lastName">
+                            Last Name
+                        </label>
+
+                        <input
+                            id="lastName"
+                            type="text"
+                            name="lastName"
+                            placeholder="Last Name"
+                            value={formData.lastName}
+                            onChange={handleChange}
+                            autoComplete="family-name"
+                            required
+                        />
+
+                        {errors.lastName && (
+                            <small className="field-error">
+                                {errors.lastName}
+                            </small>
+                        )}
+
+                    </div>
+
+                    {/* ==================================================
+                        EMAIL
+                    ================================================== */}
+
+                    <div className="form-group">
+
+                        <label htmlFor="email">
+                            Email Address
+                        </label>
+
+                        <input
+                            id="email"
+                            type="email"
+                            name="email"
+                            placeholder="Email Address"
+                            value={formData.email}
+                            onChange={handleChange}
+                            autoComplete="email"
+                            required
+                        />
+
+                        {errors.email && (
+                            <small className="field-error">
+                                {errors.email}
+                            </small>
+                        )}
+
+                    </div>
+
+                    {/* ==================================================
+                        PHONE
+                    ================================================== */}
+
+                    <div className="form-group">
+
+                        <label htmlFor="phoneNumber">
+                            Phone Number
+                        </label>
+
+                        <input
+                            id="phoneNumber"
+                            type="tel"
+                            name="phoneNumber"
+                            placeholder="Phone Number"
+                            value={formData.phoneNumber}
+                            onChange={handleChange}
+                            autoComplete="tel"
+                            required
+                        />
+
+                        {errors.phoneNumber && (
+                            <small className="field-error">
+                                {errors.phoneNumber}
+                            </small>
+                        )}
+
+                    </div>
+
+                    {/* ==================================================
+                        ROLE
+                    ================================================== */}
+
+                    <div className="form-group">
+
+                        <label htmlFor="role">
+                            Account Type
+                        </label>
+
+                        <select
+                            id="role"
+                            name="role"
+                            value={formData.role}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="PATIENT">
+                                Patient
+                            </option>
+
+                            <option value="ADMIN">
+                                Administrator
+                            </option>
+                        </select>
+
+                        {errors.role && (
+                            <small className="field-error">
+                                {errors.role}
+                            </small>
+                        )}
+
+                    </div>
+
+                    {/* ==================================================
+                        PASSWORD
+                    ================================================== */}
+
+                    <div className="form-group">
+
+                        <label htmlFor="password">
+                            Password
+                        </label>
+
+                        <div className="password-wrapper">
+
+                            <input
+                                id="password"
+                                type={
+                                    showPassword
+                                        ? "text"
+                                        : "password"
+                                }
+                                name="password"
+                                placeholder="Password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                autoComplete="new-password"
+                                required
+                            />
+
+                            <button
+                                type="button"
+                                className="password-toggle"
+                                onClick={() =>
+                                    setShowPassword(
+                                        !showPassword
+                                    )
+                                }
+                                aria-label={
+                                    showPassword
+                                        ? "Hide password"
+                                        : "Show password"
+                                }
+                            >
+                                {showPassword
+                                    ? "Hide"
+                                    : "Show"}
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    {/* ==================================================
+                        PASSWORD REQUIREMENTS
+                    ================================================== */}
+
+                    {password && (
+                        <div className="password-requirements">
+
+                            <div
+                                className={
+                                    passwordRequirements.length
+                                        ? "requirement valid"
+                                        : "requirement invalid"
+                                }
+                            >
+                                {passwordRequirements.length
+                                    ? "✓"
+                                    : "○"}{" "}
+                                8–50 characters
+                            </div>
+
+                            <div
+                                className={
+                                    passwordRequirements.uppercase
+                                        ? "requirement valid"
+                                        : "requirement invalid"
+                                }
+                            >
+                                {passwordRequirements.uppercase
+                                    ? "✓"
+                                    : "○"}{" "}
+                                One uppercase letter
+                            </div>
+
+                            <div
+                                className={
+                                    passwordRequirements.lowercase
+                                        ? "requirement valid"
+                                        : "requirement invalid"
+                                }
+                            >
+                                {passwordRequirements.lowercase
+                                    ? "✓"
+                                    : "○"}{" "}
+                                One lowercase letter
+                            </div>
+
+                            <div
+                                className={
+                                    passwordRequirements.number
+                                        ? "requirement valid"
+                                        : "requirement invalid"
+                                }
+                            >
+                                {passwordRequirements.number
+                                    ? "✓"
+                                    : "○"}{" "}
+                                One number
+                            </div>
+
+                            <div
+                                className={
+                                    passwordRequirements.special
+                                        ? "requirement valid"
+                                        : "requirement invalid"
+                                }
+                            >
+                                {passwordRequirements.special
+                                    ? "✓"
+                                    : "○"}{" "}
+                                One special character
+                            </div>
+
+                        </div>
+                    )}
+
+                    {errors.password && (
+                        <small className="field-error">
+                            {errors.password}
+                        </small>
+                    )}
+
+                    {/* ==================================================
+                        CONFIRM PASSWORD
+                    ================================================== */}
+
+                    <div className="form-group">
+
+                        <label htmlFor="confirmPassword">
+                            Confirm Password
+                        </label>
+
+                        <div className="password-wrapper">
+
+                            <input
+                                id="confirmPassword"
+                                type={
+                                    showConfirmPassword
+                                        ? "text"
+                                        : "password"
+                                }
+                                name="confirmPassword"
+                                placeholder="Confirm Password"
+                                value={confirmPassword}
+                                onChange={(e) => {
+                                    setConfirmPassword(
+                                        e.target.value
+                                    );
+                                    setError("");
+                                }}
+                                autoComplete="new-password"
+                                required
+                            />
+
+                            <button
+                                type="button"
+                                className="password-toggle"
+                                onClick={() =>
+                                    setShowConfirmPassword(
+                                        !showConfirmPassword
+                                    )
+                                }
+                                aria-label={
+                                    showConfirmPassword
+                                        ? "Hide password"
+                                        : "Show password"
+                                }
+                            >
+                                {showConfirmPassword
+                                    ? "Hide"
+                                    : "Show"}
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    {/* ==================================================
+                        PASSWORD MATCH
+                    ================================================== */}
+
+                    {confirmPassword && (
+                        <p
+                            className={
+                                passwordsMatch
+                                    ? "password-match valid"
+                                    : "password-match invalid"
+                            }
+                        >
+                            {passwordsMatch
+                                ? "✓ Passwords match"
+                                : "✗ Passwords do not match"}
+                        </p>
+                    )}
+
+                    {errors.confirmPassword && (
+                        <small className="field-error">
+                            {errors.confirmPassword}
+                        </small>
+                    )}
+
+                    {/* ==================================================
+                        CREATE ACCOUNT
+                    ================================================== */}
 
                     <button
                         type="submit"
+                        className="register-button"
                         disabled={loading}
-                        style={{
-                            ...buttonStyle,
-                            opacity: loading ? 0.7 : 1,
-                            cursor: loading ? "not-allowed" : "pointer"
-                        }}
                     >
                         {loading
                             ? "Creating Account..."
-                            : "Register"}
+                            : "Create Account"}
                     </button>
 
-                    <p
-                        style={{
-                            textAlign: "center",
-                            marginTop: "20px"
-                        }}
-                    >
+                </form>
+
+                {/* ==================================================
+                    LOGIN
+                ================================================== */}
+
+                <div className="register-footer">
+
+                    <p>
                         Already have an account?{" "}
 
-                        <Link
-                            to="/login"
-                            style={{
-                                color: "#0d6efd",
-                                fontWeight: "bold",
-                                textDecoration: "none"
-                            }}
-                        >
+                        <Link to="/login">
                             Login
                         </Link>
-
                     </p>
 
-                </form>
+                </div>
 
             </div>
 
         </div>
-
     );
-
 }
-
-const inputStyle = {
-    width: "100%",
-    padding: "14px",
-    marginBottom: "5px",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
-    fontSize: "16px",
-    boxSizing: "border-box"
-};
-
-const hintStyle = {
-    display: "block",
-    color: "#6c757d",
-    marginBottom: "15px",
-    fontSize: "13px"
-};
-
-const errorStyle = {
-    display: "block",
-    color: "#dc3545",
-    marginBottom: "15px",
-    fontSize: "13px",
-    fontWeight: "600"
-};
-
-const buttonStyle = {
-    width: "100%",
-    padding: "14px",
-    background: "#198754",
-    color: "#fff",
-    border: "none",
-    borderRadius: "8px",
-    fontSize: "16px",
-    fontWeight: "bold"
-};

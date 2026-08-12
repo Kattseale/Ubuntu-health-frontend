@@ -1,39 +1,18 @@
-import { useEffect, useState } from "react";
-import ClinicMap from "../components/ClinicMap";
+import { useContext, useEffect, useState } from "react";
+import ThemeContext from "../context/ThemeContext";
 import {
     getAllClinics,
     createClinic,
     updateClinic,
     deleteClinic
 } from "../services/clinicService";
-import { useContext } from "react";
-import ThemeContext from "../context/ThemeContext";
+import "../styles/clinics.css";
 
 export default function Clinics() {
 
-    const [clinics, setClinics] = useState([]);
-
-    const [editingId, setEditingId] = useState(null);
-
-    const [errors, setErrors] = useState({});
-
     const { darkMode } = useContext(ThemeContext);
-    const inputStyle = {
-        backgroundColor: darkMode ? "#2b2b2b" : "white",
-        color: darkMode ? "white" : "black",
-        border: darkMode ? "1px solid #555" : "1px solid #ccc"
-    };
-    const [successMessage, setSuccessMessage] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
-    const [search, setSearch] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
 
-    const recordsPerPage = 5;
-    const filteredClinics = clinics.filter(c =>
-        c.clinicName.toLowerCase().includes(search.toLowerCase())
-    );
-
-    const [clinic, setClinic] = useState({
+    const emptyClinic = {
         clinicName: "",
         province: "",
         city: "",
@@ -42,483 +21,549 @@ export default function Clinics() {
         longitude: "",
         phoneNumber: "",
         email: ""
-    });
-
-    const fetchClinics = async () => {
-        try {
-            const data = await getAllClinics();
-            setClinics(data);
-        } catch (error) {
-            console.error(error);
-        }
     };
 
-    useEffect(() => {
-        const loadClinics = async () => {
-            try {
-                const data = await getAllClinics();
-                setClinics(data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+    const [clinics, setClinics] = useState([]);
+    const [clinic, setClinic] = useState(emptyClinic);
+    const [editingId, setEditingId] = useState(null);
 
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+
+    useEffect(() => {
         loadClinics();
     }, []);
 
+    const loadClinics = async () => {
+        try {
+            setLoading(true);
+
+            const data = await getAllClinics();
+
+            setClinics(Array.isArray(data) ? data : []);
+
+        } catch (error) {
+            console.error("Unable to load clinics:", error);
+
+            setErrorMessage(
+                error.response?.data?.message ||
+                "Unable to load clinics."
+            );
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleChange = (e) => {
+        const { name, value } = e.target;
+
         setClinic({
             ...clinic,
-            [e.target.name]: e.target.value
+            [name]: value
         });
     };
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
-        setErrors({});
+
+        setSaving(true);
+        setSuccessMessage("");
+        setErrorMessage("");
 
         try {
 
+            const clinicData = {
+                ...clinic,
+                latitude: Number(clinic.latitude),
+                longitude: Number(clinic.longitude)
+            };
+
             if (editingId) {
 
-                await updateClinic(editingId, clinic);
-                setSuccessMessage("✅ Clinic updated successfully!");
-                setTimeout(() => {
-                    setSuccessMessage("");
-                }, 3000);
+                await updateClinic(
+                    editingId,
+                    clinicData
+                );
+
+                setSuccessMessage(
+                    "Clinic updated successfully."
+                );
 
             } else {
 
-                await createClinic(clinic);
-                setSuccessMessage("✅ Clinic added successfully!");
-                setTimeout(() => {
-                    setSuccessMessage("");
-                }, 3000);
+                await createClinic(clinicData);
 
+                setSuccessMessage(
+                    "Clinic added successfully."
+                );
             }
 
-            setClinic({
-                clinicName: "",
-                province: "",
-                city: "",
-                address: "",
-                latitude: "",
-                longitude: "",
-                phoneNumber: "",
-                email: ""
-            });
-
+            setClinic(emptyClinic);
             setEditingId(null);
 
-            await fetchClinics();
-            setCurrentPage(1);
+            await loadClinics();
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                "Clinic save error:",
+                error
+            );
 
-            if (error.response?.status === 400) {
+            const backendErrors =
+                error.response?.data;
 
-                setErrors(error.response.data);
+            if (
+                backendErrors &&
+                typeof backendErrors === "object"
+            ) {
+
+                const messages =
+                    Object.values(backendErrors)
+                        .filter(
+                            (value) =>
+                                typeof value === "string"
+                        )
+                        .join(" ");
+
+                setErrorMessage(
+                    messages ||
+                    backendErrors.message ||
+                    "Unable to save clinic."
+                );
 
             } else {
 
-                setErrorMessage("❌ Something went wrong.");
-
-                setTimeout(() => {
-                    setErrorMessage("");
-                }, 3000);
-
+                setErrorMessage(
+                    "Unable to save clinic."
+                );
             }
 
+        } finally {
+            setSaving(false);
         }
+    };
 
+    const handleEdit = (selectedClinic) => {
+
+        setEditingId(selectedClinic.id);
+
+        setClinic({
+            clinicName: selectedClinic.clinicName || "",
+            province: selectedClinic.province || "",
+            city: selectedClinic.city || "",
+            address: selectedClinic.address || "",
+            latitude: selectedClinic.latitude ?? "",
+            longitude: selectedClinic.longitude ?? "",
+            phoneNumber: selectedClinic.phoneNumber || "",
+            email: selectedClinic.email || ""
+        });
+
+        setSuccessMessage("");
+        setErrorMessage("");
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
     };
 
     const handleDelete = async (id) => {
 
-        if (!window.confirm("Delete this clinic?")) return;
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this clinic?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
 
         try {
 
+            setErrorMessage("");
+            setSuccessMessage("");
+
             await deleteClinic(id);
 
-            await fetchClinics();
-            setCurrentPage(1);
+            setSuccessMessage(
+                "Clinic deleted successfully."
+            );
 
-            setSuccessMessage("🗑️ Clinic deleted successfully!");
-            setTimeout(() => {
-                setSuccessMessage("");
-            }, 3000);
+            await loadClinics();
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                "Clinic delete error:",
+                error
+            );
 
+            setErrorMessage(
+                error.response?.data?.message ||
+                "Unable to delete clinic."
+            );
         }
-
     };
 
-    const indexOfLastRecord = currentPage * recordsPerPage;
-    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+    const handleCancelEdit = () => {
 
-    const currentRecords = clinics.slice(
-        indexOfFirstRecord,
-        indexOfLastRecord
-    );
+        setEditingId(null);
+        setClinic(emptyClinic);
 
-    const totalPages = Math.ceil(
-        clinics.length / recordsPerPage
-    );
+        setErrorMessage("");
+        setSuccessMessage("");
+    };
+
     return (
-
-        <div className="page"
-            style={{
-                backgroundColor: darkMode ? "#121212" : "#f4f8fb",
-                color: darkMode ? "white" : "black",
-                minHeight: "100vh",
-                padding: "20px"
-            }}
+        <div
+            className={`clinics-page ${
+    darkMode ? "dark-mode" : ""
+}`}
         >
 
-            <h1>Clinics</h1>
+            <div className="clinics-container">
 
-            {successMessage && (
-                <div className="page"
-                    style={{
-                        background: darkMode ? "#1e4620" : "#d1e7dd",
-                        color: darkMode ? "#8ff0a4" : "#0f5132",
-                        padding: "12px",
-                        marginBottom: "20px",
-                        borderRadius: "8px",
-                        border: darkMode ? "1px solid #2f7d32" : "1px solid #badbcc"
-                    }}
-                >
-                    {successMessage}
-                </div>
-            )}
-            {errorMessage && (
-                <div className="page"
-                    style={{
-                        background: darkMode ? "#4a1f1f" : "#f8d7da",
-                        color: darkMode ? "#ff9999" : "#842029",
-                        padding: "12px",
-                        marginBottom: "20px",
-                        borderRadius: "8px",
-                        border: darkMode ? "1px solid #842029" : "1px solid #f5c2c7"
-                    }}
-                >
-                    {errorMessage}
-                </div>
-            )}
+                {/* HEADER */}
 
-            {Object.keys(errors).length > 0 && (
+                <div className="clinics-header">
 
-                <div className="page"
-                    style={{
-                        background: "#ffe6e6",
-                        color: "#b30000",
-                        padding: "10px",
-                        marginBottom: "20px",
-                        borderRadius: "5px"
-                    }}
-                >
+                    <div>
+                        <h1>
+                            🏥 Clinic Management
+                        </h1>
 
-                    {Object.entries(errors).map(([field, message]) => (
-
-                        <p key={field}>
-                            <strong>{field}:</strong> {message}
+                        <p>
+                            Add, update and manage Ubuntu
+                            Health clinics.
                         </p>
+                    </div>
 
-                    ))}
+                    <div className="clinic-count">
+                        {clinics.length} Clinics
+                    </div>
 
                 </div>
 
-            )}
 
-            <div
-                className="card"
-                style={{
-                    backgroundColor: darkMode ? "#1e1e1e" : "white",
-                    color: darkMode ? "white" : "black"
-                }}
-            >
-                <form onSubmit={handleSubmit}>
+                {/* MESSAGES */}
 
-                    <input
-                        style={inputStyle}
-                        type="text"
-                        name="clinicName"
-                        placeholder="Clinic Name"
-                        value={clinic.clinicName}
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <input
-                        style={inputStyle}
-                        type="text"
-                        name="province"
-                        placeholder="Province"
-                        value={clinic.province}
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <input
-                        style={inputStyle}
-                        type="text"
-                        name="city"
-                        placeholder="City"
-                        value={clinic.city}
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <input
-                        style={inputStyle}
-                        type="text"
-                        name="address"
-                        placeholder="Address"
-                        value={clinic.address}
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <input
-                        style={inputStyle}
-                        type="number"
-                        step="any"
-                        name="latitude"
-                        placeholder="Latitude"
-                        value={clinic.latitude}
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <input
-                        style={inputStyle}
-                        type="number"
-                        step="any"
-                        name="longitude"
-                        placeholder="Longitude"
-                        value={clinic.longitude}
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <input
-                        style={inputStyle}
-                        type="text"
-                        name="phoneNumber"
-                        placeholder="Phone Number"
-                        value={clinic.phoneNumber}
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <input
-                        style={inputStyle}
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        value={clinic.email}
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <button
-                        className="btn-primary"
-                        type="submit"
-                        style={{
-                            marginTop: "15px"
-                        }}
-                    >
-                        {editingId ? "Update Clinic" : "Save Clinic"}
-                    </button>
-
-                </form>
-
-            </div>
-
-            <hr />
-
-            <div
-                className="card"
-                style={{
-                    backgroundColor: darkMode ? "#1e1e1e" : "white",
-                    color: darkMode ? "white" : "black"
-                }}
-            >
-                <div className="table-container">
-                <table
-                    style={{
-                        width: "100%",
-                        borderCollapse: "collapse",
-                        backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
-                        color: darkMode ? "#ffffff" : "#000000"
-                    }}
-                >
-
-                    <thead>
-
-                    <tr
-                        style={{
-                            backgroundColor: darkMode ? "#333" : "#e9ecef"
-                        }}
-                    >
-                        <th style={{ padding: "12px", border: "1px solid #555" }}>ID</th>
-                        <th style={{ padding: "12px", border: "1px solid #555" }}>Clinic Name</th>
-                        <th style={{ padding: "12px", border: "1px solid #555" }}>City</th>
-                        <th style={{ padding: "12px", border: "1px solid #555" }}>Province</th>
-                        <th style={{ padding: "12px", border: "1px solid #555" }}>Email</th>
-                        <th style={{ padding: "12px", border: "1px solid #555" }}>Actions</th>
-                    </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                    {currentRecords.map((clinic) => (
-
-                        <tr
-                            key={clinic.id}
-                            style={{
-                                backgroundColor: darkMode ? "#2b2b2b" : "#ffffff",
-                                color: darkMode ? "#ffffff" : "#000000"
-                            }}
-                        >
-
-                            <td style={{ padding: "10px", border: "1px solid #555" }}>
-                                {clinic.id}
-                            </td>
-                            <td style={{ padding: "10px", border: "1px solid #555" }}>
-                                {clinic.clinicName}
-                            </td>
-                            <td style={{ padding: "10px", border: "1px solid #555" }}>
-                                {clinic.city}
-                            </td>
-                            <td style={{ padding: "10px", border: "1px solid #555" }}>
-                                {clinic.province}
-                            </td>
-                            <td style={{ padding: "10px", border: "1px solid #555" }}>
-                                {clinic.email}
-                            </td>
-
-                            <td>
-
-                                <td style={{ padding: "10px", border: "1px solid #555" }}>
-                                <button
-                                    className="btn-primary"
-                                    onClick={() => {
-
-                                        setClinic({
-                                            clinicName: clinic.clinicName,
-                                            province: clinic.province,
-                                            city: clinic.city,
-                                            address: clinic.address,
-                                            latitude: clinic.latitude,
-                                            longitude: clinic.longitude,
-                                            phoneNumber: clinic.phoneNumber,
-                                            email: clinic.email
-                                        });
-
-                                        setEditingId(clinic.id);
-
-                                    }}
-                                >
-                                    Edit
-                                </button>
-
-                                <button
-                                    className="btn-danger"
-                                    onClick={() => handleDelete(clinic.id)}
-                                >
-                                    Delete
-                                </button>
-
-                                </td>
-
-                            </td>
-
-                        </tr>
-
-                    ))}
-
-                    </tbody>
-
-                </table>
-
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: "10px",
-                            marginTop: "20px",
-                            flexWrap: "wrap"
-                        }}
-                    >
-                        <button
-                            className="btn-primary"
-                            disabled={currentPage === 1}
-                            onClick={() => setCurrentPage(currentPage - 1)}
-                        >
-                            Previous
-                        </button>
-
-                        <span>
-        Page {currentPage} of {totalPages}
-    </span>
-
-                        <button
-                            className="btn-primary"
-                            disabled={currentPage === totalPages}
-                            onClick={() => setCurrentPage(currentPage + 1)}
-                        >
-                            Next
-                        </button>
+                {successMessage && (
+                    <div className="clinic-success">
+                        ✓ {successMessage}
                     </div>
-                    <hr />
+                )}
 
-                    <div
-                        className="card"
-                        style={{
-                            backgroundColor: darkMode ? "#1e1e1e" : "white",
-                            color: darkMode ? "white" : "black"
-                        }}
-                    >
+                {errorMessage && (
+                    <div className="clinic-error">
+                        ⚠ {errorMessage}
+                    </div>
+                )}
 
-                        <h2>Clinic Locations</h2>
-                        <input
-                            type="text"
-                            placeholder="Search clinic..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            style={{
-                                width: "100%",
-                                maxWidth: "500px",
-                                padding: "12px",
-                                marginBottom: "20px",
-                                borderRadius: "8px",
-                                border: darkMode ? "1px solid #555" : "1px solid #ccc",
-                                backgroundColor: darkMode ? "#2b2b2b" : "white",
-                                color: darkMode ? "white" : "black",
-                                boxSizing: "border-box"
-                            }}
-                        />
-                        <div
-                            style={{
-                                width: "100%",
-                                overflow: "hidden",
-                                borderRadius: "12px"
-                            }}
-                        >
-                            <ClinicMap clinics={filteredClinics} />
+
+                {/* FORM */}
+
+                <div className="clinic-form-card">
+
+                    <div className="clinic-form-header">
+
+                        <div>
+                            <h2>
+                                {editingId
+                                    ? "✏️ Edit Clinic"
+                                    : "➕ Add New Clinic"}
+                            </h2>
+
+                            <p>
+                                Enter the clinic details below.
+                            </p>
                         </div>
 
                     </div>
+
+
+                    <form
+                        onSubmit={handleSubmit}
+                        className="clinic-form"
+                    >
+
+                        <div className="clinic-form-grid">
+
+                            <div className="clinic-field full-width">
+                                <label>
+                                    Clinic Name
+                                </label>
+
+                                <input
+                                    name="clinicName"
+                                    value={clinic.clinicName}
+                                    onChange={handleChange}
+                                    placeholder="e.g. Soweto Community Health Centre"
+                                    required
+                                />
+                            </div>
+
+
+                            <div className="clinic-field">
+                                <label>
+                                    Province
+                                </label>
+
+                                <input
+                                    name="province"
+                                    value={clinic.province}
+                                    onChange={handleChange}
+                                    placeholder="e.g. Gauteng"
+                                    required
+                                />
+                            </div>
+
+
+                            <div className="clinic-field">
+                                <label>
+                                    City
+                                </label>
+
+                                <input
+                                    name="city"
+                                    value={clinic.city}
+                                    onChange={handleChange}
+                                    placeholder="e.g. Johannesburg"
+                                    required
+                                />
+                            </div>
+
+
+                            <div className="clinic-field full-width">
+                                <label>
+                                    Address
+                                </label>
+
+                                <input
+                                    name="address"
+                                    value={clinic.address}
+                                    onChange={handleChange}
+                                    placeholder="Clinic street address"
+                                    required
+                                />
+                            </div>
+
+
+                            <div className="clinic-field">
+                                <label>
+                                    Latitude
+                                </label>
+
+                                <input
+                                    type="number"
+                                    step="any"
+                                    name="latitude"
+                                    value={clinic.latitude}
+                                    onChange={handleChange}
+                                    placeholder="-26.2485"
+                                    required
+                                />
+                            </div>
+
+
+                            <div className="clinic-field">
+                                <label>
+                                    Longitude
+                                </label>
+
+                                <input
+                                    type="number"
+                                    step="any"
+                                    name="longitude"
+                                    value={clinic.longitude}
+                                    onChange={handleChange}
+                                    placeholder="27.8546"
+                                    required
+                                />
+                            </div>
+
+
+                            <div className="clinic-field">
+                                <label>
+                                    Phone Number
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    name="phoneNumber"
+                                    value={clinic.phoneNumber}
+                                    onChange={handleChange}
+                                    placeholder="011 123 4567"
+                                    required
+                                />
+                            </div>
+
+
+                            <div className="clinic-field">
+                                <label>
+                                    Email
+                                </label>
+
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={clinic.email}
+                                    onChange={handleChange}
+                                    placeholder="clinic@ubuntuhealth.co.za"
+                                    required
+                                />
+                            </div>
+
+                        </div>
+
+
+                        <div className="clinic-form-actions">
+
+                            {editingId && (
+                                <button
+                                    type="button"
+                                    className="clinic-cancel-button"
+                                    onClick={handleCancelEdit}
+                                >
+                                    Cancel
+                                </button>
+                            )}
+
+                            <button
+                                type="submit"
+                                className="clinic-save-button"
+                                disabled={saving}
+                            >
+                                {saving
+                                    ? "Saving..."
+                                    : editingId
+                                        ? "✓ Update Clinic"
+                                        : "➕ Add Clinic"}
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                {/* CLINICS LIST */}
+
+                <div className="clinic-list-card">
+
+                    <div className="clinic-list-header">
+
+                        <div>
+                            <h2>
+                                🏥 Existing Clinics
+                            </h2>
+
+                            <p>
+                                Clinics currently available
+                                to patients.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    {loading ? (
+
+                        <div className="clinic-loading">
+                            Loading clinics...
+                        </div>
+
+                    ) : clinics.length === 0 ? (
+
+                        <div className="clinic-empty">
+                            <div>
+                                🏥
+                            </div>
+
+                            <h3>
+                                No clinics found
+                            </h3>
+
+                            <p>
+                                Add your first clinic above.
+                            </p>
+                        </div>
+
+                    ) : (
+
+                        <div className="clinics-grid">
+
+                            {clinics.map((item) => (
+
+                                <div
+                                    className="clinic-card"
+                                    key={item.id}
+                                >
+
+                                    <div className="clinic-card-icon">
+                                        🏥
+                                    </div>
+
+                                    <div className="clinic-card-content">
+
+                                        <h3>
+                                            {item.clinicName}
+                                        </h3>
+
+                                        <p>
+                                            📍 {item.city},{" "}
+                                            {item.province}
+                                        </p>
+
+                                        <p>
+                                            {item.address}
+                                        </p>
+
+                                        <p>
+                                            📞 {item.phoneNumber}
+                                        </p>
+
+                                        <p>
+                                            ✉️ {item.email}
+                                        </p>
+
+                                    </div>
+
+                                    <div className="clinic-card-actions">
+
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                handleEdit(item)
+                                            }
+                                            className="clinic-edit-button"
+                                        >
+                                            ✏️ Edit
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                handleDelete(item.id)
+                                            }
+                                            className="clinic-delete-button"
+                                        >
+                                            🗑️ Delete
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            ))}
+
+                        </div>
+
+                    )}
+
                 </div>
 
             </div>
@@ -526,3 +571,4 @@ export default function Clinics() {
         </div>
     );
 }
+

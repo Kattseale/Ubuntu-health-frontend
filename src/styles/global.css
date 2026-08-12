@@ -127,3 +127,17 @@ html {
 .btn-danger:hover {
     background: #bb2d3b;
 }
+.fully-booked-date {
+    background-color: #f8d7da !important;
+    color: #842029 !important;
+    text-decoration: line-through;
+    border-radius: 6px;
+}
+
+.fully-booked-date:hover {
+    background-color: #f1b0b7 !important;
+}
+.dark .fully-booked-date {
+    background-color: #4a2024 !important;
+    color: #ffb3b8 !important;
+}

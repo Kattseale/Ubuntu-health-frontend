@@ -7,7 +7,7 @@ export default function HomeM() {
 
             {/* NAVBAR */}
 
-            <nav
+            <nav className="home-navbar"
                 style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -27,7 +27,7 @@ export default function HomeM() {
                         gap: "12px"
                     }}
                 >
-                    <div
+                    <div className="home-brand"
                         style={{
                             width: "48px",
                             height: "48px",
@@ -65,7 +65,7 @@ export default function HomeM() {
                     </div>
                 </div>
 
-                <div
+                <div className="home-nav-links"
                     style={{
                         display: "flex",
                         alignItems: "center",
@@ -76,7 +76,10 @@ export default function HomeM() {
                         Features
                     </a>
 
-                    <a href="#about" style={navLink}>
+                    <a
+                        href="#about"
+                        style={navLink}
+                    >
                         About
                     </a>
 
@@ -111,7 +114,7 @@ export default function HomeM() {
 
             {/* CALL TO ACTION */}
 
-            <section
+            <section className="home-hero"
                 style={{
                     background: "#0d6efd",
                     color: "#fff",
@@ -119,12 +122,12 @@ export default function HomeM() {
                     padding: "80px 30px"
                 }}
             >
-                <h1
+                <h1 className="home-hero-title"
                     style={{
                         fontSize: "58px",
                         margin: "20px 0",
                         lineHeight: "1.2",
-                        color: "#1f2937"
+                        color: "darkorange"
                     }}
                 >
                     Skip the Queue.
@@ -132,18 +135,19 @@ export default function HomeM() {
                     Get Better Healthcare.
                 </h1>
 
-                <p
+                <p className="home-hero-text"
                     style={{
-                        maxWidth: "700px",
+                        maxWidth: "750px",
                         margin: "0 auto",
                         fontSize: "20px",
-                        lineHeight: "1.8"
+                        lineHeight: "1.8",
+                        color: "#fff"
                     }}
                 >
-                    Ubuntu Health System helps patients avoid long clinic queues by
-                    making it easy to book appointments online, receive clinic updates,
-                    manage medications and access healthcare services—all from one
-                    secure platform.
+                    Spend less time waiting and more time receiving care. Ubuntu-Health Clinic
+                    allows patients to book clinic appointments in advance, helping
+                    reduce long queues and making healthcare easier, faster and more
+                    convenient.
                 </p>
 
                 <div
@@ -187,8 +191,8 @@ export default function HomeM() {
 
             <section
                 style={{
-                    background: "#987704",
-                    color: "white",
+                    background: "#198754",
+                    color: "#fff",
                     textAlign: "center",
                     padding: "18px"
                 }}
@@ -200,7 +204,7 @@ export default function HomeM() {
 
             {/* STATISTICS */}
 
-            <section
+            <section className="home-stats"
                 style={{
                     padding: "70px 40px",
                     background: "#ffffff"
@@ -218,26 +222,26 @@ export default function HomeM() {
 
                     <StatCard
                         icon="🏥"
-                        number="35+"
-                        title="Clinics"
+                        number="Multiple"
+                        title="Clinics Connected"
                     />
 
                     <StatCard
                         icon="👨‍⚕️"
-                        number="120+"
-                        title="Healthcare Staff"
+                        number="Healthcare"
+                        title="Staff Management"
                     />
 
                     <StatCard
                         icon="👥"
-                        number="15 000+"
-                        title="Patients"
+                        number="Patient"
+                        title="Access & Support"
                     />
 
                     <StatCard
                         icon="📅"
-                        number="50 000+"
-                        title="Appointments"
+                        number="Online"
+                        title="Appointment Booking"
                     />
 
                 </div>
@@ -245,8 +249,7 @@ export default function HomeM() {
 
             {/* FEATURES */}
 
-            <section
-                id="features"
+            <section id="features" className="home-features"
                 style={{
                     background: "#f8fbff",
                     padding: "80px 40px"
@@ -260,7 +263,7 @@ export default function HomeM() {
                         color: "#0d6efd"
                     }}
                 >
-                    Caring for you
+                    Healthcare Made Easier
                 </h2>
 
                 <p
@@ -271,11 +274,12 @@ export default function HomeM() {
                         margin: "0 auto 60px"
                     }}
                 >
-                    Ubuntu-Health Clinic System brings patients and healthcare providers
-                    together through one secure and easy-to-use platform.
+                    Ubuntu-Health connects patients with healthcare services through
+                    convenient digital tools designed to make accessing care simpler
+                    and more efficient.
                 </p>
 
-                <div
+                <div className="home-feature-grid"
                     style={{
                         display: "grid",
                         gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
@@ -287,25 +291,25 @@ export default function HomeM() {
                     <FeatureCard
                         icon="📅"
                         title="Book Appointments"
-                        description="Schedule and manage appointments with your preferred clinic."
+                        description="Book your clinic appointment in advance and spend less time waiting in long queues."
                     />
 
                     <FeatureCard
                         icon="💊"
                         title="Medication Management"
-                        description="Access prescriptions and medication information securely."
+                        description="Keep track of your medication and access important prescription information in one place."
                     />
 
                     <FeatureCard
                         icon="📢"
                         title="Clinic Announcements"
-                        description="Receive important updates and healthcare notifications instantly."
+                        description="Stay informed about clinic updates, important notices and healthcare information."
                     />
 
                     <FeatureCard
                         icon="👥"
                         title="Community Support"
-                        description="Connect with other patients and share healthcare experiences."
+                        description="Connect with other patients, share experiences and support one another on your healthcare journey."
                     />
                 </div>
             </section>
@@ -316,10 +320,11 @@ export default function HomeM() {
                 id="about"
                 style={{
                     padding: "90px 60px",
-                    background: "#ffffff"
+                    background: "#ffffff",
+                    scrollMarginTop: "100px"
                 }}
             >
-                <div
+                <div className="home-about-container"
                     style={{
                         maxWidth: "1200px",
                         margin: "0 auto",
@@ -331,7 +336,7 @@ export default function HomeM() {
                 >
                     {/* LEFT */}
 
-                    <div
+                    <div className="home-about-image"
                         style={{
                             flex: 1,
                             minWidth: "320px"
@@ -350,7 +355,7 @@ export default function HomeM() {
 
                     {/* RIGHT */}
 
-                    <div
+                    <div className="home-about-text"
                         style={{
                             flex: 1,
                             minWidth: "320px"
@@ -368,10 +373,11 @@ export default function HomeM() {
                         <h2
                             style={{
                                 fontSize: "42px",
-                                margin: "15px 0"
+                                margin: "15px 0",
+                                color: "#1f2937"
                             }}
                         >
-                            Caring for patients through technology.
+                            Making healthcare easier, one appointment at a time.
                         </h2>
 
                         <p
@@ -381,11 +387,11 @@ export default function HomeM() {
                                 fontSize: "18px"
                             }}
                         >
-                            Ubuntu-Health Clinic System is a digital healthcare platform
-                            designed to improve the delivery of healthcare services.
-                            Patients can book appointments, receive clinic updates,
-                            access medication information and stay connected with
-                            healthcare providers through one secure system.
+                            Ubuntu-Health Clinic System is designed to make healthcare more
+                            accessible and convenient for patients. Instead of spending hours
+                            waiting in clinic queues, patients can book appointments in advance,
+                            stay informed about clinic updates and manage their healthcare
+                            information through one secure platform.
                         </p>
 
                         <div
@@ -399,9 +405,9 @@ export default function HomeM() {
                             <div>✅ Secure Patient Records</div>
                             <div>✅ Easy Appointment Booking</div>
                             <div>✅ Community Support</div>
-                            <div>✅ Medication Tracking</div>
+                            <div>✅ Stay updated with clinic announcements</div>
                             <div>✅ Clinic Management</div>
-                            <div>✅ Healthcare Announcements</div>
+                            <div>✅ Secure patient information</div>
                         </div>
                     </div>
                 </div>
@@ -410,83 +416,107 @@ export default function HomeM() {
             {/* FOOTER */}
 
             <footer
+                className="home-footer"
                 style={{
                     background: "#111827",
                     color: "#d1d5db",
-                    padding: "50px 30px",
-                    textAlign: "center"
+                    padding: "45px 50px 20px"
                 }}
             >
-                <h3
+                <div
                     style={{
-                        color: "#fff",
-                        marginBottom: "10px"
+                        maxWidth: "1200px",
+                        margin: "0 auto",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: "50px",
+                        flexWrap: "wrap"
                     }}
                 >
-                    Ubuntu-Health Clinic System
-                </h3>
 
-                <p
-                    style={{
-                        maxWidth: "600px",
-                        margin: "0 auto 30px",
-                        lineHeight: "1.8"
-                    }}
-                >
-                    Improving healthcare through secure digital technology,
-                    smarter appointments and better communication between
-                    patients and healthcare providers.
-                </p>
+                    {/* COMPANY INFO */}
+
+                    <div
+                        style={{
+                            flex: "1 1 400px"
+                        }}
+                    >
+                        <h3
+                            style={{
+                                color: "#fff",
+                                margin: "0 0 10px",
+                                fontSize: "22px"
+                            }}
+                        >
+                            Ubuntu-Health Clinic System
+                        </h3>
+
+                        <p
+                            style={{
+                                margin: 0,
+                                maxWidth: "550px",
+                                lineHeight: "1.7"
+                            }}
+                        >
+                            Improving healthcare through secure digital technology,
+                            smarter appointments and better communication between
+                            patients and healthcare providers.
+                        </p>
+                    </div>
+
+
+                    {/* CONTACT INFORMATION */}
+
+                    <div
+                        style={{
+                            flex: "0 1 350px"
+                        }}
+                    >
+                        <h4
+                            style={{
+                                color: "#fff",
+                                margin: "0 0 15px",
+                                fontSize: "17px"
+                            }}
+                        >
+                            Contact Us
+                        </h4>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "8px"
+                            }}
+                        >
+                            <span>📞 +27 73 334 2525</span>
+
+                            <span>✉️ support@ubuntuhealth.co.za</span>
+
+                            <span>📍 Johannesburg, South Africa</span>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                {/* COPYRIGHT */}
 
                 <div
                     style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        gap: "30px",
-                        flexWrap: "wrap",
-                        marginBottom: "30px"
+                        maxWidth: "1200px",
+                        margin: "30px auto 0",
+                        paddingTop: "18px",
+                        borderTop: "1px solid #374151",
+                        textAlign: "center"
                     }}
                 >
-                    <a href="#features" style={{ color: "#d1d5db", textDecoration: "none" }}>
-                        Features
-                    </a>
-
-                    <a href="#about" style={{ color: "#d1d5db", textDecoration: "none" }}>
-                        About
-                    </a>
-
-                    <Link
-                        to="/login"
-                        style={{
-                            color: "#d1d5db",
-                            textDecoration: "none"
-                        }}
-                    >
-                        Login
-                    </Link>
-
-                    <Link
-                        to="/register"
-                        style={{
-                            color: "#d1d5db",
-                            textDecoration: "none"
-                        }}
-                    >
-                        Register
-                    </Link>
+                    <small>
+                        © {new Date().getFullYear()} Ubuntu Health System. All rights reserved.
+                    </small>
                 </div>
 
-                <hr
-                    style={{
-                        border: "none",
-                        borderTop: "1px solid #374151",
-                        marginBottom: "20px"
-                    }}
-                />
-
-                <small>
-                    © {new Date().getFullYear()} Ubuntu Health System. All rights reserved.
-                </small>
             </footer>
 
         </div>
@@ -554,7 +584,8 @@ function StatCard({ icon, number, title }) {
             <h2
                 style={{
                     color: "#0d6efd",
-                    margin: "15px 0 5px"
+                    margin: "15px 0 5px",
+                    fontSize: "26px"
                 }}
             >
                 {number}
