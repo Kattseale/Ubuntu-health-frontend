@@ -3,6 +3,9 @@ import {
     Routes,
     Route
 } from "react-router-dom";
+import VerifyEmail from "./pages/VerifyEmail";
+import ResetPassword from "./pages/ResetPassword";
+import ForgotPassword from "./pages/ForgotPassword";
 
 
 import { useEffect, useState } from "react";
@@ -16,6 +19,7 @@ import RoleProtectedRoute from "./components/RoleProtectedRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import ThemeContext from "./context/ThemeContext";
+import ResendVerification from "./pages/ResendVerification";
 
 // =========================================================
 // PAGES
@@ -120,6 +124,22 @@ function App() {
                             <Route
                                 path="/register"
                                 element={<Register />}
+                            />
+                            <Route
+                                path="/verify-email"
+                                element={<VerifyEmail />}
+                            />
+                            <Route
+                                path="/forgot-password"
+                                element={<ForgotPassword />}
+                            />dd
+                            <Route
+                                path="/resend-verification"
+                                element={<ResendVerification />}
+                            />
+                            <Route
+                                path="/reset-password"
+                                element={<ResetPassword />}
                             />
 
 

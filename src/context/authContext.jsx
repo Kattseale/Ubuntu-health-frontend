@@ -11,9 +11,7 @@ import {
     isAuthenticated
 } from "../services/authService";
 
-
 const AuthContext = createContext();
-
 
 export function AuthProvider({ children }) {
 
@@ -147,3 +145,5 @@ export function useAuth() {
     return useContext(AuthContext);
 
 }
+
+export default AuthContext;

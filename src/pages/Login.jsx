@@ -1,235 +1,326 @@
-import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-
-import { login, saveUser } from "../services/authService";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../services/authService";
+import "../styles/login.css";
+
 export default function Login() {
 
     const navigate = useNavigate();
 
-    const { loginUser } = useAuth();
-    const [showPassword, setShowPassword] = useState(false);
-
     const [formData, setFormData] = useState({
         email: "",
-        password: ""
+        password: "",
     });
 
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    // ============================================================
+    // HANDLE INPUT
+    // ============================================================
 
     const handleChange = (e) => {
 
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
+        const { name, value } = e.target;
 
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+
+        setError("");
     };
+
+
+    // ============================================================
+    // LOGIN
+    // ============================================================
 
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
+        setError("");
+
+        if (!formData.email.trim()) {
+
+            setError("Please enter your email address.");
+            return;
+        }
+
+        if (!formData.password) {
+
+            setError("Please enter your password.");
+            return;
+        }
 
         try {
 
             setLoading(true);
 
-
             const response = await login(formData);
 
+            console.log("Login successful:", response);
 
-            console.log("Login response:", response);
+            // ====================================================
+            // ROLE
+            // ====================================================
 
+            const role =
+                response?.role ||
+                response?.data?.role;
 
-            saveUser(response);
+            console.log("LOGIN ROLE:", role);
 
+            // ====================================================
+            // DASHBOARD
+            // ====================================================
 
-            loginUser(response);
+            if (
+                role === "ADMIN" ||
+                role === "PATIENT" ||
+                role === "DOCTOR" ||
+                role === "NURSE" ||
+                role === "RECEPTIONIST"
+            ) {
 
+                navigate("/dashboard");
 
-            navigate("/home");
+            } else {
 
+                navigate("/dashboard");
 
-        } catch(error) {
+            }
 
+        } catch (err) {
 
-            console.error(error);
+            console.error("Login error:", err);
 
+            const message =
+                err?.response?.data?.message ||
+                err?.response?.data?.error ||
+                "Unable to login. Please check your email and password.";
 
-            alert(
-                error.response?.data?.message ||
-                "Invalid email or password."
-            );
-
+            setError(message);
 
         } finally {
 
             setLoading(false);
 
         }
-
     };
 
+
+    // ============================================================
+    // PAGE
+    // ============================================================
+
     return (
-        <div
-            style={{
-                minHeight: "100vh",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                background: "linear-gradient(135deg,#0d6efd,#198754)"
-            }}
-        >
-            <div
-                className="login-card"
-                style={{
-                    background: "#fff",
-                    width: "420px",
-                    padding: "40px",
-                    borderRadius: "15px",
-                    boxShadow: "0 15px 40px rgba(0,0,0,.2)",
-                    boxSizing: "border-box"
-                }}
-            >
 
-                <h1
-                    style={{
-                        textAlign: "center",
-                        color: "#0d6efd",
-                        marginBottom: "5px"
-                    }}
-                >
-                    Ubuntu Health
-                </h1>
+        <div className="login-page">
 
-                <p
-                    style={{
-                        textAlign: "center",
-                        color: "#666",
-                        marginBottom: "35px"
-                    }}
-                >
-                    Welcome Back
-                </p>
+            <div className="login-card">
+
+                {/* ==================================================
+                    HEADER
+                ================================================== */}
+
+                <div className="login-header">
+
+                    <h1>
+                        Ubuntu Health
+                    </h1>
+
+                    <p>
+                        Welcome Back
+                    </p>
+
+                </div>
+
+
+                {/* ==================================================
+                    BACK TO WELCOME
+                ================================================== */}
 
                 <Link
                     to="/"
-                    style={{
-                        display: "block",
-                        textAlign: "center",
-                        marginBottom: "20px",
-                        color: "#0d6efd",
-                        fontWeight: "bold",
-                        textDecoration: "none"
-                    }}
+                    className="back-to-welcome"
                 >
                     ← Back to Welcome
                 </Link>
 
-                <form onSubmit={handleSubmit}>
 
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email Address"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        style={inputStyle}
-                    />
+                {/* ==================================================
+                    ERROR
+                ================================================== */}
 
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            width: "100%",
-                            marginBottom: "18px"
-                        }}
-                    >
+                {error && (
+
+                    <div className="login-error">
+                        {error}
+                    </div>
+
+                )}
+
+
+                {/* ==================================================
+                    LOGIN FORM
+                ================================================== */}
+
+                <form
+                    className="login-form"
+                    onSubmit={handleSubmit}
+                >
+
+                    {/* ==================================================
+                        EMAIL
+                    ================================================== */}
+
+                    <div className="form-group">
+
+                        <label htmlFor="email">
+                            Email Address
+                        </label>
+
                         <input
-                            type={showPassword ? "text" : "password"}
-                            name="password"
-                            placeholder="Password"
-                            value={formData.password}
+                            id="email"
+                            name="email"
+                            type="email"
+                            value={formData.email}
                             onChange={handleChange}
+                            placeholder="Enter your email address"
+                            autoComplete="email"
                             required
-                            style={{
-                                ...inputStyle,
-                                flex: 1,
-                                marginBottom: 0
-                            }}
                         />
 
-                        <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            style={{
-                                background: "#0d6efd",
-                                color: "#fff",
-                                border: "none",
-                                borderRadius: "6px",
-                                padding: "12px 14px",
-                                height: "48px",
-                                minWidth: "70px",
-                                cursor: "pointer",
-                                fontSize: "13px",
-                                fontWeight: "600"
-                            }}
-                        >
-                            {showPassword ? "Hide" : "Show"}
-                        </button>
                     </div>
+
+
+                    {/* ==================================================
+                        PASSWORD
+                    ================================================== */}
+
+                    <div className="form-group">
+
+                        <label htmlFor="password">
+                            Password
+                        </label>
+
+                        <div className="password-wrapper">
+
+                            <input
+                                id="password"
+                                name="password"
+                                type={
+                                    showPassword
+                                        ? "text"
+                                        : "password"
+                                }
+                                value={formData.password}
+                                onChange={handleChange}
+                                placeholder="Enter your password"
+                                autoComplete="current-password"
+                                required
+                            />
+
+                            <button
+                                type="button"
+                                className="password-toggle"
+                                onClick={() =>
+                                    setShowPassword(
+                                        !showPassword
+                                    )
+                                }
+                                aria-label={
+                                    showPassword
+                                        ? "Hide password"
+                                        : "Show password"
+                                }
+                            >
+
+                                {showPassword
+                                    ? "Hide"
+                                    : "Show"}
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* ==================================================
+                        FORGOT PASSWORD
+                    ================================================== */}
+
+                    <div className="forgot-password-container">
+
+                        <Link
+                            to="/forgot-password"
+                            className="forgot-password-link"
+                        >
+                            Forgot password?
+                        </Link>
+
+                    </div>
+
+
+                    {/* ==================================================
+                        LOGIN BUTTON
+                    ================================================== */}
 
                     <button
                         type="submit"
+                        className="login-button"
                         disabled={loading}
-                        style={buttonStyle}
                     >
-                        {loading ? "Signing In..." : "Login"}
+
+                        {loading
+                            ? "Logging in..."
+                            : "Login"}
+
                     </button>
 
-                    <p
-                        style={{
-                            textAlign: "center",
-                            marginTop: "20px"
-                        }}
-                    >
-                        Don't have an account?{" "}
-                        <Link
-                            to="/register"
-                            style={{
-                                color: "#0d6efd",
-                                fontWeight: "bold"
-                            }}
-                        >
-                            Register
-                        </Link>
-                    </p>
                 </form>
 
-            </div>
-        </div>
-    );}
-const inputStyle = {
-    width: "100%",
-    padding: "14px",
-    marginBottom: "18px",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
-    fontSize: "16px",
-    boxSizing: "border-box"
-};
 
-const buttonStyle = {
-    width: "100%",
-    padding: "14px",
-    background: "#0d6efd",
-    color: "white",
-    border: "none",
-    borderRadius: "8px",
-    fontSize: "16px",
-    cursor: "pointer",
-    fontWeight: "bold"
-};
+                {/* ==================================================
+                    FOOTER
+                ================================================== */}
+
+                <div className="login-footer">
+
+                    <p>
+
+                        Don't have an account?{" "}
+
+                        <Link to="/register">
+                            Register
+                        </Link>
+
+                    </p>
+
+
+                    {/* ==================================================
+                        RESEND VERIFICATION
+                    ================================================== */}
+
+                    <p className="verification-text">
+
+                        Didn't receive your verification email?{" "}
+
+                        <Link to="/resend-verification">
+                            Resend verification email
+                        </Link>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    );
+}
