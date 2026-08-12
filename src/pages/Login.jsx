@@ -17,6 +17,8 @@ export default function Login() {
 
     const [loading, setLoading] = useState(false);
 
+    const [showPassword, setShowPassword] = useState(false);
+
     const [errors, setErrors] = useState({
         email: "",
         password: ""
@@ -146,14 +148,46 @@ export default function Login() {
 
                     {/* PASSWORD */}
 
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        style={inputStyle}
-                    />
+                    <div
+                        style={{
+                            position: "relative",
+                            marginTop: "10px"
+                        }}
+                    >
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            placeholder="Password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            style={{
+                                ...inputStyle,
+                                marginTop: 0,
+                                paddingRight: "80px"
+                            }}
+                        />
+
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setShowPassword(!showPassword)
+                            }
+                            style={{
+                                position: "absolute",
+                                right: "15px",
+                                top: "45%",
+                                transform: "translateY(-50%)",
+                                border: "none",
+                                background: "transparent",
+                                color: "#0d6efd",
+                                fontWeight: "bold",
+                                cursor: "pointer",
+                                fontSize: "14px"
+                            }}
+                        >
+                            {showPassword ? "Hide" : "Show"}
+                        </button>
+                    </div>
 
                     <small
                         style={{
