@@ -5,7 +5,7 @@ import {
 } from "react";
 
 import ThemeContext from "../context/ThemeContext";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/authContext";
 
 import DashboardChart from "../components/DashboardChart";
 
