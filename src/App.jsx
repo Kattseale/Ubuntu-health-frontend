@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 
 import "./styles/responsive.css";
 
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "./context/authContext";
 
 import AppLayout from "./components/AppLayout";
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
